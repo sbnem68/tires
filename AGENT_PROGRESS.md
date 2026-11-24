@@ -1,25 +1,112 @@
 # Agent Progress
 
+Working branch: `checkpoint-2-wizard-steps-1-2-continuation`. Never merge to `main` without Sam's approval.
+Do not start Checkpoint 3 until Sam explicitly approves Checkpoint 2.
+
 ## Current checkpoint
 
-Checkpoint 2 — Tire Match Wizard, Steps 1 and 2. The checkpoint is in progress and still requires completion, verification, and Sam's explicit approval before Checkpoint 3 starts.
+Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: finishing (see "Incomplete items").
 
-## Completed
+## Roadmap
 
-- Inspected the project README, checkpoint log, plan, recent branch commits, and existing handoff/roadmap documentation.
-- Confirmed the preferred working branch, `checkpoint-2-wizard-steps-1-2-continuation`, exists at the commit identified in the supplied task brief.
-- Created `ROADMAP.md` as the canonical project roadmap, checkpoint plan, approval-gate record, location-directory addendum, and approved change log.
-- Added roadmap references to `README.md` and `CHECKPOINTS.md`.
+`ROADMAP.md` (added by Sam in `406893a`) is the canonical build plan, checkpoint order, approval-gate
+record and change log. Read it, `CHECKPOINTS.md`, this file, `README.md` and recent commits before any work.
+Sam's roadmap commit changed documentation only and is also saved on `backup/roadmap-20261124-110719`.
 
-## Remaining
+## Audit summary (starting point, commit `d8daf86`)
 
-- Complete and verify Checkpoint 2, including end-to-end preview verification, then obtain Sam's approval.
-- Do not begin Checkpoint 3 until Checkpoint 2 is approved.
+- Wizard Steps 1 and 2, progress indicator, back navigation, local-storage progress, and the
+  attribution lock were already built. 21 frontend tests passed (18 numbered + 3 attribution) and
+  the production build compiled. This work is kept; it is not being rebuilt.
+- Not done at audit time: a database behind the API, a working preview, real-browser evidence,
+  screenshots, and this file on the working branch.
+- Weak tests found: 12 (checked CSS class names only), 15 (checked local-storage keys only),
+  16 (mocked `fetch`, but the app uses axios).
 
-## Verification
+## Decisions from Sam (2026-11-24)
 
-- This task changed documentation only; no application tests or builds were run.
-- Static checks passed for the required section order, all 15 checkpoint summaries, all 14 location tests, the 22-step end-to-end scenario, both roadmap references, and the 348-prospect total.
-- Working branch: `checkpoint-2-wizard-steps-1-2-continuation`.
-- Timestamped backup branch: `backup/roadmap-20261124-110719`.
-- No application source, database migrations, seed data, environment configuration, or secrets were changed.
+- A. A valid listed city in the URL wins over saved progress; otherwise saved progress; otherwise
+  nothing selected. Original attribution and landing city are never overwritten.
+- B. Drivers see neutral wording only: "Next: vehicle and tire size (coming soon)." No checkpoint
+  or development language in the UI.
+- C. Use a local PostgreSQL in the Emergent workspace for the preview only. The Replit development
+  database is untouched and unverified. Do not request or use its connection string.
+- D. Pushing to the working branch after each completed, in-scope change is authorised. The token
+  is supplied through the secure card only; never in a remote URL, file or chat.
+- E. Run Checkpoint 0/1 backend tests against the three-city seed; report failures; do not run the
+  full 28-city seed; do not change seed scope.
+- F. Leave the three extra commits on `main` alone.
+
+## Completed items
+
+- `ROADMAP.md` created as the canonical roadmap, with references added to `README.md` and
+  `CHECKPOINTS.md` (Sam, `406893a`).
+- Working branch loaded into the Emergent workspace unchanged. Platform environment keys were not edited.
+- Local preview database created: PostgreSQL 15, loopback only (`127.0.0.1:5433`), database
+  `t4t_preview`. It was empty with no Alembic revision before the run.
+- Ran `python -m alembic upgrade head` (applied existing `0001`, then `0002`). No new migration.
+- Ran `python seed.py --review-cities-only`. Result: 3 cities (Ottawa onboarding, Toronto planned,
+  Hamilton planned; all listed, none indexable), 3 parent market groups with zero planning counts,
+  1 province. Zero subareas, prospects, shops, offers, leads, quotes, installs, registrations.
+- `GET /api/health` returns 200 with revision `0002`; `GET /api/public/locations` returns 200 with
+  the three cities. The earlier HTTP 500 was an unmigrated database.
+
+## Incomplete items
+
+- Decision A (URL city precedence) and its test.
+- Decision B (neutral wording).
+- Strengthen tests 12, 15, 16.
+- Real-browser run of all 18 tests plus attribution tests at mobile and desktop sizes.
+- Mobile and desktop screenshots of Steps 1 and 2.
+- Documentation refresh and completion report.
+
+## Known issues
+
+- Backend tests against the three-city seed: 25 passed, 13 failed. Every failure asserts the full
+  planning directory (14 groups, 28 cities, 3 Toronto subareas, planning total 348, Gatineau/Quebec
+  rows). None is a Checkpoint 2 defect. Left unchanged per decision E.
+  - `test_checkpoint0.py`: test_01, test_02, test_03, test_04, test_09, test_10, test_11, test_14,
+    test_architecture_endpoint_is_hidden_in_production.
+  - `test_checkpoint1.py`: test_toronto_subareas_are_not_cities,
+    test_no_city_is_live_and_ottawa_is_onboarding, test_tax_components_are_unverified_placeholders,
+    test_gatineau_is_french_first_and_unpublished.
+- With the three-city seed there are no Toronto subareas, so subarea search in the city selector
+  (North York, Scarborough, Etobicoke) finds nothing in this preview.
+- `pip install -r backend/requirements.txt` fails in this workspace on a resolver conflict between
+  two template packages unrelated to this project. Only the pinned database/API packages were
+  installed; `requirements.txt` was not changed.
+- The local PostgreSQL server binaries live outside the workspace's persistent folders. The data
+  folder persists, but after a workspace restart the server may need reinstalling and restarting.
+- `AGENT_PROGRESS.md` on `main` and `AGENT_HANDOFF.md` on `backup/replit-stalled-work` are stale.
+
+## Next immediate task
+
+Decision A: URL city precedence in `frontend/src/lib/tireMatchWizard.js`, with a test for saved
+Toronto progress plus `?city=ottawa`.
+
+## Files changed (this session)
+
+- `AGENT_PROGRESS.md` — created.
+
+## Commands run
+
+- `git clone`, `git checkout checkpoint-2-wizard-steps-1-2-continuation` (read-only audit)
+- `cd frontend && yarn install --frozen-lockfile`
+- `cd frontend && CI=true yarn test --watchAll=false --runInBand` → 21 passed
+- `cd frontend && yarn build` → compiled
+- `apt-get install postgresql` (workspace only), `initdb`, create role and database
+- `cd backend && python -m alembic current` → none; `python -m alembic history`
+- `cd backend && python -m alembic upgrade head`
+- `cd backend && python seed.py --review-cities-only`
+- `cd backend && python -m pytest tests -n 0` → 25 passed, 13 failed (see Known issues)
+
+## Test results
+
+- Frontend (at `d8daf86`): 21 of 21 passed.
+- Backend: 25 passed, 13 failed, all for the reason above.
+
+## Decisions pending user approval
+
+- Whether the 13 full-directory backend tests should be adapted or the full directory seeded in a
+  later, separately approved step.
+- Approval of Checkpoint 2 once the completion report is delivered.
