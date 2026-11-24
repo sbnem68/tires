@@ -161,4 +161,4 @@ test_plan:
   test_priority: "high_first"
 agent_communication:
   - agent: "main"
-    message: "Acceptance suite: 36 backend and 33 frontend tests passing. Migration 0003 rollback/reapplication verified; preview screenshot still pending."
+    message: "Acceptance suite: 36 backend and 33 frontend tests passing. Migration 0003 rollback/reapplication verified; desktop and mobile previews checked."
