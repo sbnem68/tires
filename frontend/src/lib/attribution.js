@@ -4,10 +4,9 @@
  * The ORIGINAL touch is written once and never overwritten by navigation, by changing the
  * selected city, or by later visits. It is kept separately from the driver's selected city.
  *
- * - A landing without any tracked parameter is stored as a provisional (organic) original.
- *   The first landing that carries tracked parameters replaces a provisional original.
- * - Once an original with parameters exists it is locked for 30 days; a later landing with
- *   different parameters is recorded as `last_touch` only.
+ * - The first landing is the original attribution, including an organic landing with no tracked
+ *   parameters. It stays locked for 30 days; later visits with different parameters are recorded
+ *   as `last_touch` only.
  */
 
 const STORAGE_KEY = "t4t.attribution.v1";
@@ -118,10 +117,6 @@ export const captureAttribution = () => {
     return;
   }
   if (!hasParams) return; // plain navigation or organic revisit: nothing changes
-  if (!stored.original_has_params) {
-    storage.write(STORAGE_KEY, { original: touch, original_meta: meta, original_has_params: true, last_touch: null });
-    return;
-  }
   if (!sameTouch(stored.original, touch)) {
     storage.write(STORAGE_KEY, { ...stored, last_touch: { ...touch, ...meta } });
   }

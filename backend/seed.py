@@ -13,6 +13,8 @@ from sqlalchemy.orm import Session
 import seed_data as sd
 from models import City, LocationSubarea, MarketGroup, ProvinceConfig
 
+REVIEW_CITY_SLUGS = {"ottawa", "toronto", "hamilton"}
+
 
 def seed_locations(session: Session) -> dict:
     provinces = {p["code"]: p for p in sd.PROVINCES}
@@ -40,11 +42,13 @@ def seed_locations(session: Session) -> dict:
 
         cfg = provinces[province]
         for order, city_name in enumerate(cities, start=1):
+            city_slug = sd.slugify(city_name)
             stmt = insert(City).values(
-                market_group_id=group_id, name=city_name, slug=sd.slugify(city_name), sort_order=order,
+                market_group_id=group_id, name=city_name, slug=city_slug, sort_order=order,
                 province_code=province, country_code="CA", timezone=sd.TIMEZONE,
                 default_locale=cfg["default_locale"], supported_locales=cfg["supported_locales"],
-                launch_status="planned", public_listing_enabled=False,
+                launch_status="onboarding" if city_slug == "ottawa" else "planned",
+                public_listing_enabled=city_slug in REVIEW_CITY_SLUGS,
             )
             session.execute(stmt.on_conflict_do_update(
                 index_elements=["slug"],

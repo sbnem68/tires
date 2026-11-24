@@ -101,3 +101,64 @@
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+user_problem_statement: "Build only the approved Checkpoint 2 wizard steps 1 and 2, preserve attribution, and keep approved fixes tested."
+backend:
+  - task: "Checkpoint 0 and 1 acceptance suite"
+    implemented: true
+    working: true
+    file: "backend/tests"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "36 tests passed against a fresh temporary PostgreSQL database after migrations and seed."
+  - task: "Migration rollback and reapplication"
+    implemented: true
+    working: true
+    file: "backend/alembic/versions/0003_checkpoint1_seed_state_correction.py"
+    stuck_count: 0
+    priority: "medium"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Migration 0003 downgraded to 0002 and reapplied successfully."
+frontend:
+  - task: "Tire Match wizard Steps 1 and 2"
+    implemented: true
+    working: true
+    file: "frontend/src/pages/TireMatchPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "33 frontend tests passed; production build compiled successfully."
+  - task: "30-day original attribution lock"
+    implemented: true
+    working: true
+    file: "frontend/src/lib/attribution.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+        agent: "main"
+        comment: "Tests confirm the first landing remains original for 30 days, including an organic first visit."
+metadata:
+  created_by: "main_agent"
+  version: "1.0"
+  test_sequence: 1
+  run_ui: true
+test_plan:
+  current_focus: []
+  stuck_tasks: []
+  test_all: true
+  test_priority: "high_first"
+agent_communication:
+  - agent: "main"
+    message: "Acceptance suite: 36 backend and 33 frontend tests passing. Migration 0003 rollback/reapplication verified; preview screenshot still pending."

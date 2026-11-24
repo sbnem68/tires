@@ -15,7 +15,8 @@ The system is built in approval-gated checkpoints. See [CHECKPOINTS.md](./CHECKP
 |---|---|---|
 | 0 | Project setup and architecture | Approved (with conditions) |
 | 1 | City-aware landing page | Approved |
-| 2–14 | Wizard, offers, leads, routing, quotes, installs, admin, multi-city, deployment | Not started |
+| 2 | Tire Match wizard: city and need steps | Ready for review; not approved |
+| 3–14 | Wheel-size, offers, leads, routing, quotes, installs, admin, multi-city, deployment | Not started |
 
 ## Stack
 
@@ -107,7 +108,8 @@ alembic revision --autogenerate -m "describe change"   # create a new migration 
 alembic check                        # verify models and database match
 ```
 
-Migration history: `0001` initial schema → `0002` Checkpoint 1 flags and review-city listing.
+Migration history: `0001` initial schema → `0002` Checkpoint 1 flags and review-city listing →
+`0003` repairs approved Checkpoint 1 city defaults for databases seeded after migration.
 Approved migrations are never edited or deleted; changes are made in a new migration.
 
 ### Seed commands
@@ -117,9 +119,9 @@ cd backend
 python seed.py
 ```
 
-The seed is idempotent. It refreshes planning metadata (names, tiers, group planning counts) and never
-touches operational state (launch status, listing, approvals). It creates no shops, offers, prospects,
-leads or installs.
+The seed is idempotent. New city rows start with the approved Checkpoint 1 defaults (Ottawa onboarding;
+Ottawa, Toronto and Hamilton listed). Later seed runs refresh planning metadata (names, tiers, group
+planning counts) and never change operational state. It creates no shops, offers, prospects, leads or installs.
 
 ### Test commands
 
@@ -160,13 +162,13 @@ Rules enforced by the schema:
 - Sharing a market group grants no service relationship; serving another city requires an explicit `shop_service_cities` row.
 - Tax components are unverified placeholders (`tax_components_verified = false`) and are never shown publicly.
 
-## Public pages (Checkpoint 1)
+## Public pages and wizard
 
 | Path | Purpose |
 |---|---|
 | `/` | Homepage with city selector |
 | `/ottawa`, `/toronto`, `/hamilton` | City pages. One domain, one path per city |
-| `/tire-match` | Destination of the CTA. The form is Checkpoint 2; this page collects nothing |
+| `/tire-match` | Checkpoint 2 wizard: city and need steps only; no contact details or server submission |
 | `/internal/architecture` | Staging-only schema and seed review |
 
 **City states.** `live` shows the approved hero and CTA. `planned` and `onboarding` show
@@ -178,9 +180,13 @@ state without changing the database (or use `?preview_state=live|planned|onboard
 and inspect captured attribution. The API disables these tools in production.
 
 **Attribution.** `city, source, campaign, shop, package, price, utm_source, utm_medium, utm_campaign,
-referrer_url, landing_url` are captured on first landing into local storage and never overwritten by
-navigation or by changing city. The selected city is stored separately. Internal links also keep the
-query string.
+referrer_url, landing_url` are captured on first landing. The original record stays locked for 30 days;
+later visits with different parameters are stored as later touches and never replace it. The selected city
+is stored separately. Internal links also keep the query string.
+
+**Replit preview.** Run `bash scripts/start-preview.sh` to create a disposable local PostgreSQL database,
+apply migrations, seed only the location directory, and start the frontend and API. This preview is
+staging-only and does not deploy the project.
 
 **SEO.** Every page is `noindex` today. A city page becomes indexable only when
 `SITE_INDEXING_ENABLED=true` **and** `cities.seo_indexable` **and** the city is `live`.

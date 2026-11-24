@@ -6,7 +6,7 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |
 | 1 | City-aware landing page | Approved | 2026-11-24 |
-| 2 | Tire Match wizard: city and need steps | Not started | — |
+| 2 | Tire Match wizard: city and need steps | Ready for review; not approved | — |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started | — |
 | 4 | Preferences and lead intent | Not started | — |
 | 5 | Shop and offer database, admin | Not started | — |
@@ -98,3 +98,32 @@ offers, lead capture, admin, notifications, quotes, bookings or reconciliation.
 
 **Next checkpoint.** Checkpoint 2 — Tire Match wizard, steps 1 and 2 (city/location and need selection),
 only after Checkpoint 1 is approved.
+
+---
+
+## Checkpoint 2 — Tire Match wizard: city and need steps
+
+- **Status:** Ready for review; not approved
+- **Approval date:** —
+- **Branch:** `checkpoint-2-tire-match-wizard`
+- **Git tag:** None; create only after approval
+
+**Scope.** Step 1 city/location and Step 2 need selection only. No vehicle/tire-size form, offers,
+lead capture, admin tools, notifications, quotes, bookings or reconciliation.
+
+**Deliverables**
+- Database-driven city selector limited to the three listed cities; URL city preselection and manual changes.
+- Optional postal code and travel radius choices.
+- Five need choices, winter-tire follow-up, repair description, and next-step preview only.
+- Progress indicator, back navigation, mobile-first layout, and browser-local progress storage.
+- The original attribution remains separate from the selected city and locked for 30 days.
+- No customer contact details, lead creation or server writes.
+- 33 frontend tests and 36 backend acceptance tests pass.
+- Supporting migration `0003` repairs approved Checkpoint 1 city defaults when seed data already exists.
+
+**Known limitations**
+- Steps 3–6 are not built. The wizard shows the appropriate next-step label and stops there.
+- No production deployment, external database, customer data or live booking flow.
+- No Checkpoint 2 approval date or tag yet.
+
+**Next checkpoint.** Checkpoint 3 remains blocked until Sam approves Checkpoint 2.
