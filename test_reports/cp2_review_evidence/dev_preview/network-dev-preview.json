@@ -1,0 +1,1612 @@
+{
+  "label": "dev-preview",
+  "target": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com",
+  "viewports": {
+    "390x844": {
+      "total_requests": 70,
+      "requests_by_class": {
+        "Application asset": 8,
+        "Google Fonts (font asset)": 20,
+        "Dev-server overlay/recorder (added by workspace dev server)": 15,
+        "Cloudflare beacon (added by preview host)": 11,
+        "Application API": 16
+      },
+      "non_get_requests": [
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545135417001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545135959002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 867,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545135132,\"pageloadId\":\"6d0783f8-2760-4335-952e-59e4c648f548\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":62,\"connectStart\":62,\"connectEnd\":96,\"secureConnectionStart\":74,\"requestStart\":97,\"responseSta"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/f8df4d4a0cd6/0.17103154444730906:1795541430:zisMtPK6YpvG255vIQP_tL0jYrL-AoRRzVFpR4iOZCM/a5fa7ec73db62911",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 16439,
+          "typed_value_in_request": false,
+          "body_excerpt": "4BCoqpcEloRGE0Qo6ZFt4QbVZ$cpUnGrC5ir3ji-gEem+ooUhLn41i9df5HvFqvFKnzEL+DXxC0VipbAw9tHpDT$LRxhYSGhFBmhDJ71ik8-+4PBiPbINemzQ7QDfzhXVHSy+mTU2s$GJz4xJVg-ayYrezDRnj$f3CWwGpsCc-YRvDZBYP4embH$i5+x+$1dqMB-12ALKnPKZBHI5fZw9TQfdeWeILf8LJMhmdEvIm$Hiabp9Y6fbWsiW7I11+tSpzlt67MVSo+FYMmUkr51axmwNPcdoPNlovLoRAL2QtfwwVAy2ahduwqFCcrQnG30dKiB$IaGhZB73yyNDUeg4i4aDXBhv6+8QKyhs2yr+X7XN+ut1gH87Ehran+8iaZ$IXQd5I$mvLTPMMpXMQzzbpegVEk6Z$b3oP$G3KPDbAFUWUF+pYEgMm8+BFr8TiDVJndg49MT3yV$kg6qIP0TNavkv5K93zQuXJYUyXgGmRwtbmGf8aqm3amo4nQID3xH7ScLZAoAPeDYNqgcSuIFes7bplujmTqxgUs$xtZj4+WaC0Bg5sR8VmKrxN3DVh38n1BPk3coY9eXUZkt0nCjkQG2"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545136864001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545137250002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 858,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545136769,\"pageloadId\":\"ec05a0e3-a093-497a-83b7-a7de3cfa1c5e\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":2,\"domainLookupEnd\":2,\"connectStart\":2,\"connectEnd\":2,\"secureConnectionStart\":2,\"requestStart\":2,\"responseStart\":8"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545138364003,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545138386001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545138754002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 857,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545138280,\"pageloadId\":\"346062aa-b15f-44e0-945e-32793e78df87\",\"eventType\":1,\"nt\":\"reload\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":1,\"connectStart\":1,\"connectEnd\":1,\"secureConnectionStart\":1,\"requestStart\":2,\"responseStart\":96,"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"aiii1iwo\",\"seq\":1795545139886003,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"iwb7ijny\",\"seq\":1795545140125001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"iwb7ijny\",\"seq\":1795545140663002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 858,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545140036,\"pageloadId\":\"915eee46-8329-4f09-bb9a-acea14b19f88\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":1,\"connectStart\":1,\"connectEnd\":1,\"secureConnectionStart\":1,\"requestStart\":1,\"responseStart\":7"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"iwb7ijny\",\"seq\":1795545141625003,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        }
+      ],
+      "requests_containing_typed_input": [],
+      "third_party_urls": [
+        "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+        "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+        "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+        "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+        "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+      ],
+      "page": {
+        "analytics_globals": [],
+        "recorder_globals": [
+          "__EMERGENT_OVERLAY__",
+          "__EMERGENT_OVERLAY_STATE__",
+          "rrweb"
+        ],
+        "script_tags": [
+          "(inline, 79767 chars)",
+          "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "(inline, 327 chars)",
+          "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+        ],
+        "cookies": [
+          {
+            "name": "cf_clearance",
+            "domain": ".wizard-cp2-review--8ktg0g80.preview.emergentagent.com"
+          }
+        ],
+        "websockets": []
+      },
+      "screenshots": [
+        {
+          "file": "1-no-url-no-saved-390x844.jpg",
+          "case": "No URL city and no saved progress",
+          "url": "/tire-match",
+          "observed": {
+            "city_select_value": "",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": true,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "2-url-city-preselected-390x844.jpg",
+          "case": "URL ?city=ottawa preselects Ottawa",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": "ottawa",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "ottawa",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "3-manual-change-after-url-390x844.jpg",
+          "case": "Manual change to Hamilton after ?city=ottawa",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": "hamilton",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "hamilton",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "4-refresh-keeps-manual-change-390x844.jpg",
+          "case": "Refresh with ?city=ottawa still in the URL keeps Hamilton",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": "hamilton",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "hamilton",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "5a-saved-hamilton-on-step-2-390x844.jpg",
+          "case": "Saved progress: Hamilton, on Step 2, other answers filled in",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": null,
+            "step_label": "Step 2 of 6",
+            "continue_disabled": null,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 2,
+                "citySlug": "hamilton",
+                "postalCode": "K1A 0B1",
+                "radius": "25",
+                "need": "repair",
+                "winterNeedsNewTires": null,
+                "issueDescription": "Slow leak zebra-quartz front tire",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "5b-url-city-replaces-saved-returns-to-step-1-390x844.jpg",
+          "case": "New session with ?city=toronto replaces saved Hamilton: back on Step 1, other answers kept",
+          "url": "/tire-match?city=toronto",
+          "observed": {
+            "city_select_value": "toronto",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "toronto",
+                "postalCode": "K1A 0B1",
+                "radius": "25",
+                "need": "repair",
+                "winterNeedsNewTires": null,
+                "issueDescription": "Slow leak zebra-quartz front tire",
+                "outcome": null
+              }
+            }
+          }
+        }
+      ],
+      "all_requests": [
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5fa7ec73db62911",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/h/b/scripts/jsd/f8df4d4a0cd6/main.js?ray=a5fa7ec73db62911",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 867
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/f8df4d4a0cd6/0.17103154444730906:1795541430:zisMtPK6YpvG255vIQP_tL0jYrL-AoRRzVFpR4iOZCM/a5fa7ec73db62911",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 16439
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match?city=ottawa",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 858
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match?city=ottawa",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 857
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match?city=toronto",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 858
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        }
+      ]
+    },
+    "1440x900": {
+      "total_requests": 70,
+      "requests_by_class": {
+        "Application asset": 8,
+        "Google Fonts (font asset)": 20,
+        "Dev-server overlay/recorder (added by workspace dev server)": 15,
+        "Cloudflare beacon (added by preview host)": 11,
+        "Application API": 16
+      },
+      "non_get_requests": [
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545148626001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545149179002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 867,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545148430,\"pageloadId\":\"e2dd1d3c-5955-4be0-9d81-9b451b696c42\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":26,\"connectStart\":26,\"connectEnd\":57,\"secureConnectionStart\":37,\"requestStart\":57,\"responseSta"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/f8df4d4a0cd6/0.17103154444730906:1795541430:zisMtPK6YpvG255vIQP_tL0jYrL-AoRRzVFpR4iOZCM/a5fa7f1a0a0a111b",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 16370,
+          "typed_value_in_request": false,
+          "body_excerpt": "4BCoqpcEloRGE0Qo6ZFt4QktvdcpUnGrC5ir3ji-gEem+ooUhLn41i9df5HvFqvFKnzEL+DXxC0VipbAw9tHpDT$LRxhYSGhFBmhDJ71ik8-+4PBiPbINemzQ7QDfzhXVHSy+mTU2s$GJz4xJVg-ayYrezDRnj$f3CWwGpsCc-YRvDZBYP4embH$i5+x+$VdJ$qwMY+J0hsuvQHYCYvRoplkALA00w-5uMiktqJUbooLRT7BBSUwId3E8$slB-FaPYmdT1MFqNH814PPh12SihGhVq8X4XPLhv2s8cae1K0LhTFQeZHdc5QbMT47ZsQg3WtSNyQG8W4HZj1mpUghiV$+7niYBArq7iVbiH26WjP03YvUYK$FPdnnJw34X3-PxcBRcujM4NylcU3usGpj0PMwCop$mPqFGtbN1-rQh3dzTcJum287tKtR38TR8Il8e4MeCLc8jHGLqq8gWYlwy6iyiAFaAqe7KzUzpNi2rUmB+6abSmKh3HR2Tb5NerqMpbgsoWzsL5P31qKX0WoFdpBnV90PxIWIAkwnrXfG2v3UfqmMWvwf2WfsFjsj-lfVuUU9FzQAqkeW5nsqRPWhfHtZ"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545150091001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545150454002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 859,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545149993,\"pageloadId\":\"919bf76a-68ab-4718-9ed9-2d8193b4a7fe\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":1,\"connectStart\":1,\"connectEnd\":1,\"secureConnectionStart\":1,\"requestStart\":2,\"responseStart\":8"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545151591003,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545151647001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545151964002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 857,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545151542,\"pageloadId\":\"178df909-f211-4c52-9630-205d1e235fee\",\"eventType\":1,\"nt\":\"reload\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":2,\"domainLookupEnd\":2,\"connectStart\":2,\"connectEnd\":2,\"secureConnectionStart\":2,\"requestStart\":2,\"responseStart\":94,"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"zxkkcssz\",\"seq\":1795545153147003,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"o0pl6a7b\",\"seq\":1795545153537001,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"o0pl6a7b\",\"seq\":1795545154084002,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 858,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"startTime\":1795545153444,\"pageloadId\":\"918f66f8-7fde-4843-9936-4ebe71f05f7c\",\"eventType\":1,\"nt\":\"navigate\",\"location\":\"https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match\",\"versions\":{\"fl\":\"2024.11.0\",\"js\":\"2026.10.1\",\"timings\":2},\"bi\":{\"be\":\"Blink\",\"bev\":\"156\",\"bv\":\"156\"},\"memory\":{\"totalJSHeapSize\":21700000,\"usedJSHeapSize\":15200000,\"jsHeapSizeLimit\":3760000000},\"firstPaint\":0,\"firstContentfulPaint\":0,\"timingsV2\":{\"nextHopProtocol\":\"h2\",\"domainLookupStart\":1,\"domainLookupEnd\":1,\"connectStart\":1,\"connectEnd\":1,\"secureConnectionStart\":1,\"requestStart\":1,\"responseStart\":8"
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89,
+          "typed_value_in_request": false,
+          "body_excerpt": "{\"page\":\"o0pl6a7b\",\"seq\":1795545155037003,\"url\":\"/tire-match\",\"splash\":false,\"errors\":[]}"
+        }
+      ],
+      "requests_containing_typed_input": [],
+      "third_party_urls": [
+        "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+        "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+        "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+        "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+        "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+        "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+      ],
+      "page": {
+        "analytics_globals": [],
+        "recorder_globals": [
+          "__EMERGENT_OVERLAY__",
+          "__EMERGENT_OVERLAY_STATE__",
+          "rrweb"
+        ],
+        "script_tags": [
+          "(inline, 79767 chars)",
+          "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "(inline, 327 chars)",
+          "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092"
+        ],
+        "cookies": [
+          {
+            "name": "cf_clearance",
+            "domain": ".wizard-cp2-review--8ktg0g80.preview.emergentagent.com"
+          }
+        ],
+        "websockets": []
+      },
+      "screenshots": [
+        {
+          "file": "1-no-url-no-saved-1440x900.jpg",
+          "case": "No URL city and no saved progress",
+          "url": "/tire-match",
+          "observed": {
+            "city_select_value": "",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": true,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "2-url-city-preselected-1440x900.jpg",
+          "case": "URL ?city=ottawa preselects Ottawa",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": "ottawa",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "ottawa",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "3-manual-change-after-url-1440x900.jpg",
+          "case": "Manual change to Hamilton after ?city=ottawa",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": "hamilton",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "hamilton",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "4-refresh-keeps-manual-change-1440x900.jpg",
+          "case": "Refresh with ?city=ottawa still in the URL keeps Hamilton",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": "hamilton",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "hamilton",
+                "postalCode": "",
+                "radius": "",
+                "need": "",
+                "winterNeedsNewTires": null,
+                "issueDescription": "",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "5a-saved-hamilton-on-step-2-1440x900.jpg",
+          "case": "Saved progress: Hamilton, on Step 2, other answers filled in",
+          "url": "/tire-match?city=ottawa",
+          "observed": {
+            "city_select_value": null,
+            "step_label": "Step 2 of 6",
+            "continue_disabled": null,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 2,
+                "citySlug": "hamilton",
+                "postalCode": "K1A 0B1",
+                "radius": "25",
+                "need": "repair",
+                "winterNeedsNewTires": null,
+                "issueDescription": "Slow leak zebra-quartz front tire",
+                "outcome": null
+              }
+            }
+          }
+        },
+        {
+          "file": "5b-url-city-replaces-saved-returns-to-step-1-1440x900.jpg",
+          "case": "New session with ?city=toronto replaces saved Hamilton: back on Step 1, other answers kept",
+          "url": "/tire-match?city=toronto",
+          "observed": {
+            "city_select_value": "toronto",
+            "step_label": "Step 1 of 6",
+            "continue_disabled": false,
+            "saved_wizard_state": {
+              "version": 1,
+              "state": {
+                "step": 1,
+                "citySlug": "toronto",
+                "postalCode": "K1A 0B1",
+                "radius": "25",
+                "need": "repair",
+                "winterNeedsNewTires": null,
+                "issueDescription": "Slow leak zebra-quartz front tire",
+                "outcome": null
+              }
+            }
+          }
+        }
+      ],
+      "all_requests": [
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a5fa7f1a0a0a111b",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/h/b/scripts/jsd/f8df4d4a0cd6/main.js?ray=a5fa7f1a0a0a111b",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 867
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/challenge-platform/h/b/jsd/oneshot/f8df4d4a0cd6/0.17103154444730906:1795541430:zisMtPK6YpvG255vIQP_tL0jYrL-AoRRzVFpR4iOZCM/a5fa7f1a0a0a111b",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 16370
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match?city=ottawa",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 859
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match?city=ottawa",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 857
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match?city=toronto",
+          "resource": "document",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=Inter:wght@600&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/static/js/bundle.js",
+          "resource": "script",
+          "class": "Application asset",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/recorder.js",
+          "resource": "script",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://static.cloudflareinsights.com/beacon.min.js/vce701823e78c4301a35b7e07294d87301792088814092",
+          "resource": "script",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap",
+          "resource": "stylesheet",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/config",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/api/public/locations",
+          "resource": "xhr",
+          "class": "Application API",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=V8mloQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7aUSkoFDG70JFMnmBvY_Q8kCxH&skey=c04ef52a878abc32&v=v22",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/l/font?kit=UcCB3FwrK3iLTeHuS_nVMrMxCp50SjIw2boKoduKmMEVuLyfU5NJeWUdIOjBeTGbXZdND2M&skey=c491285d6722e4fa&v=v20",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/cdn-cgi/rum?",
+          "resource": "xhr",
+          "class": "Cloudflare beacon (added by preview host)",
+          "body_bytes": 858
+        },
+        {
+          "method": "GET",
+          "url": "https://fonts.gstatic.com/s/ibmplexmono/v23/-F63fjptAgt5VM-kVkqdyU8n1i8q1w.woff2",
+          "resource": "font",
+          "class": "Google Fonts (font asset)",
+          "body_bytes": 0
+        },
+        {
+          "method": "POST",
+          "url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/__emergent_overlay__/report",
+          "resource": "fetch",
+          "class": "Dev-server overlay/recorder (added by workspace dev server)",
+          "body_bytes": 89
+        }
+      ]
+    }
+  }
+}

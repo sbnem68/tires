@@ -1,0 +1,424 @@
+{
+  "suite": "Checkpoint 2 real-browser acceptance",
+  "run_at_utc": "2026-11-24 18:28",
+  "base_url_host": "127.0.0.1:4173",
+  "viewports": {
+    "mobile": {
+      "width": 390,
+      "height": 844
+    },
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "passed": 54,
+  "failed": 0,
+  "total": 54,
+  "network_findings": {
+    "mobile": {
+      "non_api_writes_by_destination": {},
+      "typed_values_found_in": [],
+      "third_party_hosts_contacted": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "third_party_writes": 0,
+      "analytics_requests": 0,
+      "scripts_injected_by_preview_host": [],
+      "scripts_injected_by_dev_server": []
+    },
+    "desktop": {
+      "non_api_writes_by_destination": {},
+      "typed_values_found_in": [],
+      "third_party_hosts_contacted": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "third_party_writes": 0,
+      "analytics_requests": 0,
+      "scripts_injected_by_preview_host": [],
+      "scripts_injected_by_dev_server": []
+    }
+  },
+  "results": [
+    {
+      "viewport": "mobile",
+      "test": "1",
+      "title": "Step 1 loads correctly",
+      "status": "PASS",
+      "detail": "cities from API: ['Hamilton', 'Ottawa', 'Toronto']"
+    },
+    {
+      "viewport": "mobile",
+      "test": "2",
+      "title": "City can be selected manually",
+      "status": "PASS",
+      "detail": "all three cities selectable"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3",
+      "title": "City is preselected from URL",
+      "status": "PASS",
+      "detail": "preselected: ['ottawa', 'toronto', 'hamilton']"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3a",
+      "title": "Unlisted URL city is ignored",
+      "status": "PASS",
+      "detail": "unlisted city in URL is ignored"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3b",
+      "title": "URL city wins over saved progress; attribution unchanged",
+      "status": "PASS",
+      "detail": "saved Toronto + ?city=ottawa -> Ottawa; original attribution unchanged"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3c",
+      "title": "No URL city and no saved progress leaves the city unselected (strict)",
+      "status": "PASS",
+      "detail": "no URL city + no saved progress -> 'Choose a city', Continue disabled, even after visiting /toronto"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3d",
+      "title": "No URL city but saved progress restores the saved city",
+      "status": "PASS",
+      "detail": "no URL city + saved progress -> saved city (Hamilton) restored, not the last city page visited"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3e",
+      "title": "Manual city change after URL preselect survives refresh",
+      "status": "PASS",
+      "detail": "URL preselect Ottawa -> manual Hamilton -> kept across two refreshes"
+    },
+    {
+      "viewport": "mobile",
+      "test": "4",
+      "title": "Postal code is optional",
+      "status": "PASS",
+      "detail": "continued with postal code empty"
+    },
+    {
+      "viewport": "mobile",
+      "test": "5",
+      "title": "Travel radius can be selected",
+      "status": "PASS",
+      "detail": "four radius options, optional"
+    },
+    {
+      "viewport": "mobile",
+      "test": "6",
+      "title": "Step 2 loads correctly",
+      "status": "PASS",
+      "detail": "Step 2 heading and label correct"
+    },
+    {
+      "viewport": "mobile",
+      "test": "7",
+      "title": "All five need options work",
+      "status": "PASS",
+      "detail": "five single-select options with exact labels"
+    },
+    {
+      "viewport": "mobile",
+      "test": "8",
+      "title": "Each need type routes to the correct next step",
+      "status": "PASS",
+      "detail": "{\"buy_2\": \"vehicle_tire_size\", \"buy_4\": \"vehicle_tire_size\", \"unsure\": \"guidance_needed\", \"changeover_yes\": \"vehicle_tire_size\", \"changeover_no\": \"changeover_request\", \"repair\": \"repair_inspection\"}"
+    },
+    {
+      "viewport": "mobile",
+      "test": "9",
+      "title": "Forward and backward navigation preserves selections",
+      "status": "PASS",
+      "detail": "selections kept both ways"
+    },
+    {
+      "viewport": "mobile",
+      "test": "10",
+      "title": "Progress indicator updates correctly",
+      "status": "PASS",
+      "detail": "1 of 6 -> 2 of 6 -> 1 of 6"
+    },
+    {
+      "viewport": "mobile",
+      "test": "11",
+      "title": "Partial progress is saved in local storage",
+      "status": "PASS",
+      "detail": "saved under t4t.tire_match_wizard.v1"
+    },
+    {
+      "viewport": "mobile",
+      "test": "12",
+      "title": "Form works on this viewport (measured layout)",
+      "status": "PASS",
+      "detail": "step 1: 3 fields; step 2: 5 fields; primary action 100% of form width; no horizontal scroll at 390px"
+    },
+    {
+      "viewport": "mobile",
+      "test": "13",
+      "title": "No data is lost on refresh",
+      "status": "PASS",
+      "detail": "step 1, step 2 and a manual change after ?city= all survive refresh"
+    },
+    {
+      "viewport": "mobile",
+      "test": "14",
+      "title": "No customer contact information is collected",
+      "status": "PASS",
+      "detail": "fields present: {1: ['wizard-city', 'wizard-postal', 'wizard-radius'], 2: ['wizard-issue']}"
+    },
+    {
+      "viewport": "mobile",
+      "test": "15",
+      "title": "No lead is created",
+      "status": "PASS",
+      "detail": "leads=0, quotes=0 before and after; no lead endpoint called"
+    },
+    {
+      "viewport": "mobile",
+      "test": "16",
+      "title": "No server write occurs",
+      "status": "PASS",
+      "detail": "API calls: ['/api/public/config', '/api/public/locations'], GET only, no body; typed values found in 0 of 10 requests; non-API writes (preview tooling/analytics): {}"
+    },
+    {
+      "viewport": "mobile",
+      "test": "17",
+      "title": "Attribution remains intact when city changes",
+      "status": "PASS",
+      "detail": "all 9 URL fields + landing URL intact; selected city toronto stored separately from landing city ottawa"
+    },
+    {
+      "viewport": "mobile",
+      "test": "18",
+      "title": "Original attribution remains locked for 30 days",
+      "status": "PASS",
+      "detail": "later touches on day 0 and day 29 recorded as last touch only; original unchanged"
+    },
+    {
+      "viewport": "mobile",
+      "test": "19",
+      "title": "No analytics or session recording (required fix)",
+      "status": "PASS",
+      "detail": "no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: []; injected by dev server: []"
+    },
+    {
+      "viewport": "mobile",
+      "test": "A1",
+      "title": "Attribution: organic first landing is the original",
+      "status": "PASS",
+      "detail": "organic first landing stays the original for 30 days"
+    },
+    {
+      "viewport": "mobile",
+      "test": "A2",
+      "title": "Attribution: lock ends after 30 days",
+      "status": "PASS",
+      "detail": "after 31 days a new original touch starts"
+    },
+    {
+      "viewport": "mobile",
+      "test": "A3",
+      "title": "Attribution: city selector keeps attribution",
+      "status": "PASS",
+      "detail": "city selector change keeps attribution; wizard follows the URL city, not the site selection"
+    },
+    {
+      "viewport": "desktop",
+      "test": "1",
+      "title": "Step 1 loads correctly",
+      "status": "PASS",
+      "detail": "cities from API: ['Hamilton', 'Ottawa', 'Toronto']"
+    },
+    {
+      "viewport": "desktop",
+      "test": "2",
+      "title": "City can be selected manually",
+      "status": "PASS",
+      "detail": "all three cities selectable"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3",
+      "title": "City is preselected from URL",
+      "status": "PASS",
+      "detail": "preselected: ['ottawa', 'toronto', 'hamilton']"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3a",
+      "title": "Unlisted URL city is ignored",
+      "status": "PASS",
+      "detail": "unlisted city in URL is ignored"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3b",
+      "title": "URL city wins over saved progress; attribution unchanged",
+      "status": "PASS",
+      "detail": "saved Toronto + ?city=ottawa -> Ottawa; original attribution unchanged"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3c",
+      "title": "No URL city and no saved progress leaves the city unselected (strict)",
+      "status": "PASS",
+      "detail": "no URL city + no saved progress -> 'Choose a city', Continue disabled, even after visiting /toronto"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3d",
+      "title": "No URL city but saved progress restores the saved city",
+      "status": "PASS",
+      "detail": "no URL city + saved progress -> saved city (Hamilton) restored, not the last city page visited"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3e",
+      "title": "Manual city change after URL preselect survives refresh",
+      "status": "PASS",
+      "detail": "URL preselect Ottawa -> manual Hamilton -> kept across two refreshes"
+    },
+    {
+      "viewport": "desktop",
+      "test": "4",
+      "title": "Postal code is optional",
+      "status": "PASS",
+      "detail": "continued with postal code empty"
+    },
+    {
+      "viewport": "desktop",
+      "test": "5",
+      "title": "Travel radius can be selected",
+      "status": "PASS",
+      "detail": "four radius options, optional"
+    },
+    {
+      "viewport": "desktop",
+      "test": "6",
+      "title": "Step 2 loads correctly",
+      "status": "PASS",
+      "detail": "Step 2 heading and label correct"
+    },
+    {
+      "viewport": "desktop",
+      "test": "7",
+      "title": "All five need options work",
+      "status": "PASS",
+      "detail": "five single-select options with exact labels"
+    },
+    {
+      "viewport": "desktop",
+      "test": "8",
+      "title": "Each need type routes to the correct next step",
+      "status": "PASS",
+      "detail": "{\"buy_2\": \"vehicle_tire_size\", \"buy_4\": \"vehicle_tire_size\", \"unsure\": \"guidance_needed\", \"changeover_yes\": \"vehicle_tire_size\", \"changeover_no\": \"changeover_request\", \"repair\": \"repair_inspection\"}"
+    },
+    {
+      "viewport": "desktop",
+      "test": "9",
+      "title": "Forward and backward navigation preserves selections",
+      "status": "PASS",
+      "detail": "selections kept both ways"
+    },
+    {
+      "viewport": "desktop",
+      "test": "10",
+      "title": "Progress indicator updates correctly",
+      "status": "PASS",
+      "detail": "1 of 6 -> 2 of 6 -> 1 of 6"
+    },
+    {
+      "viewport": "desktop",
+      "test": "11",
+      "title": "Partial progress is saved in local storage",
+      "status": "PASS",
+      "detail": "saved under t4t.tire_match_wizard.v1"
+    },
+    {
+      "viewport": "desktop",
+      "test": "12",
+      "title": "Form works on this viewport (measured layout)",
+      "status": "PASS",
+      "detail": "step 1: 3 fields; step 2: 5 fields; primary action 24% of form width; no horizontal scroll at 1440px"
+    },
+    {
+      "viewport": "desktop",
+      "test": "13",
+      "title": "No data is lost on refresh",
+      "status": "PASS",
+      "detail": "step 1, step 2 and a manual change after ?city= all survive refresh"
+    },
+    {
+      "viewport": "desktop",
+      "test": "14",
+      "title": "No customer contact information is collected",
+      "status": "PASS",
+      "detail": "fields present: {1: ['wizard-city', 'wizard-postal', 'wizard-radius'], 2: ['wizard-issue']}"
+    },
+    {
+      "viewport": "desktop",
+      "test": "15",
+      "title": "No lead is created",
+      "status": "PASS",
+      "detail": "leads=0, quotes=0 before and after; no lead endpoint called"
+    },
+    {
+      "viewport": "desktop",
+      "test": "16",
+      "title": "No server write occurs",
+      "status": "PASS",
+      "detail": "API calls: ['/api/public/config', '/api/public/locations'], GET only, no body; typed values found in 0 of 10 requests; non-API writes (preview tooling/analytics): {}"
+    },
+    {
+      "viewport": "desktop",
+      "test": "17",
+      "title": "Attribution remains intact when city changes",
+      "status": "PASS",
+      "detail": "all 9 URL fields + landing URL intact; selected city toronto stored separately from landing city ottawa"
+    },
+    {
+      "viewport": "desktop",
+      "test": "18",
+      "title": "Original attribution remains locked for 30 days",
+      "status": "PASS",
+      "detail": "later touches on day 0 and day 29 recorded as last touch only; original unchanged"
+    },
+    {
+      "viewport": "desktop",
+      "test": "19",
+      "title": "No analytics or session recording (required fix)",
+      "status": "PASS",
+      "detail": "no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: []; injected by dev server: []"
+    },
+    {
+      "viewport": "desktop",
+      "test": "A1",
+      "title": "Attribution: organic first landing is the original",
+      "status": "PASS",
+      "detail": "organic first landing stays the original for 30 days"
+    },
+    {
+      "viewport": "desktop",
+      "test": "A2",
+      "title": "Attribution: lock ends after 30 days",
+      "status": "PASS",
+      "detail": "after 31 days a new original touch starts"
+    },
+    {
+      "viewport": "desktop",
+      "test": "A3",
+      "title": "Attribution: city selector keeps attribution",
+      "status": "PASS",
+      "detail": "city selector change keeps attribution; wizard follows the URL city, not the site selection"
+    }
+  ]
+}

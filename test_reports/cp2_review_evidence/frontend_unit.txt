@@ -1,0 +1,66 @@
+yarn run v1.22.22
+$ craco test --watchAll=false --runInBand --verbose
+Project root path resolved to:  /app/frontend
+Override started with arguments:  [
+  '/usr/bin/node',
+  '/app/frontend/node_modules/@craco/craco/dist/scripts/test.js',
+  '--watchAll=false',
+  '--runInBand',
+  '--verbose'
+]
+For environment:  test
+Config file path resolved to:  /app/frontend/craco.config.js
+Applied craco config plugins.
+Found jest config at:  /app/frontend/node_modules/react-scripts/scripts/utils/createJestConfig.js
+Overrode require cache for module: /app/frontend/node_modules/react-scripts/scripts/utils/createJestConfig.js
+Overrode Jest config provider.
+Overrided Jest config.
+Testing CRA at:  /app/frontend/node_modules/react-scripts/scripts/test.js
+Overrided Jest Babel transformer.
+Merged Jest config with 'jest.configure'.
+Applied Jest config plugins.
+Merged Jest config.
+Config file path resolved to:  /app/frontend/craco.config.js
+Applied craco config plugins.
+PASS src/pages/TireMatchPage.test.jsx
+  ✓ 1. Step 1 loads with the city and location fields (80 ms)
+  ✓ 2. City can be selected manually (97 ms)
+  ✓ 3. City is preselected from the URL (79 ms)
+  ✓ 3b. A valid URL city wins over saved progress, and original attribution is unchanged (13 ms)
+  ✓ 3c. No URL city: saved wizard progress restores the saved city (17 ms)
+  ✓ 3c-strict. No URL city and no saved progress leaves the city unselected, whatever was chosen elsewhere (9 ms)
+  ✓ 3d. Manual city change after a URL preselect is kept, and survives a refresh (17 ms)
+  ✓ 3e. The city chosen elsewhere on the site never overrides the URL city or saved progress (49 ms)
+  ✓ 4. Postal code is optional (20 ms)
+  ✓ 5. Travel radius can be selected (8 ms)
+  ✓ 6. Step 2 loads after continuing from location (12 ms)
+  ✓ 7. All five need options can be selected (68 ms)
+  ✓ 8. Each need type resolves to its correct next route (1 ms)
+  ✓ 9. Back navigation keeps the user's selections (32 ms)
+  ✓ 10. The progress indicator changes from step 1 to step 2 (53 ms)
+  ✓ 11. Partial progress is saved in local storage (13 ms)
+  ✓ 12. Mobile-first markup: single column, full-width primary action, and no fixed widths (9 ms)
+  ✓ 13. Saved progress is restored after a refresh (23 ms)
+  ✓ 14. No customer contact information fields are present (7 ms)
+  ✓ 15. No lead is created: no request reaches a lead endpoint and no lead record is stored (110 ms)
+  ✓ 16. No server write: the real HTTP client issues only the two read-only GET requests (66 ms)
+  ✓ 17. Changing the selected city does not change original attribution (8 ms)
+  ✓ 18. Original attribution remains locked for later touches within 30 days (2 ms)
+  ✓ Driver-facing wording contains no internal development language (66 ms)
+
+PASS src/lib/attribution.test.js
+  ✓ keeps an organic first landing as the original during the 30-day lock (4 ms)
+  ✓ keeps all original attribution fields intact for 30 days (2 ms)
+  ✓ starts a new original touch after the 30-day lock expires (2 ms)
+
+PASS src/lib/noAnalytics.test.js
+  ✓ the page template loads no analytics, session-recording or platform script (1 ms)
+  ✓ the application source references no analytics client (8 ms)
+
+Test Suites: 3 passed, 3 total
+Tests:       29 passed, 29 total
+Snapshots:   0 total
+Time:        3.777 s
+Ran all test suites.
+Done in 4.95s.
+exit=0
