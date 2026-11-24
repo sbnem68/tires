@@ -1,6 +1,6 @@
 {
   "suite": "Checkpoint 2 real-browser acceptance",
-  "run_at_utc": "2026-11-24 16:25",
+  "run_at_utc": "2026-11-24 17:04",
   "base_url_host": "tire-match-cp2--16m7pwkc.preview.emergentagent.com",
   "viewports": {
     "mobile": {
@@ -12,25 +12,47 @@
       "height": 900
     }
   },
-  "passed": 46,
+  "passed": 54,
   "failed": 0,
-  "total": 46,
+  "total": 54,
   "network_findings": {
     "mobile": {
       "non_api_writes_by_destination": {
         "/__emergent_overlay__": 3,
-        "/cdn-cgi": 2,
-        "ap.emergent.sh/flags": 1
+        "/cdn-cgi": 2
       },
-      "typed_values_found_in": []
+      "typed_values_found_in": [],
+      "third_party_hosts_contacted": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "third_party_writes": 0,
+      "analytics_requests": 0,
+      "scripts_injected_by_preview_host": [
+        "static.cloudflareinsights.com"
+      ],
+      "scripts_injected_by_dev_server": [
+        "/__emergent_overlay__/recorder.js"
+      ]
     },
     "desktop": {
       "non_api_writes_by_destination": {
         "/__emergent_overlay__": 3,
-        "/cdn-cgi": 2,
-        "ap.emergent.sh/flags": 1
+        "/cdn-cgi": 2
       },
-      "typed_values_found_in": []
+      "typed_values_found_in": [],
+      "third_party_hosts_contacted": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "third_party_writes": 0,
+      "analytics_requests": 0,
+      "scripts_injected_by_preview_host": [
+        "static.cloudflareinsights.com"
+      ],
+      "scripts_injected_by_dev_server": [
+        "/__emergent_overlay__/recorder.js"
+      ]
     }
   },
   "results": [
@@ -68,6 +90,27 @@
       "title": "URL city wins over saved progress; attribution unchanged",
       "status": "PASS",
       "detail": "saved Toronto + ?city=ottawa -> Ottawa; original attribution unchanged"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3c",
+      "title": "No URL city and no saved progress leaves the city unselected (strict)",
+      "status": "PASS",
+      "detail": "no URL city + no saved progress -> 'Choose a city', Continue disabled, even after visiting /toronto"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3d",
+      "title": "No URL city but saved progress restores the saved city",
+      "status": "PASS",
+      "detail": "no URL city + saved progress -> saved city (Hamilton) restored, not the last city page visited"
+    },
+    {
+      "viewport": "mobile",
+      "test": "3e",
+      "title": "Manual city change after URL preselect survives refresh",
+      "status": "PASS",
+      "detail": "URL preselect Ottawa -> manual Hamilton -> kept across two refreshes"
     },
     {
       "viewport": "mobile",
@@ -158,7 +201,7 @@
       "test": "16",
       "title": "No server write occurs",
       "status": "PASS",
-      "detail": "API calls: ['/api/public/config', '/api/public/locations'], GET only, no body; typed values found in 0 of 29 requests; non-API writes (preview tooling/analytics): {'/__emergent_overlay__': 3, '/cdn-cgi': 2, 'ap.emergent.sh/flags': 1}"
+      "detail": "API calls: ['/api/public/config', '/api/public/locations'], GET only, no body; typed values found in 0 of 20 requests; non-API writes (preview tooling/analytics): {'/__emergent_overlay__': 3, '/cdn-cgi': 2}"
     },
     {
       "viewport": "mobile",
@@ -173,6 +216,13 @@
       "title": "Original attribution remains locked for 30 days",
       "status": "PASS",
       "detail": "later touches on day 0 and day 29 recorded as last touch only; original unchanged"
+    },
+    {
+      "viewport": "mobile",
+      "test": "19",
+      "title": "No analytics or session recording (required fix)",
+      "status": "PASS",
+      "detail": "no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: ['static.cloudflareinsights.com']; injected by dev server: ['/__emergent_overlay__/recorder.js']"
     },
     {
       "viewport": "mobile",
@@ -193,7 +243,7 @@
       "test": "A3",
       "title": "Attribution: city selector keeps attribution",
       "status": "PASS",
-      "detail": "city selector change keeps attribution; explicit choice outranks carried parameter"
+      "detail": "city selector change keeps attribution; wizard follows the URL city, not the site selection"
     },
     {
       "viewport": "desktop",
@@ -229,6 +279,27 @@
       "title": "URL city wins over saved progress; attribution unchanged",
       "status": "PASS",
       "detail": "saved Toronto + ?city=ottawa -> Ottawa; original attribution unchanged"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3c",
+      "title": "No URL city and no saved progress leaves the city unselected (strict)",
+      "status": "PASS",
+      "detail": "no URL city + no saved progress -> 'Choose a city', Continue disabled, even after visiting /toronto"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3d",
+      "title": "No URL city but saved progress restores the saved city",
+      "status": "PASS",
+      "detail": "no URL city + saved progress -> saved city (Hamilton) restored, not the last city page visited"
+    },
+    {
+      "viewport": "desktop",
+      "test": "3e",
+      "title": "Manual city change after URL preselect survives refresh",
+      "status": "PASS",
+      "detail": "URL preselect Ottawa -> manual Hamilton -> kept across two refreshes"
     },
     {
       "viewport": "desktop",
@@ -319,7 +390,7 @@
       "test": "16",
       "title": "No server write occurs",
       "status": "PASS",
-      "detail": "API calls: ['/api/public/config', '/api/public/locations'], GET only, no body; typed values found in 0 of 29 requests; non-API writes (preview tooling/analytics): {'/__emergent_overlay__': 3, '/cdn-cgi': 2, 'ap.emergent.sh/flags': 1}"
+      "detail": "API calls: ['/api/public/config', '/api/public/locations'], GET only, no body; typed values found in 0 of 20 requests; non-API writes (preview tooling/analytics): {'/__emergent_overlay__': 3, '/cdn-cgi': 2}"
     },
     {
       "viewport": "desktop",
@@ -334,6 +405,13 @@
       "title": "Original attribution remains locked for 30 days",
       "status": "PASS",
       "detail": "later touches on day 0 and day 29 recorded as last touch only; original unchanged"
+    },
+    {
+      "viewport": "desktop",
+      "test": "19",
+      "title": "No analytics or session recording (required fix)",
+      "status": "PASS",
+      "detail": "no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: ['static.cloudflareinsights.com']; injected by dev server: ['/__emergent_overlay__/recorder.js']"
     },
     {
       "viewport": "desktop",
@@ -354,7 +432,7 @@
       "test": "A3",
       "title": "Attribution: city selector keeps attribution",
       "status": "PASS",
-      "detail": "city selector change keeps attribution; explicit choice outranks carried parameter"
+      "detail": "city selector change keeps attribution; wizard follows the URL city, not the site selection"
     }
   ]
 }

@@ -145,6 +145,8 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
+| 2026-11-24 17:04 | Real-browser suite after BOTH required fixes (analytics removed; strict city precedence), mobile 390x844 and desktop 1440x900 | `T4T_BASE_URL=<preview> python3 tests/e2e/checkpoint2_browser.py --screenshots screenshots` | PASS — 54 of 54 (27 per viewport). No request to PostHog, `ap.emergent.sh` or `assets.emergent.sh`; no third-party write; no wizard input in any request. An earlier run the same minute had two desktop page-load timeouts (tests 12, 13) that did not recur |
+| 2026-11-24 17:04 | Frontend unit suite after both fixes | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 29 of 29 (includes template guard test and strict-precedence tests) |
 | 2026-11-24 16:39 | Independent verification by the testing agent: backend API, wizard at 390x844 and 1920x800, URL precedence, attribution, network recording, regression of `/`, city pages and city selector | testing agent, report `test_reports/iteration_3.json` | PASS — 49 checks passed, no application bugs. One of the agent's own mobile assertions was wrong (its logic, not the app). No source files changed; database unchanged |
 | 2026-11-24 16:26 | Full backend suite, three-city seed | `cd backend && python -m pytest tests -n 0` | 30 passed, 13 failed — the same 13 full-directory tests (see Known issues); all Checkpoint 2 tests pass |
 | 2026-11-24 16:26 | Production frontend build | `cd frontend && yarn build` | PASS — compiled successfully |

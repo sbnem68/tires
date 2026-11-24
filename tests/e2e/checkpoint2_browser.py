@@ -555,9 +555,14 @@ DEV_TOOLING_PREFIXES = ("/__emergent_overlay__", "/visual-edit-overlay")
 # Where the API lives when the frontend is served separately from it (production-bundle check).
 API_HOST = urlparse(os.environ.get("T4T_API_URL", BASE)).netloc
 
-ANALYTICS_MARKERS = ("posthog", "ap.emergent.sh", "assets.emergent.sh", "emergent-main", "/flags", "/decide",
-                     "/e/", "/s/", "/batch", "google-analytics", "googletagmanager", "hotjar", "clarity.ms",
-                     "segment", "mixpanel", "fullstory")
+# Substrings that identify an analytics or session-recording vendor anywhere in a URL.
+ANALYTICS_MARKERS = ("posthog", "emergent.sh", "emergent-main", "google-analytics", "googletagmanager", "hotjar",
+                     "clarity.ms", "segment.", "mixpanel", "fullstory", "rrweb", "sentry", "datadog", "doubleclick",
+                     "facebook.net")
+# Paths used by event-capture and recording endpoints.
+ANALYTICS_PATHS = ("/flags", "/decide", "/batch", "/e/", "/s/", "/i/v0", "/collect", "/capture", "/track")
+# Font files only: fetched with GET, no cookies, no script. Reported, not treated as analytics.
+FONT_HOSTS = {"fonts.googleapis.com", "fonts.gstatic.com"}
 
 
 def t19_no_analytics(s, vp):
@@ -584,7 +589,11 @@ def t19_no_analytics(s, vp):
     third_party = [r for r in s.requests
                    if urlparse(r["url"]).netloc not in {host, API_HOST} | EDGE_INJECTED_HOSTS]
     flagged = sorted({urlparse(r["url"]).netloc + urlparse(r["url"]).path[:40] for r in third_party
-                      if any(m in r["url"].lower() for m in ANALYTICS_MARKERS)})
+                      if any(m in r["url"].lower() for m in ANALYTICS_MARKERS)
+                      or (urlparse(r["url"]).netloc not in FONT_HOSTS
+                          and urlparse(r["url"]).path.startswith(ANALYTICS_PATHS))})
+    non_font = sorted({urlparse(r["url"]).netloc for r in third_party} - FONT_HOSTS)
+    assert not non_font, f"unexpected third-party hosts contacted: {non_font}"
     assert not flagged, f"analytics requests: {flagged}"
     third_party_writes = [r["url"] for r in third_party if r["method"] not in ("GET", "HEAD", "OPTIONS")]
     assert not third_party_writes, f"writes to third parties: {third_party_writes}"
