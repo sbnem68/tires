@@ -7,6 +7,11 @@ Do not start Checkpoint 3 until Sam explicitly approves Checkpoint 2.
 
 Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: built and verified; awaiting Sam's approval.
 
+## Backup branches
+
+- `backup/checkpoint2-verified-20261124-163933` — full Checkpoint 2 state at the end of this session (same commit as the working branch).
+- `backup/roadmap-20261124-110719` — Sam's roadmap commit.
+
 ## Roadmap
 
 `ROADMAP.md` (added by Sam in `406893a`) is the canonical build plan, checkpoint order, approval-gate
