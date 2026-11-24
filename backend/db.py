@@ -12,9 +12,11 @@ load_dotenv(Path(__file__).parent / ".env")
 def database_url() -> str:
     """Return DATABASE_URL normalised to the psycopg 3 driver.
 
-    Railway and most hosts hand out postgres:// or postgresql:// URLs.
+    Prefer the project-specific external database secret when present. Replit reserves
+    DATABASE_URL for its managed Postgres connection, so an external Supabase URL uses
+    TIRES4TODAY_DATABASE_URL instead. Railway and most hosts hand out postgres:// URLs.
     """
-    url = os.environ["DATABASE_URL"]
+    url = os.environ.get("TIRES4TODAY_DATABASE_URL") or os.environ["DATABASE_URL"]
     for prefix in ("postgresql+psycopg://", "postgresql://", "postgres://"):
         if url.startswith(prefix):
             return "postgresql+psycopg://" + url[len(prefix):]

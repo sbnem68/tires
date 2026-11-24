@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const API = `${process.env.REACT_APP_BACKEND_URL || ""}/api`;
 
 export const fetchPublicConfig = () => axios.get(`${API}/public/config`).then((r) => r.data);
 export const fetchLocations = () => axios.get(`${API}/public/locations`).then((r) => r.data.cities);

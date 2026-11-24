@@ -32,7 +32,7 @@ export const URL_PARAM_KEYS = [
 export const ATTRIBUTION_KEYS = [...URL_PARAM_KEYS, "referrer_url", "landing_url"];
 
 /** Query parameters used by staging review tools; never part of attribution. */
-const INTERNAL_PARAMS = ["preview_state"];
+const INTERNAL_PARAMS = ["preview_state", "wizard_preview"];
 
 const clean = (value) => {
   if (typeof value !== "string") return null;
