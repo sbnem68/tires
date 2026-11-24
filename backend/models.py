@@ -72,6 +72,8 @@ class ProvinceConfig(Base, Timestamps):
     supported_locales: Mapped[list[str]] = mapped_column(ARRAY(String(10)))
     # e.g. [{"name": "HST", "rate": "0.13"}] - display/disclosure only until verified by Sam.
     tax_components: Mapped[list] = mapped_column(JSONB, server_default=text("'[]'::jsonb"))
+    # Placeholders until Sam verifies them. Never shown publicly as a tax breakdown.
+    tax_components_verified: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
     tax_config_verified_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     disclosure_notes: Mapped[Optional[str]] = mapped_column(Text)
     consent_wording_approved_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
@@ -130,6 +132,8 @@ class City(Base, Timestamps):
     supported_locales: Mapped[list[str]] = mapped_column(ARRAY(String(10)))
     launch_status: Mapped[str] = mapped_column(String(20), default="planned", server_default="planned")
     public_listing_enabled: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
+    # Per-page SEO control: indexable only if true AND live AND site-wide indexing is enabled.
+    seo_indexable: Mapped[bool] = mapped_column(Boolean, default=False, server_default=text("false"))
     launched_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
     launch_approved_by: Mapped[Optional[str]] = mapped_column(String(120))
     launch_approved_at: Mapped[Optional[datetime]] = mapped_column(DateTime(timezone=True))
@@ -395,6 +399,7 @@ class LeadEvent(Base):
     lead_id: Mapped[uuid.UUID] = mapped_column(ForeignKey("leads.id", ondelete="CASCADE"))
     event_type: Mapped[str] = mapped_column(String(60))
     actor: Mapped[Optional[str]] = mapped_column(String(120))
+    notes: Mapped[Optional[str]] = mapped_column(Text)
     payload: Mapped[dict] = mapped_column(JSONB, server_default=text("'{}'::jsonb"))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
