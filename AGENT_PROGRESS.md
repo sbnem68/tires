@@ -15,11 +15,27 @@ The manual path saves in the browser and shows confirmation without submitting a
 Live widget and selection capture are blocked pending vendor permissions and entitlement; no calls to
 the widget are made. Checkpoint 4, tag, merge, deployment and launch are not authorized.
 
-Checkpoint 3 manual verification: `CI=true corepack yarn test --watchAll=false --runInBand`
-(33/33), `corepack yarn build` (compiled), and `tests/e2e/checkpoint3_browser.py` (mobile and desktop
-pass). The adapted Checkpoint 2 browser regression also passed 54/54. Browser tests use a locally
-served production bundle with read-only snapshots of the three-city preview responses, not a new
-backend or a live deployment; the backend and seed were not changed or rerun.
+Checkpoint 3 manual verification from the supplied branch: the initial 33 frontend tests and build
+passed, the Checkpoint 3 browser test passed at mobile and desktop sizes, and the adapted Checkpoint 2
+browser regression passed 54/54. Those real-browser results are evidence from the supplied handoff,
+not a rerun after the local validation change below. They used a locally served production bundle
+with read-only snapshots of the three-city preview responses; the backend and seed were not changed.
+
+## Latest handoff for the next agent (2026-11-24)
+
+- The current working branch is `checkpoint-3-vehicle-tire-size`. `main` is preserved; do not merge,
+  tag, deploy, or launch without Sam's approval.
+- Step 2 routing is covered for Buy 2, Buy 4, winter changeover with new tires, guidance, repair, and
+  winter changeover without new tires. Only the first four open manual vehicle/tire entry.
+- `normalizeTireSize` accepts metric formats (including ZR and load/speed markings), flotation sizes,
+  and older inch-based sizes. It rejects non-string input safely. Focused coverage is in
+  `frontend/src/pages/TireMatchPage.test.jsx`.
+- This workspace's latest frontend check passed 35/35 tests and the production build. The manual
+  browser flow was not rerun here: the frontend preview compiled, but its `/api` proxy failed because
+  the backend on port 8001 was not running. No backend, database, or seed changes were made.
+- Keep Wheel-Size disabled until entitlement, permitted preview use, and storage of driver-confirmed
+  results are confirmed or the lookup scope is revised. Do not start Checkpoint 4 before Checkpoint 3
+  approval.
 
 Standing instruction from Sam: push to GitHub the instant each approved change is complete and tested;
 never hold finished work locally.
@@ -173,6 +189,7 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
+| 2026-11-24 20:47 | Follow-up review of Step 2 routing and tire-size normalization; production frontend build; preview startup | `CI=true yarn test --watchAll=false --runInBand`; `yarn build`; Node assertions for six routes and six input cases | PASS — 35 frontend tests; optimized build compiled; direct routing/normalization assertions passed. The frontend preview compiled, but `/api` calls failed with `ECONNREFUSED` on port 8001, so no new real-browser flow result is claimed. No backend, database, or seed changes |
 | 2026-11-24 20:30 | Closeout follow-up at `b721fe4`: preview Referer behaviour (before/after, synthetic values, wire headers, 390x844 and 1440x900); affected suites; independent testing-agent check; backend baseline at `checkpoint-1-approved` on the same three-city database | `referrer_check.py`; `CI=true yarn test --watchAll=false --runInBand --verbose`; `python3 tests/e2e/checkpoint2_browser.py` (preview); `python -m pytest tests -n 0 -v` at `6bd57cf` and at `b721fe4`; `yarn build` | Referer with attribution: 17–18 requests before, 0 after, in application, overlay and Cloudflare traffic. Attribution still saved and kept; recorder off; no wizard input sent; health checks 200. Frontend 31 of 31; browser 54 of 54; build file unchanged. Testing agent: all ten requirements met (`test_reports/iteration_4.json`). Backend: 13 failed at baseline (23 passed) and at `b721fe4` (30 passed), identical errors, all from the three-city seed. One coverage gap recorded (architecture-endpoint test stops early; checked directly). Cloudflare beacon, challenge and cookies remain outside repository control |
 | 2026-11-24 19:40 | Checkpoint 2 closeout at `ce3bfb0`: full frontend unit, backend, and browser acceptance suites (preview and production build, 390x844 and 1440x900); network check with attribution parameters, typed input and secret comparison; review of workspace commit `ca726a1` | `CI=true yarn test --watchAll=false --runInBand --verbose`; `python -m pytest tests -n 0 -v`; `python3 tests/e2e/checkpoint2_browser.py` on both targets; `closeout_network_check.py` | Frontend 30 of 30; backend 30 passed, 13 failed (same 13); browser 54 of 54 on both targets. Recorder off. No wizard input and no secret in any request. Overlay and Cloudflare messages contain no attribution parameters, but the browser's Referer header on them carries the full page address. Limitation recorded in `CHECKPOINTS.md`. No application code, test or seed changed |
 | 2026-11-24 19:05 | Checkpoint 2 approved by Sam (not production-ready, not deployed). Required follow-up 1: development-preview session recorder switched off in `frontend/craco.config.js`. Verified on the preview at 390x844 and 1440x900 | `CI=true yarn test --watchAll=false --runInBand`; `python3 tests/e2e/checkpoint2_browser.py --only 19`; `yarn build` | Frontend 30 of 30 (new guard test); browser test 19 passes 2 of 2 with the stricter no-recorder assertions; no `recorder.js` request and no `window.rrweb`; production bundle unchanged (`main.6ba5c62b.js`). Still present on the preview and documented in README: the overlay's same-origin status message and the preview host's Cloudflare beacon. Evidence: `test_reports/cp2_review_evidence/followup_recorder_off/`. Full suites not rerun (already accepted) |
