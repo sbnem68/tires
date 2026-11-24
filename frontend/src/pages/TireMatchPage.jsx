@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ArrowLeft, ArrowRight, Check, Info } from "lucide-react";
 import { PageShell, useCarry } from "@/components/site/PageShell";
 import { Seo } from "@/components/site/Seo";
+import VehicleTireStep from "@/components/site/VehicleTireStep";
 import { useSite } from "@/context/SiteContext";
 import {
   canContinueLocation,
@@ -323,7 +324,7 @@ export default function TireMatchPage() {
                   </div>
                 )}
 
-                {state.outcome && (
+                {outcomeCopy[state.outcome] && (
                   <div className="mt-6 rounded-xl border border-[hsl(var(--t4t-cta))]/30 bg-[hsl(var(--t4t-wash-1))] p-4" role="status" data-testid="next-step-notice" data-outcome={state.outcome}>
                     <p className="flex items-start gap-2 font-semibold">
                       <Check className="mt-0.5 h-5 w-5 shrink-0 text-[hsl(var(--t4t-cta))]" aria-hidden="true" />
@@ -343,7 +344,7 @@ export default function TireMatchPage() {
                   </div>
                 )}
 
-                {!state.outcome && (
+                {!outcomeCopy[state.outcome] && (
                   <div className="mt-8 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <p className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
                       <Info className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
@@ -360,6 +361,10 @@ export default function TireMatchPage() {
                   </div>
                 )}
               </form>
+            )}
+
+            {!loading && !error && initialized && state.step === 3 && (
+              <VehicleTireStep vehicle={state.vehicle} guidanceNeeded={state.outcome === "guidance_needed"} dispatch={dispatch} />
             )}
 
             <div className="mt-6 border-t pt-4 text-xs leading-relaxed text-muted-foreground" data-testid="privacy-note">

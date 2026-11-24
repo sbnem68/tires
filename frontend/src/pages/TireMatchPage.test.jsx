@@ -453,7 +453,8 @@ test("15. No lead is created: no request reaches a lead endpoint and no lead rec
     const keys = Object.keys(window.localStorage).sort();
     expect(keys).toEqual(["t4t.attribution.v1", "t4t.selected_city.v1", WIZARD_STORAGE_KEY].sort());
     expect(JSON.stringify(window.localStorage)).not.toMatch(/lead_id|idempotency|first_name|phone|email/i);
-    expect(container.querySelector('[data-testid="next-step-notice"]').textContent).toContain("no request has been created");
+    expect(container.querySelector('[data-testid="vehicle-step"]')).not.toBeNull();
+    expect(container.querySelector('[data-testid="privacy-note"]').textContent).toContain("no tire request is created");
   } finally {
     restore();
   }
@@ -463,7 +464,7 @@ test("16. No server write: the real HTTP client issues only the two read-only GE
   const { requests, fetchSpy, beaconSpy, xhrSpy, restore } = await renderWithRealClient("/tire-match");
   try {
     await completeBothSteps();
-    await click('[data-testid="edit-need"]');
+    await click('[data-testid="wizard-back"]'); // Step 3 to Step 2.
     await click('[data-testid="wizard-back"]');
     await setValue('[data-testid="city-select"]', "toronto");
     await click('[data-testid="continue-location"]');
@@ -523,17 +524,50 @@ test("18. Original attribution remains locked for later touches within 30 days",
 });
 
 test("Driver-facing wording contains no internal development language", async () => {
-  expect(outcomeCopy.vehicle_tire_size).toBe("Next: vehicle and tire size (coming soon).");
   await renderPage();
   await goToNeedStep();
   for (const need of ["buy_2", "unsure"]) {
     await click(`[data-testid="need-option-${need}"] input`);
     await click('[data-testid="continue-need"]');
-    expect(container.textContent).toContain("Next: vehicle and tire size (coming soon).");
+    expect(container.querySelector('[data-testid="wizard-progress-label"]').textContent).toBe("Step 3 of 6");
+    expect(container.textContent).toContain("What tire size do you need?");
     expect(container.textContent).not.toMatch(/checkpoint|not implemented|todo|not built|are built|outside/i);
-    await click('[data-testid="edit-need"]');
+    await click('[data-testid="wizard-back"]');
   }
   Object.values(outcomeCopy).forEach((copy) => {
     expect(copy).not.toMatch(/checkpoint|not implemented|todo|built|outside/i);
   });
+});
+
+test("manual tire size can be corrected, normalized, saved and edited without vehicle details", async () => {
+  await renderPage();
+  await goToNeedStep();
+  await click('[data-testid="need-option-buy_2"] input');
+  await click('[data-testid="continue-need"]');
+  await setValue("#wizard-tire-size", "205");
+  await click('[data-testid="vehicle-step"] button[type="submit"]');
+  expect(container.querySelector('[role="alert"]').textContent).toContain("Enter the full tire size");
+  expect(document.activeElement.id).toBe("wizard-tire-size");
+  await setValue("#wizard-tire-size", " 205 / 55 r16 ");
+  await click('[data-testid="vehicle-step"] button[type="submit"]');
+  expect(readWizardProgress().vehicle).toMatchObject({ tireSize: "205/55R16", tireType: "Unknown", saved: true });
+  await click('[data-testid="vehicle-saved"] button');
+  await setValue("#wizard-tire-size", "225/65R17");
+  await click('[data-testid="vehicle-step"] button[type="submit"]');
+  expect(readWizardProgress().vehicle).toMatchObject({ tireSize: "225/65R17", saved: true });
+});
+
+test("changing to repair does not allow saved tire details to bypass its approved path", async () => {
+  await renderPage();
+  await goToNeedStep();
+  await click('[data-testid="need-option-buy_4"] input');
+  await click('[data-testid="continue-need"]');
+  await setValue("#wizard-tire-size", "225/65R17");
+  await click('[data-testid="wizard-back"]');
+  await click('[data-testid="need-option-repair"] input');
+  await setValue('[data-testid="issue-description"]', "Slow leak");
+  await click('[data-testid="continue-need"]');
+  expect(container.querySelector('[data-testid="next-step-notice"]').dataset.outcome).toBe("repair_inspection");
+  expect(container.querySelector('[data-testid="vehicle-step"]')).toBeNull();
+  expect(readWizardProgress().vehicle.tireSize).toBe("225/65R17");
 });

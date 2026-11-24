@@ -40,8 +40,8 @@ Before coding, every agent must:
 |---|---|---|
 | 0 | Project setup and architecture | Approved with conditions; deployment remains on hold |
 | 1 | City-aware landing pages | Approved |
-| 2 | Tire Match Wizard — Steps 1 and 2 | Conditionally approved; two required fixes completed and retested; awaiting Sam's approval of the updated report |
-| 3 | Wheel-Size widget and manual tire-size entry | Not started |
+| 2 | Tire Match Wizard — Steps 1 and 2 | Approved for development only; no launch or deployment authorization |
+| 3 | Wheel-Size widget and manual tire-size entry | In progress; manual path implemented, Wheel-Size permission and review setup pending |
 | 4 | Preferences and lead intent | Not started |
 | 5 | Shop and offer database | Not started |
 | 6 | Offer matching and display | Not started |
@@ -54,7 +54,7 @@ Before coding, every agent must:
 | 13 | WordPress embed and deployment | Not started |
 | 14 | Final end-to-end test | Not started |
 
-**Current checkpoint:** Checkpoint 2 — conditionally approved; both required fixes are done and retested; awaiting Sam's approval of the updated report. Not tagged, not merged to `main`. Checkpoint 3 must not start until Sam explicitly approves the updated Checkpoint 2 report.
+**Current checkpoint:** Checkpoint 3, authorized by Sam on the separate `checkpoint-3-vehicle-tire-size` branch from `c05f0c7`. Do not start Checkpoint 4 without explicit approval of Checkpoint 3.
 
 ## 5. Global Build Rules
 
@@ -178,7 +178,7 @@ Ottawa live-state copy:
 
 **Approval gate:** Sam approves Steps 1 and 2.
 
-**Current status:** Conditionally approved by Sam on 2026-11-24. The two required fixes — removal of the analytics snippet and platform script, and strict city precedence — are implemented and retested. Evidence: 29 frontend unit tests, 7 backend Checkpoint 2 tests, a real-browser suite of 54 checks on the preview (mobile 390x844, desktop 1440x900) and 40 checks against the production bundle all pass; the production build compiles. See `AGENT_PROGRESS.md` (test log), `test_reports/` and `screenshots/`. Awaiting Sam's approval of the updated report; passing tests are not approval.
+**Current status:** Approved for development only. Closeout code was tested at `b721fe4`; evidence and documented development limitations are at `c05f0c7`. Sam authorized Checkpoint 3 using the approved handoff on 2026-11-24. No tag, merge, deployment or public launch was authorized.
 
 **Strict city precedence (required fix, see Change Log):** (1) valid listed URL city, (2) saved wizard progress, (3) nothing selected. The city chosen elsewhere on the site or on an earlier visit is never used. A URL city is applied once per browser session. A URL city that replaces a different saved city returns the driver to Step 1 and keeps all other answers. The original attribution record is never overwritten.
 
@@ -230,7 +230,7 @@ Tire types: Winter, All-season, Summer, Performance, Unknown. Conditions: New, G
 
 **Approval gate:** Sam approves the Wheel-Size widget integration and manual entry.
 
-**Current status:** Not started.
+**Current status:** Manual entry and Step 2 handoff are implemented on the Checkpoint 3 branch. The live embed and app-side selection capture are still blocked; the [vendor terms](https://services.wheel-size.com/terms-of-usage/) list the event system as Professional, limit free use to public sites, and restrict storage and copying of vendor data. Confirm the approved widget's entitlement, review environment and permission to persist a confirmed selection before integrating. An alternate lookup/manual-entry flow requires Sam's agreement and is not counted as a pass.
 
 ### Checkpoint 4 — Preferences and Lead Intent
 
@@ -755,6 +755,14 @@ Any agent who discovers a necessary scope change, upgrade, or deviation must:
 5. Reference the change in the relevant checkpoint and in `AGENT_PROGRESS.md`.
 
 Do not silently expand scope. Do not mark a change approved without Sam's confirmation.
+
+### 2026-11-24 — Checkpoint 3 development authorized
+
+- Checkpoint: 3, Vehicle and tire size.
+- Approved by: Sam, in the development handoff: “Start Checkpoint 3 with the approved handoff prompt on a separate branch.”
+- Baseline: `c05f0c7`, including the Checkpoint 2 closeout and documented preview limitations.
+- Scope: Original Checkpoint 3 only. No tag, merge, deployment, public launch or Checkpoint 4.
+- Open decision: confirm Wheel-Size permissions and entitlement or approve a revised lookup approach. The manual branch is not a change to the widget acceptance requirement.
 
 Use this template for future entries:
 

@@ -26,6 +26,31 @@ export const INITIAL_WIZARD_STATE = {
   winterNeedsNewTires: null,
   issueDescription: "",
   outcome: null,
+  vehicle: { make: "", model: "", year: "", trim: "", tireSize: "", tireType: "Unknown", condition: "", saved: false },
+};
+
+export const TIRE_TYPES = ["Winter", "All-season", "Summer", "Performance", "Unknown"];
+export const TIRE_CONDITIONS = ["New", "Good", "Worn", "Damaged", "Unknown"];
+
+export const normalizeTireSize = (value = "") => {
+  const compact = value.toUpperCase().replace(/\s+/g, "");
+  // Check the shape, not whether the size is suitable for a particular vehicle.
+  return /^(?:P|LT|ST|T)?[1-9]\d{2}\/[1-9]\d(?:R|D|B)[1-9]\d(?:\.\d)?$/.test(compact) ? compact : "";
+};
+
+const readVehicle = (value) => {
+  const field = (name, limit) => typeof value?.[name] === "string" ? value[name].slice(0, limit) : "";
+  const tireSize = field("tireSize", 40);
+  return {
+    make: field("make", 60),
+    model: field("model", 60),
+    year: field("year", 4).replace(/\D/g, ""),
+    trim: field("trim", 60),
+    tireSize,
+    tireType: TIRE_TYPES.includes(value?.tireType) ? value.tireType : "Unknown",
+    condition: TIRE_CONDITIONS.includes(value?.condition) ? value.condition : "",
+    saved: value?.saved === true && Boolean(normalizeTireSize(tireSize)),
+  };
 };
 
 const safeStorage = (providedStorage) => {
@@ -38,7 +63,7 @@ const safeStorage = (providedStorage) => {
   }
 };
 
-const validStep = (step) => (step === 2 ? 2 : 1);
+const validStep = (step) => (step === 2 || step === 3 ? step : 1);
 
 export const readWizardProgress = (providedStorage) => {
   const storage = safeStorage(providedStorage);
@@ -58,6 +83,7 @@ export const readWizardProgress = (providedStorage) => {
       winterNeedsNewTires: typeof stored.winterNeedsNewTires === "boolean" ? stored.winterNeedsNewTires : null,
       issueDescription: typeof stored.issueDescription === "string" ? stored.issueDescription.slice(0, 300) : "",
       outcome: typeof stored.outcome === "string" ? stored.outcome : null,
+      vehicle: readVehicle(stored.vehicle),
     };
   } catch (error) {
     return null;
@@ -79,6 +105,7 @@ export const saveWizardProgress = (state, providedStorage) => {
       winterNeedsNewTires: typeof state.winterNeedsNewTires === "boolean" ? state.winterNeedsNewTires : null,
       issueDescription: (state.issueDescription || "").slice(0, 300),
       outcome: state.outcome || null,
+      vehicle: readVehicle(state.vehicle),
     },
   };
 
@@ -193,6 +220,8 @@ export const canContinueNeed = (state) => {
   return true;
 };
 
+const entersVehicleStep = (outcome) => outcome === "vehicle_tire_size" || outcome === "guidance_needed";
+
 export const wizardReducer = (state, action) => {
   switch (action.type) {
     case "set-city":
@@ -215,16 +244,39 @@ export const wizardReducer = (state, action) => {
       return { ...state, issueDescription: action.value.slice(0, 300), outcome: null };
     case "continue-location":
       return canContinueLocation(state) ? { ...state, step: 2, outcome: null } : state;
-    case "continue-need":
-      return canContinueNeed(state) ? { ...state, outcome: getNeedOutcome(state) } : state;
+    case "continue-need": {
+      if (state.step !== 2 || !state.citySlug || !canContinueNeed(state)) return state;
+      const outcome = getNeedOutcome(state);
+      return { ...state, outcome, step: entersVehicleStep(outcome) ? 3 : 2 };
+    }
+    case "set-vehicle-field":
+      return state.step === 3 && Object.hasOwn(INITIAL_WIZARD_STATE.vehicle, action.field) && action.field !== "saved"
+        ? { ...state, vehicle: readVehicle({ ...state.vehicle, [action.field]: action.value, saved: false }) }
+        : state;
+    case "save-vehicle": {
+      const tireSize = normalizeTireSize(state.vehicle.tireSize);
+      return state.step === 3 && tireSize
+        ? { ...state, vehicle: { ...state.vehicle, tireSize, saved: true } }
+        : state;
+    }
+    case "edit-vehicle":
+      return state.step === 3 ? { ...state, vehicle: { ...state.vehicle, saved: false } } : state;
     case "back":
-      return { ...state, step: 1, outcome: null };
+      return { ...state, step: state.step === 3 ? 2 : 1, outcome: null };
     case "edit-need":
       return { ...state, step: 2, outcome: null };
-    case "hydrate-city":
-      return action.returnToLocation
-        ? { ...state, citySlug: action.value, step: 1, outcome: null }
-        : { ...state, citySlug: action.value };
+    case "hydrate-city": {
+      if (action.returnToLocation || !action.value) {
+        return { ...state, citySlug: action.value, step: 1, outcome: null };
+      }
+      if (state.step === 3) {
+        const outcome = getNeedOutcome(state);
+        return canContinueNeed(state) && entersVehicleStep(outcome)
+          ? { ...state, citySlug: action.value, outcome }
+          : { ...state, citySlug: action.value, step: 2, outcome: null };
+      }
+      return { ...state, citySlug: action.value };
+    }
     default:
       return state;
   }
@@ -232,8 +284,6 @@ export const wizardReducer = (state, action) => {
 
 /** Driver-facing wording only. Internal checkpoint or development language never appears here. */
 export const outcomeCopy = {
-  vehicle_tire_size: "Next: vehicle and tire size (coming soon).",
-  guidance_needed: "Next: vehicle and tire size (coming soon). We’ll help you choose along the way.",
   changeover_request: "Winter tire changeover noted. The next steps are coming soon.",
   repair_inspection: "Tire repair or inspection noted. The next steps are coming soon.",
 };

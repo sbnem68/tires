@@ -1,21 +1,25 @@
 # Agent Progress
 
-Working branch: `checkpoint-2-wizard-steps-1-2-continuation`. Never merge to `main` without Sam's approval.
-Do not start Checkpoint 3 until Sam explicitly authorizes it.
+Working branch: `checkpoint-3-vehicle-tire-size`, baseline `c05f0c7`. Never merge to `main` without Sam's approval.
 
 ## Current checkpoint
 
-Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: APPROVED by Sam on 2026-11-24 for the work
-completed, subject to follow-up requirements; not production-ready. Follow-up 1 (development-preview recorder
-off) is done in `ce3bfb0`. Closeout report at `ce3bfb0` is awaiting Sam's review:
-`test_reports/cp2_review_evidence/closeout_ce3bfb0/CHECKPOINT2_CLOSEOUT_REPORT.md`.
-Not tagged (needs Sam's instruction). Not merged to `main`. Not deployed. Checkpoint 3 must NOT start until
-Sam authorizes it. The Foot memo and self-hosted fonts are not prerequisites (Sam, 2026-11-24).
-The error overlay stays on in the development preview and the session recorder stays off (Sam, 2026-11-24).
-Closeout follow-up tested at `b721fe4`: dev-server `Referrer-Policy: no-referrer` (preview only) and the
-backend baseline for the 13 expected failures. Evidence in `test_reports/cp2_review_evidence/closeout_referrer/`
-and report sections 6–8; awaiting Sam's review. Network checks use synthetic values only; never compare live
-secret values (Sam, 2026-11-24).
+Checkpoint 3 — Vehicle and tire size, explicitly authorized by Sam on 2026-11-24: “Start Checkpoint 3 with
+the approved handoff prompt on a separate branch.” Checkpoint 2 was accepted for development, not release.
+The tested Checkpoint 2 code is `b721fe4`; its closeout is documented at `c05f0c7`. Keep the recorder off,
+keep the development overlay with its no-referrer policy, and preserve Checkpoint 2's accepted limitations.
+The historical audit and evidence below describe the Checkpoint 2 branch.
+
+Checkpoint 3 manual flow: qualifying Step 2 intents route into an editable vehicle/tire-size step.
+The manual path saves in the browser and shows confirmation without submitting a request.
+Live widget and selection capture are blocked pending vendor permissions and entitlement; no calls to
+the widget are made. Checkpoint 4, tag, merge, deployment and launch are not authorized.
+
+Checkpoint 3 manual verification: `CI=true corepack yarn test --watchAll=false --runInBand`
+(33/33), `corepack yarn build` (compiled), and `tests/e2e/checkpoint3_browser.py` (mobile and desktop
+pass). The adapted Checkpoint 2 browser regression also passed 54/54. Browser tests use a locally
+served production bundle with read-only snapshots of the three-city preview responses, not a new
+backend or a live deployment; the backend and seed were not changed or rerun.
 
 Standing instruction from Sam: push to GitHub the instant each approved change is complete and tested;
 never hold finished work locally.
@@ -91,7 +95,7 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Incomplete items
 
-- None inside Checkpoint 2. Waiting for Sam's approval.
+- Checkpoint 3: Wheel-Size embed, supported selection capture and live mobile verification are pending.
 
 ## Known issues
 
@@ -129,8 +133,9 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Next immediate task
 
-None until Sam approves the updated Checkpoint 2 report. Checkpoint 3 scope (Wheel-Size widget with
-Sam's exact embed, manual tire-size entry) is recorded in `ROADMAP.md`; do not start it.
+Confirm the Wheel-Size widget entitlement, permitted use on a review preview and permission to persist
+the driver-confirmed selection, or get approval to revise the lookup requirement. Do not rebuild the
+manual flow or start Checkpoint 4.
 
 ## Files changed (this session)
 
@@ -189,6 +194,7 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 ## Decisions pending user approval
 
-- Approval of the updated Checkpoint 2 report. Until then: no tag, no merge, no Checkpoint 3.
+- Checkpoint 3 vendor entitlement and permissions, or approval of a revised lookup requirement. No tag,
+  merge, deployment, launch or Checkpoint 4.
 - Optional: switch off the development overlay in dev previews; self-host fonts; fix the template meta description.
 - Launch-time: restore the full location seed or split the backend suites (see README).

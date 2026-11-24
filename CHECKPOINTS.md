@@ -8,8 +8,8 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |
 | 1 | City-aware landing page | Approved | 2026-11-24 |
-| 2 | Tire Match wizard: city and need steps | Conditionally approved; two required fixes completed — awaiting approval of the updated report | — |
-| 3 | Wheel-Size widget and manual tire-size entry | Not started | — |
+| 2 | Tire Match wizard: city and need steps | Approved for development only | 2026-11-24 |
+| 3 | Wheel-Size widget and manual tire-size entry | In progress; live widget blocked pending entitlement and permission | — |
 | 4 | Preferences and lead intent | Not started | — |
 | 5 | Shop and offer database, admin | Not started | — |
 | 6 | Offer matching and display | Not started | — |
@@ -107,8 +107,9 @@ only after Checkpoint 1 is approved.
 
 - **Status:** Approved by Sam on 2026-11-24 for the work completed, subject to follow-up requirements
   (Sam's decision: "Checkpoint 2 is APPROVED, subject to the follow-up requirements below… Do not tag it as
-  production-ready. Do not deploy it. Do not launch it publicly."). Closeout report at `ce3bfb0` is awaiting
-  Sam's review. Not tagged, not merged to `main`, not deployed, not production-ready.
+  production-ready. Do not deploy it. Do not launch it publicly."). The final closeout is documented at
+  `c05f0c7`; Sam subsequently authorized Checkpoint 3 on a separate branch. Not tagged, not merged to `main`,
+  not deployed, not production-ready.
 - **Approved date:** 2026-11-24 (no approval tag; a tag needs Sam's instruction)
 - **Tested revision:** `b721fe4` (closeout follow-up); earlier closeout at `ce3bfb0e3e6bc2bdbb9b6bfe5b2339466f1d1b88`
 - **Branch:** `checkpoint-2-wizard-steps-1-2-continuation`
@@ -167,11 +168,10 @@ only after Checkpoint 1 is approved.
   (`test_reports/iteration_1.json`, `iteration_2.json`). Backend at `b721fe4`: 30 passed, 13 failed.
 - Evidence: `test_reports/cp2_review_evidence/closeout_referrer/`; report sections 6–8 of
   `test_reports/cp2_review_evidence/closeout_ce3bfb0/CHECKPOINT2_CLOSEOUT_REPORT.md`.
-- Status unchanged: approved by Sam on 2026-11-24 subject to follow-up requirements; this follow-up evidence
-  is awaiting Sam's review.
+- Sam authorized Checkpoint 3 after this closeout. The authorization is for development only.
 
 **Known limitations**
-- Vehicle/tire-size entry, preferences, offers, lead capture, and every later checkpoint remain unbuilt.
+- The approved Checkpoint 2 revision stops before vehicle/tire-size entry; that work is tracked separately below.
 - No contact information is collected; no lead or request is created; no wizard data is sent to the server.
 - In a development preview only: the development server's error overlay (kept on at Sam's instruction,
   recorder off) posts a same-origin status message containing the page path, and the preview host adds a
@@ -194,5 +194,10 @@ only after Checkpoint 1 is approved.
 - The Replit development database is untouched and unverified.
 - Not deployed to Railway or Vercel.
 
-**Next checkpoint.** Checkpoint 3 — Wheel-Size widget and manual tire-size entry, only after Sam reviews the
-Checkpoint 2 closeout report and explicitly authorizes Checkpoint 3.
+## Checkpoint 3 — Vehicle and tire size
+
+- **Branch:** `checkpoint-3-vehicle-tire-size`, based on `c05f0c7`.
+- **Implemented:** Eligible need paths enter Step 3. Drivers can manually enter and save an editable tire size and optional vehicle details locally. Repair and changeover without new tires keep their approved paths. Nothing is submitted.
+- **Verification:** 33 frontend tests passed and the frontend production bundle compiled. Manual browser acceptance passed at 390×844 and 1440×900 using the local bundle and read-only three-city API response snapshots. This is frontend evidence, not a rerun of the live backend suite.
+- **Blocked:** Live Wheel-Size integration and automatic selection capture are not implemented or counted as verified. Confirm vendor entitlement, permitted preview usage and fitment data storage rights, or obtain approval for a revised lookup flow.
+- **Held:** Checkpoint 4, tag, merge, deployment and launch.

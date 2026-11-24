@@ -321,6 +321,12 @@ def t08(s, vp):
 
     def finish(label):
         page.click(tid("continue-need"))
+        if label in ("buy_2", "buy_4", "unsure", "changeover_yes"):
+            page.wait_for_selector(tid("vehicle-step"))
+            assert text_of(page, tid("wizard-progress-label")) == "Step 3 of 6"
+            outcomes[label] = page.evaluate("(key) => JSON.parse(localStorage.getItem(key)).state.outcome", WIZ_KEY)
+            page.click(tid("wizard-back"))
+            return
         page.wait_for_selector(tid("next-step-notice"))
         outcomes[label] = page.get_attribute(tid("next-step-notice"), "data-outcome")
         notice = text_of(page, tid("next-step-notice"))
@@ -329,7 +335,7 @@ def t08(s, vp):
 
     for value in ("buy_2", "buy_4"):
         page.click(f'{tid(f"need-option-{value}")} input')
-        assert "Next: vehicle and tire size (coming soon)." in finish(value)
+        finish(value)
     page.click(f'{tid("need-option-unsure")} input')
     finish("unsure")
 
@@ -353,7 +359,7 @@ def t08(s, vp):
     body = page.inner_text("body").lower()
     for banned in ("checkpoint", "not implemented", "todo", "not built"):
         assert banned not in body, banned
-    # No later step was built: there is no step 3 screen to reach.
+    # Repair still terminates at the Step 2 notice.
     assert page.locator(tid("wizard-progress-label")).inner_text() == "Step 2 of 6"
     return json.dumps(outcomes)
 
@@ -754,8 +760,8 @@ def take_screenshots(browser, directory):
         s.page.click(f'{tid("need-option-buy_4")} input')
         shot(s, vp, "step-2")
         s.page.click(tid("continue-need"))
-        s.page.wait_for_selector(tid("next-step-notice"))
-        shot(s, vp, "step-2-next")
+        s.page.wait_for_selector(tid("vehicle-step"))
+        shot(s, vp, "step-3-entry")
         s.close()
 
 
@@ -810,7 +816,8 @@ def main():
     }
     report = ROOT / "test_reports" / args.report
     report.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
-    print(f"\n{passed} of {len(results)} passed. Report: {report.relative_to(ROOT)}")
+    display_path = report.relative_to(ROOT) if report.is_relative_to(ROOT) else report
+    print(f"\n{passed} of {len(results)} passed. Report: {display_path}")
     print("Network findings:", json.dumps(findings))
     sys.exit(0 if passed == len(results) else 1)
 
