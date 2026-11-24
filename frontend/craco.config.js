@@ -30,6 +30,12 @@ function makeDevServerV5Compatible(devServerConfig) {
   compatibleConfig.headers = {
     ...compatibleConfig.headers,
     "Cross-Origin-Resource-Policy": "same-origin",
+    // Review previews only (Sam, 2026-11-24, Checkpoint 2 closeout): the dev server tells the
+    // browser to send no Referer header, so campaign and attribution values in the page address
+    // are not attached to requests made by the page, the development overlay or the preview
+    // host's own scripts. This is dev-server configuration; it is not part of `yarn build` and
+    // changes no production setting.
+    "Referrer-Policy": "no-referrer",
   };
 
   if (onBeforeSetupMiddleware || setupMiddlewares) {

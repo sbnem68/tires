@@ -24,6 +24,17 @@ test("the dev-server configuration forces the preview session recorder off befor
   expect(config).toMatch(/if \(isDevServer && process\.env\.DISABLE_EMERGENT_OVERLAY !== "true"\)/);
 });
 
+test("the dev-server configuration sends Referrer-Policy: no-referrer on review previews only", () => {
+  const config = fs.readFileSync(path.resolve(__dirname, "../../craco.config.js"), "utf8");
+  // Set on the dev server's response headers, so attribution values in the page address are not
+  // attached to requests made by the page, the development overlay or the preview host's scripts.
+  expect(config).toMatch(/compatibleConfig\.headers = \{[^}]*"Referrer-Policy": "no-referrer"/s);
+  // Production settings are not changed by this: neither the page template nor the hosting config sets it.
+  expect(template).not.toMatch(/referrer/i);
+  const vercel = fs.readFileSync(path.resolve(__dirname, "../../vercel.json"), "utf8");
+  expect(vercel).not.toMatch(/referrer/i);
+});
+
 test("the application source references no analytics client", () => {
   const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name);
