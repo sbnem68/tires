@@ -64,11 +64,22 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Incomplete items
 
-- Real-browser run of all 18 tests plus attribution tests at mobile and desktop sizes.
-- Mobile and desktop screenshots of Steps 1 and 2.
+- Independent verification by the testing agent.
 - Documentation refresh and completion report.
 
 ## Known issues
+
+- OPEN DECISION FOR SAM — analytics in `frontend/public/index.html`. The file has carried, since
+  the Checkpoint 0 workspace baseline, the platform script `emergent-main.js` and a PostHog snippet
+  that posts to `ap.emergent.sh` with page-view capture, click autocapture and session recording
+  enabled. It is not part of the wizard and was not added in Checkpoint 2, and the wizard itself
+  sends nothing. In the automated browser PostHog sent one feature-flag call and no events (it
+  detects automation), and nothing typed into the wizard appeared in any request. What a real
+  driver's browser sends, and whether typed text is masked in recordings, was NOT verified.
+  Recommendation: remove the snippet before any public launch. Not changed without approval.
+- In the development preview only, the dev-server error overlay (`/__emergent_overlay__`) and the
+  preview host's CDN beacons (`/cdn-cgi`) also post. Neither exists in a production build or on
+  Railway/Vercel, and neither carried wizard data.
 
 - Backend tests against the three-city seed: 25 passed, 13 failed. Every failure asserts the full
   planning directory (14 groups, 28 cities, 3 Toronto subareas, planning total 348, Gatineau/Quebec
@@ -89,7 +100,8 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Next immediate task
 
-Real-browser suite (mobile and desktop) for all 18 tests plus attribution, then screenshots.
+Independent verification by the testing agent, then documentation (ROADMAP change log,
+CHECKPOINTS, README, plan), backup branch and the completion report.
 
 ## Files changed (this session)
 
@@ -97,6 +109,10 @@ Real-browser suite (mobile and desktop) for all 18 tests plus attribution, then 
 - `frontend/src/lib/tireMatchWizard.js` — URL city precedence, session marker, neutral wording.
 - `frontend/src/pages/TireMatchPage.jsx` — uses the new precedence; neutral privacy note; `data-outcome`.
 - `frontend/src/components/site/CitySelector.jsx` — an explicit city choice outranks a carried `city` parameter.
+- `tests/e2e/checkpoint2_browser.py` — new: real-browser suite (mobile and desktop) with network recording.
+- `test_reports/checkpoint2_browser.json` — results of the latest browser run.
+- `screenshots/checkpoint-2-step-{1,2,2-next}-{mobile,desktop}.jpg` — six screenshots.
+- `frontend/src/lib/tireMatchWizard.js` (second change) — an explicit city choice now outranks a URL city already applied in the session (found by browser test A3).
 - `backend/tests/test_checkpoint2_no_writes.py` — new: every API route is read-only; no lead or wizard endpoint; write attempts return 404/405 and create no records.
 - `frontend/src/pages/TireMatchPage.test.jsx` — tests 3b, 3c, 3d added; 12, 15, 16 strengthened; wording test.
 
@@ -114,13 +130,19 @@ Real-browser suite (mobile and desktop) for all 18 tests plus attribution, then 
 
 ## Test log (newest first; add an entry and push immediately after every test run)
 
+Times marked ~ are approximate (taken before the first commit of this session); the rest match commit times.
+
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
-| 2026-11-24 16:50 | Backend Checkpoint 2 suites: no write/lead endpoint, write attempts rejected, three listed cities, restricted seed | `cd backend && python -m pytest tests/test_checkpoint2_no_writes.py tests/test_checkpoint2_seed.py -n 0` | PASS — 7 of 7 |
-| 2026-11-24 16:40 | Frontend unit suite after decisions A and B and stronger tests 12, 15, 16 | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 25 of 25 (18 numbered, 3b/3c/3d precedence, wording, 3 attribution) |
-| 2026-11-24 15:55 | Backend Checkpoint 0/1/2 suites against the three-city seed | `cd backend && python -m pytest tests -n 0` | 25 passed, 13 failed — all 13 assert the full 28-city directory (see Known issues); not changed |
-| 2026-11-24 15:50 | Local API after migration and seed | `GET /api/health`, `GET /api/public/locations` | PASS — 200, revision `0002`, three cities |
-| 2026-11-24 15:35 | Frontend unit suite and build at `d8daf86` (audit) | `yarn test`, `yarn build` | PASS — 21 of 21; build compiled |
+| 2026-11-24 16:26 | Full backend suite, three-city seed | `cd backend && python -m pytest tests -n 0` | 30 passed, 13 failed — the same 13 full-directory tests (see Known issues); all Checkpoint 2 tests pass |
+| 2026-11-24 16:26 | Production frontend build | `cd frontend && yarn build` | PASS — compiled successfully |
+| 2026-11-24 16:26 | Real-browser acceptance (headless Chromium) at mobile 390x844 and desktop 1440x900: the 18 required tests, 3a/3b precedence, attribution A1-A3 | `T4T_BASE_URL=<preview> python3 tests/e2e/checkpoint2_browser.py --screenshots screenshots` | PASS — 46 of 46 (23 per viewport). Report: `test_reports/checkpoint2_browser.json` |
+| 2026-11-24 16:26 | Frontend unit suite after the precedence fix (test 3e) | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 26 of 26 |
+| 2026-11-24 16:14 | Backend Checkpoint 2 suites: no write/lead endpoint, write attempts rejected, three listed cities, restricted seed | `cd backend && python -m pytest tests/test_checkpoint2_no_writes.py tests/test_checkpoint2_seed.py -n 0` | PASS — 7 of 7 |
+| 2026-11-24 16:13 | Frontend unit suite after decisions A and B and stronger tests 12, 15, 16 | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 25 of 25 (18 numbered, 3b/3c/3d precedence, wording, 3 attribution) |
+| 2026-11-24 ~16:00 | Backend Checkpoint 0/1/2 suites against the three-city seed | `cd backend && python -m pytest tests -n 0` | 25 passed, 13 failed — all 13 assert the full 28-city directory (see Known issues); not changed |
+| 2026-11-24 ~15:58 | Local API after migration and seed | `GET /api/health`, `GET /api/public/locations` | PASS — 200, revision `0002`, three cities |
+| 2026-11-24 ~15:50 | Frontend unit suite and build at `d8daf86` (audit) | `yarn test`, `yarn build` | PASS — 21 of 21; build compiled |
 
 ## Decisions pending user approval
 
