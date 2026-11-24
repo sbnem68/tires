@@ -1,7 +1,7 @@
 # Agent Progress
 
 ## Current checkpoint
-Checkpoint 2 handoff — audit completed; waiting for approval before database setup.
+Checkpoint 2 handoff — audit completed; workspace updates synced to GitHub; waiting for approval before database setup.
 
 ## Completed items
 - Read the project README and identified the React frontend and FastAPI/PostgreSQL backend.
@@ -10,6 +10,7 @@ Checkpoint 2 handoff — audit completed; waiting for approval before database s
 - Audited the local Git state and fetched remote branch refs for comparison without changing application files.
 - Found existing Checkpoint 2 implementations on remote branches; the most complete candidate is `checkpoint-2-tire-match-wizard`.
 - Queried the Replit development PostgreSQL database read-only: it has no Alembic table, schema tables, or seeded locations.
+- Pushed the existing workspace commit to GitHub `main` and verified remote `main` matches the local commit.
 
 ## Incomplete items
 - Continue from the existing Checkpoint 2 branch without reimplementing completed work.
@@ -26,7 +27,7 @@ Checkpoint 2 handoff — audit completed; waiting for approval before database s
 - Replit automatically added `postgresql-16` to `.replit` after the initial status check. This environment change was left untouched.
 
 ## Next immediate task
-Review the audit and approve whether to initialize the development database before preview verification.
+Continue Checkpoint 2 only after the development-database setup decision is resolved.
 
 ## Files changed
 - `AGENT_PROGRESS.md` — created per the user's continuity rule.
@@ -44,11 +45,15 @@ Review the audit and approve whether to initialize the development database befo
 - `git fetch --no-tags origin '+refs/heads/*:refs/remotes/origin/*'`
 - `git diff`, `git show`, and `git grep` on Checkpoint 2 branches and migration files
 - Read-only `executeSql` schema probe against the development database
+- `git push origin main`
+- `git ls-remote origin refs/heads/main`
+- `git rev-parse HEAD`
 
 ## Test results
 - No tests or build were run in this audit-only stage.
+- Git sync verification passed: remote `main` and local `HEAD` are both `6f10ac10218f6fd4f5a015beea63137c132f3e30`; worktree is clean.
 - Existing remote reports claim 33 frontend and 36 backend tests passed on `checkpoint-2-tire-match-wizard`; another branch claims 18 frontend tests. These results have not been rerun in this workspace.
 
 ## Decisions pending user approval
-- Approve applying the existing `0001` and `0002` migrations and running the location seed against the Replit development database.
-- No new migration or seed operation will run without approval.
+- No approval was received to apply `0001` and `0002` or run the location seed against the Replit development database.
+- No migration or seed operation has run.
