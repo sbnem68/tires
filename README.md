@@ -67,8 +67,9 @@ git clone https://github.com/sbnem68/tires.git && cd tires
 cd backend
 cp .env.example .env              # then set DATABASE_URL
 pip install -r requirements.txt
-alembic upgrade head              # create / update the schema
+alembic upgrade 0002              # create the schema and Checkpoint 1 columns
 python seed.py                    # seed the location directory (safe to rerun)
+alembic upgrade head              # apply post-seed review-city defaults
 uvicorn server:app --port 8001 --reload
 
 # frontend (second terminal)
@@ -100,14 +101,17 @@ Create an empty PostgreSQL database and put its connection string in `DATABASE_U
 
 ```bash
 cd backend
-alembic upgrade head                 # apply all migrations
+alembic upgrade 0002                 # apply schema and Checkpoint 1 columns
+python seed.py                       # seed cities before review-city defaults
+alembic upgrade head                 # apply remaining migrations (including 0003)
 alembic current                      # show the applied revision
 alembic downgrade -1                 # roll back one migration
 alembic revision --autogenerate -m "describe change"   # create a new migration after editing models.py
 alembic check                        # verify models and database match
 ```
 
-Migration history: `0001` initial schema → `0002` Checkpoint 1 flags and review-city listing.
+Migration history: `0001` initial schema → `0002` Checkpoint 1 flags and review-city listing
+→ `0003` applies the review-city defaults after the first location seed.
 Approved migrations are never edited or deleted; changes are made in a new migration.
 
 ### Seed commands
