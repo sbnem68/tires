@@ -8,7 +8,7 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |
 | 1 | City-aware landing page | Approved | 2026-11-24 |
-| 2 | Tire Match wizard: city and need steps | Built and verified — awaiting approval | — |
+| 2 | Tire Match wizard: city and need steps | Conditionally approved; two required fixes completed — awaiting approval of the updated report | — |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started | — |
 | 4 | Preferences and lead intent | Not started | — |
 | 5 | Shop and offer database, admin | Not started | — |
@@ -105,7 +105,7 @@ only after Checkpoint 1 is approved.
 
 ## Checkpoint 2 — Tire Match wizard: city and need steps
 
-- **Status:** Built and verified — awaiting Sam's approval
+- **Status:** Conditionally approved 2026-11-24. Both required fixes (analytics removal, strict city precedence) are completed and retested. Awaiting Sam's approval of the updated report. Not tagged, not merged.
 - **Approved date:** —
 - **Branch:** `checkpoint-2-wizard-steps-1-2-continuation`
 - **Scope.** Wizard steps 1 and 2 only: city/location and need selection. The progress indicator shows
@@ -118,28 +118,36 @@ only after Checkpoint 1 is approved.
   inspection, I'm not sure — help me choose. Winter changeover asks whether new tires are also needed.
   Repair/inspection requires a short issue description. Each choice resolves to its next-step intent;
   no later screen is built.
-- City precedence: a valid listed URL city wins; otherwise saved progress; otherwise the city last chosen
-  on the site; otherwise nothing selected.
+- Strict city precedence: a valid listed URL city; otherwise saved wizard progress; otherwise nothing
+  selected. The city chosen elsewhere on the site is never used. A URL city is applied once per browser
+  session; if it replaces a different saved city the wizard returns to Step 1 and keeps other answers.
+- No analytics: the PostHog snippet, session recording and `emergent-main.js` were removed from the page template.
 - Back navigation, mobile-first layout, progress saved in the browser and restored after refresh.
 - The original 30-day attribution record is never changed by the wizard; the selected city is stored separately.
 - Driver-facing wording only ("Next: vehicle and tire size (coming soon).").
 
-**Verification (2026-11-24)**
-- Frontend unit tests: 26 of 26. Backend Checkpoint 2 tests: 7 of 7. Production build compiles.
-- Real-browser suite, mobile 390x844 and desktop 1440x900: 46 of 46 (the 18 required tests, precedence
-  tests 3a/3b, attribution tests A1–A3). `tests/e2e/checkpoint2_browser.py`, results in
+**Verification (2026-11-24, after both required fixes)**
+- Frontend unit tests: 29 of 29. Backend Checkpoint 2 tests: 7 of 7. Production build compiles.
+- Real-browser suite on the preview, mobile 390x844 and desktop 1440x900: 54 of 54 (the 18 required tests,
+  precedence tests 3a–3e, analytics test 19, attribution tests A1–A3). Results in
   `test_reports/checkpoint2_browser.json`.
-- Independent testing run (`test_reports/iteration_3.json`): no application bugs.
+- Same suite against the production bundle served on its own: 40 of 40, with no injected scripts
+  (`test_reports/checkpoint2_production_bundle.json`).
+- No request to PostHog, `ap.emergent.sh` or `assets.emergent.sh`; no third-party write; no wizard input
+  in any request.
 - Screenshots: `screenshots/checkpoint-2-step-*.jpg`.
 - No migration added or changed. Local preview database only: `0001`, `0002`, three-city seed.
 
 **Known limitations**
 - Vehicle/tire-size entry, preferences, offers, lead capture, and every later checkpoint remain unbuilt.
 - No contact information is collected; no lead or request is created; no wizard data is sent to the server.
-- `frontend/public/index.html` still carries the workspace template's analytics snippet (PostHog) and
-  platform script. It predates this checkpoint and needs Sam's decision before any public launch.
+- In a development preview only, the preview host adds its own CDN beacon and the development server
+  injects its error overlay with a same-origin recorder. Neither is in the production bundle.
+- Fonts are loaded from Google Fonts (font files only).
 - Thirteen Checkpoint 0/1 backend tests assert the full 28-city directory and fail against the approved
-  three-city preview seed. They were not changed and the full seed was not run.
+  three-city preview seed. This is expected; they were not changed and the full seed was not run. The
+  three-city preview is not production-ready: before public launch restore the full seed or split the
+  suites into full-directory integrity tests and three-city preview tests (see README).
 - With the three-city seed there are no Toronto subareas, so subarea search finds nothing in this preview.
 - The Replit development database is untouched and unverified.
 - Not deployed to Railway or Vercel.

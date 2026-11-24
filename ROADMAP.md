@@ -40,7 +40,7 @@ Before coding, every agent must:
 |---|---|---|
 | 0 | Project setup and architecture | Approved with conditions; deployment remains on hold |
 | 1 | City-aware landing pages | Approved |
-| 2 | Tire Match Wizard — Steps 1 and 2 | Built and verified; awaiting Sam's approval |
+| 2 | Tire Match Wizard — Steps 1 and 2 | Conditionally approved; two required fixes completed and retested; awaiting Sam's approval of the updated report |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started |
 | 4 | Preferences and lead intent | Not started |
 | 5 | Shop and offer database | Not started |
@@ -54,7 +54,7 @@ Before coding, every agent must:
 | 13 | WordPress embed and deployment | Not started |
 | 14 | Final end-to-end test | Not started |
 
-**Current checkpoint:** Checkpoint 2 — built and verified, awaiting Sam's approval. Checkpoint 3 must not start until Sam explicitly approves Checkpoint 2.
+**Current checkpoint:** Checkpoint 2 — conditionally approved; both required fixes are done and retested; awaiting Sam's approval of the updated report. Not tagged, not merged to `main`. Checkpoint 3 must not start until Sam explicitly approves the updated Checkpoint 2 report.
 
 ## 5. Global Build Rules
 
@@ -178,11 +178,11 @@ Ottawa live-state copy:
 
 **Approval gate:** Sam approves Steps 1 and 2.
 
-**Current status:** Built and verified on 2026-11-24; awaiting Sam's approval. Evidence: 26 frontend unit tests, 7 backend Checkpoint 2 tests, and a real-browser suite of 46 checks (the 18 required tests plus precedence and attribution tests, at mobile 390x844 and desktop 1440x900) all pass; an independent testing run found no application bugs; the production build compiles. See `AGENT_PROGRESS.md` (test log), `test_reports/checkpoint2_browser.json` and `screenshots/`. Passing tests are not approval.
+**Current status:** Conditionally approved by Sam on 2026-11-24. The two required fixes — removal of the analytics snippet and platform script, and strict city precedence — are implemented and retested. Evidence: 29 frontend unit tests, 7 backend Checkpoint 2 tests, a real-browser suite of 54 checks on the preview (mobile 390x844, desktop 1440x900) and 40 checks against the production bundle all pass; the production build compiles. See `AGENT_PROGRESS.md` (test log), `test_reports/` and `screenshots/`. Awaiting Sam's approval of the updated report; passing tests are not approval.
 
-**City precedence (approved change, see Change Log):** valid listed URL city, then saved wizard progress, then the city the driver last chose on the site, then nothing selected.
+**Strict city precedence (required fix, see Change Log):** (1) valid listed URL city, (2) saved wizard progress, (3) nothing selected. The city chosen elsewhere on the site or on an earlier visit is never used. A URL city is applied once per browser session. A URL city that replaces a different saved city returns the driver to Step 1 and keeps all other answers. The original attribution record is never overwritten.
 
-**Open decision before any public launch:** the analytics snippet in `frontend/public/index.html` (see `AGENT_PROGRESS.md`, Known issues).
+**No analytics (required fix, see Change Log):** the application loads no analytics, tracking, session recording or third-party scripts.
 
 ### Checkpoint 3 — Wheel-Size Widget and Manual Tire-Size Entry
 
@@ -801,6 +801,7 @@ Use this template for future entries:
 - Approved by: Sam
 - Approved at: 2026-11-24
 - Reason: The brief requires the city to be preselected from the URL. Precedence is now: a valid listed URL city; otherwise saved progress; otherwise no city selected. Original attribution and the original landing city are never overwritten; the selected city is stored separately.
+- Superseded in part by "Strict city precedence" below: detail (2) was rejected by Sam.
 - Impact: `frontend/src/lib/tireMatchWizard.js`, `TireMatchPage.jsx`, `CitySelector.jsx`, tests 3b-3e. Two implementation details to confirm: (1) a URL city is applied once per browser session so a later manual change survives refresh; (2) when there is no URL city and no saved progress, the city the driver last chose on the site (for example by visiting `/toronto`) is used before falling back to "nothing selected".
 - Status: Implemented
 
@@ -825,6 +826,39 @@ Use this template for future entries:
 - Reason: The Replit development database cannot be reached from the Emergent workspace. A local PostgreSQL holds the preview data. The Replit database is untouched and unverified.
 - Impact: No repository schema or seed change. Existing migrations `0001` and `0002` and `python seed.py --review-cities-only` were run against the local database only. Thirteen Checkpoint 0/1 backend tests that assert the full 28-city directory fail against this three-city seed and were left unchanged.
 - Status: Implemented
+
+### 2026-11-24 — Analytics, session recording and platform script removed
+
+- Checkpoint: 2 — Tire Match Wizard, Steps 1 and 2 (required fix before Checkpoint 3)
+- Type: Correction
+- Proposed by: Agent (finding in the Checkpoint 2 report)
+- Approved by: Sam
+- Approved at: 2026-11-24
+- Reason: The page template inherited from the original workspace loaded a PostHog snippet (page views, click autocapture, session recording, requests to `ap.emergent.sh`) and `emergent-main.js`. The application must not send third-party analytics or session recording. It must not be replaced by another provider, and no tracking, cookies, fingerprinting, session recording or event capture may be added.
+- Impact: `frontend/public/index.html`; guard test `frontend/src/lib/noAnalytics.test.js`; browser test 19. The preview host's own beacon and the development server's overlay are outside the application and absent from the production bundle.
+- Status: Implemented
+
+### 2026-11-24 — Strict city precedence
+
+- Checkpoint: 2 — Tire Match Wizard, Steps 1 and 2 (required fix before Checkpoint 3)
+- Type: Correction
+- Proposed by: Sam
+- Approved by: Sam
+- Approved at: 2026-11-24
+- Reason: With no URL city and no saved wizard progress, no city may be selected by default. The wizard must not use the city chosen elsewhere on the site or infer one from a previous visit. Order: URL city, saved wizard progress, none. Confirmed: a URL city is applied once per browser session; a URL city that replaces a different saved city returns the driver to Step 1, shows the changed city, keeps other answers, and never overwrites the original attribution.
+- Impact: `frontend/src/lib/tireMatchWizard.js`, `TireMatchPage.jsx` (no longer follows the site-wide selected city), `CitySelector.jsx` (restored to its Checkpoint 1 behaviour), unit tests 3c, 3c-strict, 3d, 3e, browser tests 3c-3e and A3.
+- Status: Implemented
+
+### 2026-11-24 — Preview seed versus full directory: test expectations documented
+
+- Checkpoint: 0, 1, 2 and final release
+- Type: Documentation
+- Proposed by: Sam
+- Approved by: Sam
+- Approved at: 2026-11-24
+- Reason: The preview seed intentionally holds only Ottawa, Toronto and Hamilton, so 13 Checkpoint 0/1 tests that assert the full directory fail by design. The seed and tests must not be changed merely to make them pass, and the three-city preview is not production-ready.
+- Impact: README section "Location seeds and what the tests expect". Before public launch: restore the full location seed, or split the suites into full-directory integrity tests and three-city preview tests.
+- Status: Documented; the launch-time action is open.
 
 ## 9. Agent Session Protocol
 

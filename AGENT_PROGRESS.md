@@ -5,7 +5,12 @@ Do not start Checkpoint 3 until Sam explicitly approves Checkpoint 2.
 
 ## Current checkpoint
 
-Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: built and verified; awaiting Sam's approval.
+Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: CONDITIONALLY APPROVED by Sam (2026-11-24).
+Both required fixes are complete, retested and pushed. Awaiting Sam's approval of the updated report.
+Not tagged. Not merged to `main`. Checkpoint 3 must NOT start until Sam explicitly approves.
+
+Standing instruction from Sam: push to GitHub the instant each approved change is complete and tested;
+never hold finished work locally.
 
 ## Backup branches
 
@@ -56,7 +61,11 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 - `GET /api/health` returns 200 with revision `0002`; `GET /api/public/locations` returns 200 with
   the three cities. The earlier HTTP 500 was an unmigrated database.
 
-- Decision A implemented. Precedence: valid listed URL city, then saved wizard progress, then the
+- REQUIRED FIX 1 done: analytics, session recording and platform script removed from the page template.
+- REQUIRED FIX 2 done: strict city precedence (URL city, saved wizard progress, none). This replaces
+  the earlier fallback to the city last chosen on the site.
+- Seed/test distinction documented in README ("Location seeds and what the tests expect").
+- Decision A implemented (first version, since tightened). Precedence was: valid listed URL city, then saved wizard progress, then the
   city the driver last chose on the site, then nothing selected. A URL city is applied once per
   browser session, so a manual change afterwards survives refresh. If the URL city replaces a
   different saved city the wizard returns to Step 1 so the driver sees it; other answers are kept.
@@ -77,18 +86,21 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Known issues
 
-- OPEN DECISION FOR SAM — analytics in `frontend/public/index.html`. The file has carried, since
-  the Checkpoint 0 workspace baseline, the platform script `emergent-main.js` and a PostHog snippet
-  that posts to `ap.emergent.sh` with page-view capture, click autocapture and session recording
-  enabled. It is not part of the wizard and was not added in Checkpoint 2, and the wizard itself
-  sends nothing. In the automated browser PostHog sent one feature-flag call and no events (it
-  detects automation), and nothing typed into the wizard appeared in any request. What a real
-  driver's browser sends, and whether typed text is masked in recordings, was NOT verified.
-  Recommendation: remove the snippet before any public launch. Not changed without approval.
-- In the development preview only, the dev-server error overlay (`/__emergent_overlay__`) and the
-  preview host's CDN beacons (`/cdn-cgi`) also post. Neither exists in a production build or on
-  Railway/Vercel, and neither carried wizard data.
-
+- RESOLVED — analytics. Sam required removal. The PostHog snippet, its recorder error shim and
+  `emergent-main.js` are gone from `frontend/public/index.html`. Guard: `noAnalytics.test.js` and
+  browser test 19. Do not add any analytics, tracking, cookies or session recording.
+- Development preview only (not the application, not in the production bundle): the preview host
+  injects its own CDN beacon (`static.cloudflareinsights.com`, `/cdn-cgi`), and the development
+  server's overlay (dev dependency `@emergentbase/overlay`, wired in `craco.config.js`) injects an
+  error overlay and a same-origin recorder (`/__emergent_overlay__/recorder.js`) and posts a small
+  heartbeat (page path and error list). No wizard input appeared in any request. It can be switched
+  off in a dev preview with `DISABLE_EMERGENT_OVERLAY=true`; left as is pending Sam's wish.
+- Fonts load from Google Fonts (`fonts.googleapis.com`, `fonts.gstatic.com`): font files only, no
+  script or cookie. Self-hosting them would remove the last third-party request. Not changed.
+- The template's meta description still reads "A product of emergent.sh". Not changed (out of scope).
+- A consequence of strict precedence: if a driver lands with `?city=ottawa`, picks Toronto in the
+  header city selector, then opens the wizard, the wizard shows Ottawa (the URL city still carried
+  in the query string), because the site-wide choice is never consulted.
 - Backend tests against the three-city seed: 25 passed, 13 failed. Every failure asserts the full
   planning directory (14 groups, 28 cities, 3 Toronto subareas, planning total 348, Gatineau/Quebec
   rows). None is a Checkpoint 2 defect. Left unchanged per decision E.
@@ -108,9 +120,8 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Next immediate task
 
-None until Sam responds. Do not start Checkpoint 3. If Sam approves the analytics removal, delete the
-PostHog snippet (and, if agreed, `emergent-main.js`) from `frontend/public/index.html` and re-run
-`tests/e2e/checkpoint2_browser.py`.
+None until Sam approves the updated Checkpoint 2 report. Checkpoint 3 scope (Wheel-Size widget with
+Sam's exact embed, manual tire-size entry) is recorded in `ROADMAP.md`; do not start it.
 
 ## Files changed (this session)
 
@@ -118,6 +129,9 @@ PostHog snippet (and, if agreed, `emergent-main.js`) from `frontend/public/index
 - `frontend/src/lib/tireMatchWizard.js` — URL city precedence, session marker, neutral wording.
 - `frontend/src/pages/TireMatchPage.jsx` — uses the new precedence; neutral privacy note; `data-outcome`.
 - `frontend/src/components/site/CitySelector.jsx` — an explicit city choice outranks a carried `city` parameter.
+- `frontend/public/index.html` — PostHog snippet, recorder shim and `emergent-main.js` removed.
+- `frontend/src/lib/noAnalytics.test.js` — new guard test.
+- `test_reports/checkpoint2_production_bundle.json` — browser results against the production bundle.
 - `ROADMAP.md`, `CHECKPOINTS.md`, `README.md`, `plan.md`, `memory/PRD.md` — status and documentation.
 - `test_reports/iteration_3.json` — independent testing-agent report.
 - `tests/e2e/checkpoint2_browser.py` — new: real-browser suite (mobile and desktop) with network recording.
@@ -145,6 +159,8 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
+| 2026-11-24 17:06 | Full backend suite, three-city seed, after both fixes | `cd backend && python -m pytest tests -n 0` | 30 passed, 13 failed — the same 13 full-directory tests, expected on the preview seed; Checkpoint 2 files 7 of 7 |
+| 2026-11-24 17:06 | Production build, then the browser suite against the built bundle served on its own (mobile and desktop) | `cd frontend && yarn build`; `T4T_BASE_URL=http://127.0.0.1:4173 T4T_API_URL=<preview> python3 tests/e2e/checkpoint2_browser.py --only ... --report checkpoint2_production_bundle.json` | PASS — build compiles; 40 of 40; one script tag (the app); no recorder, overlay, PostHog or platform script; only font files fetched from third parties |
 | 2026-11-24 17:04 | Real-browser suite after BOTH required fixes (analytics removed; strict city precedence), mobile 390x844 and desktop 1440x900 | `T4T_BASE_URL=<preview> python3 tests/e2e/checkpoint2_browser.py --screenshots screenshots` | PASS — 54 of 54 (27 per viewport). No request to PostHog, `ap.emergent.sh` or `assets.emergent.sh`; no third-party write; no wizard input in any request. An earlier run the same minute had two desktop page-load timeouts (tests 12, 13) that did not recur |
 | 2026-11-24 17:04 | Frontend unit suite after both fixes | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 29 of 29 (includes template guard test and strict-precedence tests) |
 | 2026-11-24 16:39 | Independent verification by the testing agent: backend API, wizard at 390x844 and 1920x800, URL precedence, attribution, network recording, regression of `/`, city pages and city selector | testing agent, report `test_reports/iteration_3.json` | PASS — 49 checks passed, no application bugs. One of the agent's own mobile assertions was wrong (its logic, not the app). No source files changed; database unchanged |
@@ -160,10 +176,6 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 ## Decisions pending user approval
 
-- Analytics snippet in `frontend/public/index.html` (see Known issues): remove, keep, or defer.
-- Confirm two details of the city precedence: the URL city is applied once per browser session, and
-  the city last chosen on the site is used when there is no URL city and no saved progress.
-
-- Whether the 13 full-directory backend tests should be adapted or the full directory seeded in a
-  later, separately approved step.
-- Approval of Checkpoint 2 once the completion report is delivered.
+- Approval of the updated Checkpoint 2 report. Until then: no tag, no merge, no Checkpoint 3.
+- Optional: switch off the development overlay in dev previews; self-host fonts; fix the template meta description.
+- Launch-time: restore the full location seed or split the backend suites (see README).

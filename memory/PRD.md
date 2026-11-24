@@ -22,7 +22,8 @@ React + Tailwind / FastAPI / PostgreSQL (SQLAlchemy 2, Alembic, psycopg 3). See 
 
 - Checkpoint 2 (Tire Match wizard, steps 1-2): city/location and need selection, progress indicator,
   back navigation, browser-saved progress, URL city precedence, attribution lock preserved. No contact
-  fields, no lead, no server write. Built and verified 2026-11-24; awaiting Sam's approval.
+  fields, no lead, no server write, no analytics. Strict city precedence (URL, saved progress, none).
+  Conditionally approved 2026-11-24; both required fixes done; awaiting approval of the updated report.
 
 ## Backlog (P0 next)
 - Checkpoint 3 (Wheel-Size widget and manual tire-size entry) only after Sam approves Checkpoint 2.

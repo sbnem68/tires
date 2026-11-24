@@ -238,10 +238,11 @@ choices come from the public, database-backed locations API. Postal code and tra
 Need selection supports two tires, four tires, winter changeover, repair/inspection, and guidance. The
 winter and repair follow-up questions appear only when relevant.
 
-City precedence: a valid listed city in the URL (`?city=ottawa`) wins and becomes the selected city;
-otherwise saved progress is used; otherwise the city the driver last chose on the site; otherwise
-nothing is selected and the driver must choose. A URL city is applied once per browser session, so a
-manual change afterwards survives a refresh.
+City precedence is strict: (1) a valid listed city in the URL (`?city=ottawa`), (2) saved wizard
+progress, (3) nothing selected, and the driver must choose. The city chosen elsewhere on the site or
+on an earlier visit is never used. A URL city is applied once per browser session, so a refresh does
+not undo a manual change. If a URL city replaces a different saved city, the wizard returns to Step 1
+and keeps every other answer. None of this touches the original attribution record.
 
 The wizard shows progress as steps 1 and 2 of 6 and saves partial answers in the browser. This checkpoint
 does not collect contact information, create a lead, submit a request, or write to the server. Original
@@ -250,6 +251,36 @@ separately. Later wizard steps are not included.
 
 **SEO.** Every page is `noindex` today. A city page becomes indexable only when
 `SITE_INDEXING_ENABLED=true` **and** `cities.seo_indexable` **and** the city is `live`.
+
+## Analytics and tracking
+
+The application loads no analytics, tracking, session-recording or third-party scripts. The PostHog
+snippet and the platform script that came with the original workspace template were removed from
+`frontend/public/index.html` on 2026-11-24, and must not be replaced by another provider without Sam's
+approval. `frontend/src/lib/noAnalytics.test.js` and browser test 19 fail if any return.
+
+Two things are outside the application and appear only in a development preview, never in the
+production bundle: the preview host's own CDN beacon, and the development server's error overlay
+(a dev dependency configured in `craco.config.js`), which injects a same-origin session recorder used
+for bug reports. `yarn build` output contains neither. The only third-party requests the production
+bundle makes are font files from Google Fonts.
+
+## Location seeds and what the tests expect
+
+There are two seeds, and two kinds of backend test:
+
+| | Full directory seed (`python seed.py`) | Three-city preview seed (`python seed.py --review-cities-only`) |
+|---|---|---|
+| Contents | 14 market groups, 28 cities, 3 Toronto subareas, 348 planning total, Ontario and Quebec | Ottawa, Toronto, Hamilton; 3 parent groups with zero counts; Ontario only |
+| Used for | Staging and production | Checkpoint 2 preview only |
+| Full-directory integrity tests (`test_checkpoint0.py`, `test_checkpoint1.py`) | Expected to pass | 13 fail by design |
+| Three-city preview tests (`test_checkpoint2_seed.py`, `test_checkpoint2_no_writes.py`) | `test_checkpoint2_seed.py` refuses to run over a full directory | Pass |
+
+The 13 failures on the preview seed are expected and are not defects: those tests assert all 14 groups,
+all 28 cities, the Toronto subareas, the 348 planning total and the Gatineau/Quebec rows. Do not change
+the seed or the tests merely to make them pass. **The three-city preview is not production-ready.**
+Before public launch, either restore the full location seed or split the suites explicitly into
+full-directory integrity tests and three-city preview tests.
 
 ## Deployment notes
 
