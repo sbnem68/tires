@@ -61,6 +61,26 @@ design_guidelines.md     Visual design system
 
 Requirements: Python 3.11+, Node 18+, Yarn, a PostgreSQL database.
 
+### Replit preview
+
+The Replit preview uses the Replit **development** PostgreSQL database and a same-origin `/api`
+proxy. No public backend URL is needed. After confirming the target is the development database:
+
+```bash
+cd backend
+python -m alembic upgrade head
+python seed.py --review-cities-only
+cd ..
+bash scripts/start-preview.sh
+```
+
+On the current branch, `alembic upgrade head` applies `0001_initial_schema.py` followed by
+`0002_checkpoint1_listing_and_flags.py`. The restricted seed adds only Ottawa, Toronto, and Hamilton
+as city records, plus required non-public province and market-group parent rows. The required
+parent planning-count fields are zero placeholders. It does not add other cities, subareas, shops,
+offers, prospects, leads, installs, customer data, or actual planning counts. Do not use the full
+`python seed.py` command for this preview.
+
 ```bash
 git clone https://github.com/sbnem68/tires.git && cd tires
 
@@ -74,7 +94,6 @@ uvicorn server:app --port 8001 --reload
 
 # frontend (second terminal)
 cd frontend
-cp .env.example .env              # REACT_APP_BACKEND_URL=http://localhost:8001
 yarn install
 yarn start                        # http://localhost:3000
 ```
@@ -90,7 +109,7 @@ git-ignored. No secret is ever returned by an API.
 | `APP_ENV` | backend | `staging` or `production`. Anything else behaves as production |
 | `SITE_INDEXING_ENABLED` | backend | Site-wide search indexing switch. Keep `false` until launch is approved |
 | `CORS_ORIGINS` | backend | Comma-separated allowed frontend origins |
-| `REACT_APP_BACKEND_URL` | frontend | Public backend URL (no trailing slash) |
+| `REACT_APP_BACKEND_URL` | frontend | Optional backend override for a separately hosted frontend; omitted in the Replit preview |
 
 ## Database setup
 
@@ -115,12 +134,13 @@ Approved migrations are never edited or deleted; changes are made in a new migra
 
 ```bash
 cd backend
-python seed.py
+python seed.py --review-cities-only   # Replit preview: only Ottawa, Toronto, Hamilton
+python seed.py                        # Full directory seed; not approved for this preview
 ```
 
-The seed is idempotent. It refreshes planning metadata (names, tiers, group planning counts) and never
-touches operational state (launch status, listing, approvals). It creates no shops, offers, prospects,
-leads or installs.
+The full seed is idempotent and refreshes planning metadata; use it only when the full location
+directory is explicitly approved. The restricted Replit preview seed preserves existing records and
+adds only the three review cities and required zero-count parent rows.
 
 ### Test commands
 

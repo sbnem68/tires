@@ -178,6 +178,7 @@ test("8. Each need type resolves to its correct next route", () => {
     expect(canContinueNeed(state)).toBe(true);
     expect(getNeedOutcome(state)).toBe(outcome);
   });
+  expect(canContinueNeed({ need: "repair", issueDescription: "   " })).toBe(false);
 });
 
 test("9. Back navigation keeps the user's selections", async () => {

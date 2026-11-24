@@ -1,10 +1,9 @@
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL?.replace(/\/+$/, "");
-const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
+const API = BACKEND_URL ? `${BACKEND_URL}/api` : "/api";
 
-const missingBackendUrl = () => Promise.reject(new Error("REACT_APP_BACKEND_URL is not configured."));
-const get = (endpoint) => (API ? axios.get(`${API}/${endpoint}`) : missingBackendUrl());
+const get = (endpoint) => axios.get(`${API}/${endpoint}`);
 
 export const fetchPublicConfig = () => {
   return get("public/config").then((response) => {

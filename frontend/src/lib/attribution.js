@@ -4,10 +4,9 @@
  * The ORIGINAL touch is written once and never overwritten by navigation, by changing the
  * selected city, or by later visits. It is kept separately from the driver's selected city.
  *
- * - A landing without any tracked parameter is stored as a provisional (organic) original.
- *   The first landing that carries tracked parameters replaces a provisional original.
- * - Once an original with parameters exists it is locked for 30 days; a later landing with
- *   different parameters is recorded as `last_touch` only.
+ * - The first landing, including an organic landing, is the original touch.
+ * - The original touch is locked for 30 days; later landings with different parameters
+ *   are recorded as `last_touch` only.
  */
 
 const STORAGE_KEY = "t4t.attribution.v1";
@@ -110,18 +109,16 @@ export const captureAttribution = () => {
 
   const { touch, hasParams, meta } = readTouch();
   const stored = storage.read(STORAGE_KEY);
-  const expired = !stored?.original_meta?.captured_at
-    || Date.now() - new Date(stored.original_meta.captured_at).getTime() > TTL_MS;
+  const capturedAt = stored?.original_meta?.captured_at
+    ? new Date(stored.original_meta.captured_at).getTime()
+    : Number.NaN;
+  const expired = !Number.isFinite(capturedAt) || Date.now() - capturedAt > TTL_MS;
 
   if (!stored || expired) {
     storage.write(STORAGE_KEY, { original: touch, original_meta: meta, original_has_params: hasParams, last_touch: null });
     return;
   }
   if (!hasParams) return; // plain navigation or organic revisit: nothing changes
-  if (!stored.original_has_params) {
-    storage.write(STORAGE_KEY, { original: touch, original_meta: meta, original_has_params: true, last_touch: null });
-    return;
-  }
   if (!sameTouch(stored.original, touch)) {
     storage.write(STORAGE_KEY, { ...stored, last_touch: { ...touch, ...meta } });
   }
