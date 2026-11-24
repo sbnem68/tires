@@ -1,0 +1,60 @@
+{
+  "suite": "Checkpoint 2 real-browser acceptance",
+  "run_at_utc": "2026-11-24 18:50",
+  "base_url_host": "wizard-cp2-review--8ktg0g80.preview.emergentagent.com",
+  "viewports": {
+    "mobile": {
+      "width": 390,
+      "height": 844
+    },
+    "desktop": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  "passed": 2,
+  "failed": 0,
+  "total": 2,
+  "network_findings": {
+    "mobile": {
+      "third_party_hosts_contacted": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "third_party_writes": 0,
+      "analytics_requests": 0,
+      "scripts_injected_by_preview_host": [
+        "static.cloudflareinsights.com"
+      ],
+      "scripts_injected_by_dev_server": []
+    },
+    "desktop": {
+      "third_party_hosts_contacted": [
+        "fonts.googleapis.com",
+        "fonts.gstatic.com"
+      ],
+      "third_party_writes": 0,
+      "analytics_requests": 0,
+      "scripts_injected_by_preview_host": [
+        "static.cloudflareinsights.com"
+      ],
+      "scripts_injected_by_dev_server": []
+    }
+  },
+  "results": [
+    {
+      "viewport": "mobile",
+      "test": "19",
+      "title": "No analytics or session recording (required fix)",
+      "status": "PASS",
+      "detail": "no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: ['static.cloudflareinsights.com']; injected by dev server: []"
+    },
+    {
+      "viewport": "desktop",
+      "test": "19",
+      "title": "No analytics or session recording (required fix)",
+      "status": "PASS",
+      "detail": "no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: ['static.cloudflareinsights.com']; injected by dev server: []"
+    }
+  ]
+}

@@ -69,6 +69,17 @@ if (config.enableHealthCheck) {
   healthPluginInstance = new WebpackHealthPlugin();
 }
 
+// Review previews must not record sessions (Sam, 2026-11-24, Checkpoint 2 follow-up).
+// The workspace starts the dev server with EMERGENT_OVERLAY_RRWEB=buffer, which makes the
+// development overlay inject /__emergent_overlay__/recorder.js (an rrweb session recorder).
+// These switches are read by the overlay when it loads, so they are forced off here, before it
+// is required. The overlay's error card and preview health probe are kept. Do not remove this
+// block or add an opt-in without Sam's approval. None of this reaches the production build:
+// the overlay is only loaded by the dev server (see isDevServer below).
+process.env.EMERGENT_OVERLAY_RRWEB = "";
+process.env.EMERGENT_OVERLAY_NETWORK = "off";
+process.env.EMERGENT_OVERLAY_FAB = "off";
+
 // Branded error overlay + preview health probe, dev server only. Fails open: a broken
 // overlay must degrade to "no overlay", never to "no dev server".
 let emergentOverlay;

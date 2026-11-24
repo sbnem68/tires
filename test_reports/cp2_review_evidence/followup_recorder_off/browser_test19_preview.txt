@@ -1,0 +1,6 @@
+[mobile ] PASS   19. No analytics or session recording (required fix) — no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: ['static.cloudflareinsights.com']; injected by dev server: []
+[desktop] PASS   19. No analytics or session recording (required fix) — no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): ['fonts.googleapis.com', 'fonts.gstatic.com']; injected by preview host: ['static.cloudflareinsights.com']; injected by dev server: []
+
+2 of 2 passed. Report: test_reports/cp2_review_evidence/followup_recorder_off/browser_test19_preview.json
+Network findings: {"mobile": {"third_party_hosts_contacted": ["fonts.googleapis.com", "fonts.gstatic.com"], "third_party_writes": 0, "analytics_requests": 0, "scripts_injected_by_preview_host": ["static.cloudflareinsights.com"], "scripts_injected_by_dev_server": []}, "desktop": {"third_party_hosts_contacted": ["fonts.googleapis.com", "fonts.gstatic.com"], "third_party_writes": 0, "analytics_requests": 0, "scripts_injected_by_preview_host": ["static.cloudflareinsights.com"], "scripts_injected_by_dev_server": []}}
+exit=0

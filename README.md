@@ -259,11 +259,20 @@ snippet and the platform script that came with the original workspace template w
 `frontend/public/index.html` on 2026-11-24, and must not be replaced by another provider without Sam's
 approval. `frontend/src/lib/noAnalytics.test.js` and browser test 19 fail if any return.
 
-Two things are outside the application and appear only in a development preview, never in the
-production bundle: the preview host's own CDN beacon, and the development server's error overlay
-(a dev dependency configured in `craco.config.js`), which injects a same-origin session recorder used
-for bug reports. `yarn build` output contains neither. The only third-party requests the production
-bundle makes are font files from Google Fonts.
+### Development-preview tooling (not application code)
+
+A development preview (the workspace dev server, `yarn start`) carries tooling that the application
+does not contain and that `yarn build` never includes:
+
+| Item | Added by | Status |
+|---|---|---|
+| Session recorder `/__emergent_overlay__/recorder.js` (rrweb) | Workspace dev server, through the dev-only package `@emergentbase/overlay` | **Switched off** on 2026-11-24 at Sam's request. `craco.config.js` forces `EMERGENT_OVERLAY_RRWEB`, `EMERGENT_OVERLAY_NETWORK` and `EMERGENT_OVERLAY_FAB` off before the overlay loads. Guarded by `noAnalytics.test.js` and browser test 19 |
+| Error overlay and preview health probe (`/__emergent_overlay__/report`, `/health`) | Same package | Still on. It posts a small same-origin status message (page path and any runtime errors) to the workspace's own dev server; the workspace uses it to know the preview is healthy. It can be removed completely by starting the dev server with `DISABLE_EMERGENT_OVERLAY=true` |
+| Cloudflare beacon (`static.cloudflareinsights.com`, `/cdn-cgi/rum`) and `cf_clearance` cookie | The preview host's network edge | Cannot be controlled from this repository. It is not present when the build is served anywhere else |
+
+These are platform development tools, not application dependencies. The only third-party requests
+the production bundle makes are font files from Google Fonts (a known third-party asset request: GET
+only, no cookie, no script, no wizard input).
 
 ## Location seeds and what the tests expect
 

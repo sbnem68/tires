@@ -13,6 +13,17 @@ test("the page template loads no analytics, session-recording or platform script
   expect(template).not.toMatch(/<script[^>]+src=/i);
 });
 
+test("the dev-server configuration forces the preview session recorder off before the overlay loads", () => {
+  const config = fs.readFileSync(path.resolve(__dirname, "../../craco.config.js"), "utf8");
+  const switchOff = config.indexOf('process.env.EMERGENT_OVERLAY_RRWEB = "";');
+  const overlayLoad = config.indexOf('require("@emergentbase/overlay/craco")');
+  expect(switchOff).toBeGreaterThan(-1);
+  expect(overlayLoad).toBeGreaterThan(switchOff);
+  expect(config).toContain('process.env.EMERGENT_OVERLAY_NETWORK = "off";');
+  // The overlay itself may only ever be loaded by the dev server, never by a production build.
+  expect(config).toMatch(/if \(isDevServer && process\.env\.DISABLE_EMERGENT_OVERLAY !== "true"\)/);
+});
+
 test("the application source references no analytics client", () => {
   const walk = (dir) => fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {
     const full = path.join(dir, entry.name);

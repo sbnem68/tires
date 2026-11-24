@@ -583,6 +583,14 @@ def t19_no_analytics(s, vp):
     edge_injected = [src for src in script_sources if urlparse(src).netloc in EDGE_INJECTED_HOSTS]
     dev_tooling = [urlparse(src).path for src in script_sources
                    if urlparse(src).netloc == host and urlparse(src).path.startswith(DEV_TOOLING_PREFIXES)]
+    # Checkpoint 2 follow-up (2026-11-24): the development overlay's session recorder is switched
+    # off in craco.config.js, so no recorder may be present on the preview either.
+    recorder_scripts = [src for src in script_sources if "recorder" in src.lower() or "rrweb" in src.lower()]
+    assert not recorder_scripts, f"session recorder script loaded: {recorder_scripts}"
+    assert not s.page.evaluate("'rrweb' in window"), "a session recorder (rrweb) is present on the page"
+    recorder_requests = sorted({urlparse(r["url"]).path for r in s.requests
+                                if "recorder" in r["url"].lower() or "rrweb" in r["url"].lower()})
+    assert not recorder_requests, f"session recorder requested: {recorder_requests}"
     external_scripts = [src for src in script_sources
                         if urlparse(src).netloc not in ("", host) and src not in edge_injected]
     assert not external_scripts, f"third-party scripts loaded: {external_scripts}"
