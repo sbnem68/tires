@@ -14,6 +14,7 @@ never hold finished work locally.
 
 ## Backup branches
 
+- `backup/checkpoint2-fixes-verified-20261124-170722` — state after both required Checkpoint 2 fixes (same commit as the working branch).
 - `backup/checkpoint2-verified-20261124-163933` — full Checkpoint 2 state at the end of this session (same commit as the working branch).
 - `backup/roadmap-20261124-110719` — Sam's roadmap commit.
 
