@@ -51,11 +51,19 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 - `GET /api/health` returns 200 with revision `0002`; `GET /api/public/locations` returns 200 with
   the three cities. The earlier HTTP 500 was an unmigrated database.
 
+- Decision A implemented. Precedence: valid listed URL city, then saved wizard progress, then the
+  city the driver last chose on the site, then nothing selected. A URL city is applied once per
+  browser session, so a manual change afterwards survives refresh. If the URL city replaces a
+  different saved city the wizard returns to Step 1 so the driver sees it; other answers are kept.
+  Attribution is never read or written by this logic.
+- Decision B implemented. Driver wording is now "Next: vehicle and tire size (coming soon)." and
+  similar neutral lines. No checkpoint or development language remains in the UI.
+- Tests strengthened: 12 (markup in Jest, real viewport in the browser suite), 15 and 16 (real
+  SiteProvider and real axios client with only the transport replaced by a recorder; fetch,
+  XMLHttpRequest and sendBeacon are also watched).
+
 ## Incomplete items
 
-- Decision A (URL city precedence) and its test.
-- Decision B (neutral wording).
-- Strengthen tests 12, 15, 16.
 - Real-browser run of all 18 tests plus attribution tests at mobile and desktop sizes.
 - Mobile and desktop screenshots of Steps 1 and 2.
 - Documentation refresh and completion report.
@@ -81,12 +89,15 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Next immediate task
 
-Decision A: URL city precedence in `frontend/src/lib/tireMatchWizard.js`, with a test for saved
-Toronto progress plus `?city=ottawa`.
+Real-browser suite (mobile and desktop) for all 18 tests plus attribution, then screenshots.
 
 ## Files changed (this session)
 
-- `AGENT_PROGRESS.md` — created.
+- `AGENT_PROGRESS.md` — created, then merged with Sam's version from `406893a`.
+- `frontend/src/lib/tireMatchWizard.js` — URL city precedence, session marker, neutral wording.
+- `frontend/src/pages/TireMatchPage.jsx` — uses the new precedence; neutral privacy note; `data-outcome`.
+- `frontend/src/components/site/CitySelector.jsx` — an explicit city choice outranks a carried `city` parameter.
+- `frontend/src/pages/TireMatchPage.test.jsx` — tests 3b, 3c, 3d added; 12, 15, 16 strengthened; wording test.
 
 ## Commands run
 
@@ -100,10 +111,14 @@ Toronto progress plus `?city=ottawa`.
 - `cd backend && python seed.py --review-cities-only`
 - `cd backend && python -m pytest tests -n 0` → 25 passed, 13 failed (see Known issues)
 
-## Test results
+## Test log (newest first; add an entry and push immediately after every test run)
 
-- Frontend (at `d8daf86`): 21 of 21 passed.
-- Backend: 25 passed, 13 failed, all for the reason above.
+| When (UTC) | What was tested | Command | Result |
+|---|---|---|---|
+| 2026-11-24 16:40 | Frontend unit suite after decisions A and B and stronger tests 12, 15, 16 | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 25 of 25 (18 numbered, 3b/3c/3d precedence, wording, 3 attribution) |
+| 2026-11-24 15:55 | Backend Checkpoint 0/1/2 suites against the three-city seed | `cd backend && python -m pytest tests -n 0` | 25 passed, 13 failed — all 13 assert the full 28-city directory (see Known issues); not changed |
+| 2026-11-24 15:50 | Local API after migration and seed | `GET /api/health`, `GET /api/public/locations` | PASS — 200, revision `0002`, three cities |
+| 2026-11-24 15:35 | Frontend unit suite and build at `d8daf86` (audit) | `yarn test`, `yarn build` | PASS — 21 of 21; build compiled |
 
 ## Decisions pending user approval
 
