@@ -83,3 +83,8 @@ android-sdk/
 
 # overlay black-box crash/user-report dumps — session data, never history
 **/.emergent/recordings/
+
+# Environment files (templates only are committed)
+.env
+.env.*
+!.env.example
