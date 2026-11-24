@@ -8,7 +8,7 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |
 | 1 | City-aware landing page | Approved | 2026-11-24 |
-| 2 | Tire Match wizard: city and need steps | Built — awaiting approval | — |
+| 2 | Tire Match wizard: city and need steps | Built and verified — awaiting approval | — |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started | — |
 | 4 | Preferences and lead intent | Not started | — |
 | 5 | Shop and offer database, admin | Not started | — |
@@ -105,28 +105,44 @@ only after Checkpoint 1 is approved.
 
 ## Checkpoint 2 — Tire Match wizard: city and need steps
 
-- **Status:** Built — awaiting approval
+- **Status:** Built and verified — awaiting Sam's approval
 - **Approved date:** —
-- **Branch:** `checkpoint-2-wizard-steps-1-2-continuation` (from the saved backup commit)
+- **Branch:** `checkpoint-2-wizard-steps-1-2-continuation`
 - **Scope.** Wizard steps 1 and 2 only: city/location and need selection. The progress indicator shows
   steps 1 and 2 of 6. Answers are stored in the browser; the wizard makes no server writes.
 
 **Deliverables**
-- Step 1 uses the public locations API for city choices, with optional postal code and travel radius.
-- Step 2 offers two tires, four tires, winter changeover, repair/inspection, and guidance-needed options.
-- Winter changeover asks whether new tires are also needed. Repair/inspection asks for a short issue
-  description. Each selection resolves to the appropriate next-step intent without building later screens.
-- Back navigation, responsive layout, and saved progress across refreshes.
-- The original 30-day attribution record stays separate from the driver's selected city and wizard state.
-- 18 frontend acceptance tests pass. The production frontend build compiles.
+- Step 1 "Which city are you in?": city dropdown from the public locations API (Ottawa, Toronto, Hamilton),
+  optional postal code, optional travel radius (10 km, 25 km, 50 km, Flexible).
+- Step 2 "What do you need today?": Buy 2 tires, Buy 4 tires, Winter tire changeover, Tire repair or
+  inspection, I'm not sure — help me choose. Winter changeover asks whether new tires are also needed.
+  Repair/inspection requires a short issue description. Each choice resolves to its next-step intent;
+  no later screen is built.
+- City precedence: a valid listed URL city wins; otherwise saved progress; otherwise the city last chosen
+  on the site; otherwise nothing selected.
+- Back navigation, mobile-first layout, progress saved in the browser and restored after refresh.
+- The original 30-day attribution record is never changed by the wizard; the selected city is stored separately.
+- Driver-facing wording only ("Next: vehicle and tire size (coming soon).").
+
+**Verification (2026-11-24)**
+- Frontend unit tests: 26 of 26. Backend Checkpoint 2 tests: 7 of 7. Production build compiles.
+- Real-browser suite, mobile 390x844 and desktop 1440x900: 46 of 46 (the 18 required tests, precedence
+  tests 3a/3b, attribution tests A1–A3). `tests/e2e/checkpoint2_browser.py`, results in
+  `test_reports/checkpoint2_browser.json`.
+- Independent testing run (`test_reports/iteration_3.json`): no application bugs.
+- Screenshots: `screenshots/checkpoint-2-step-*.jpg`.
+- No migration added or changed. Local preview database only: `0001`, `0002`, three-city seed.
 
 **Known limitations**
 - Vehicle/tire-size entry, preferences, offers, lead capture, and every later checkpoint remain unbuilt.
-  The page explains the next-step intent but does not collect downstream details.
-- No contact information is collected; no lead or request is created; no form data is sent to the server.
-- Previewing database-backed city choices requires the existing PostgreSQL-backed public API to be
-  configured and running.
+- No contact information is collected; no lead or request is created; no wizard data is sent to the server.
+- `frontend/public/index.html` still carries the workspace template's analytics snippet (PostHog) and
+  platform script. It predates this checkpoint and needs Sam's decision before any public launch.
+- Thirteen Checkpoint 0/1 backend tests assert the full 28-city directory and fail against the approved
+  three-city preview seed. They were not changed and the full seed was not run.
+- With the three-city seed there are no Toronto subareas, so subarea search finds nothing in this preview.
+- The Replit development database is untouched and unverified.
 - Not deployed to Railway or Vercel.
 
-**Next checkpoint.** Checkpoint 3 — Wheel-Size widget and manual tire-size entry, only after Checkpoint 2
-is approved.
+**Next checkpoint.** Checkpoint 3 — Wheel-Size widget and manual tire-size entry, only after Sam explicitly
+approves Checkpoint 2.

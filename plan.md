@@ -13,8 +13,8 @@ Rule: one checkpoint at a time; STOP for approval after each; nothing outside th
 
 ## Status
 - [x] CP0 Project setup & architecture — APPROVED with conditions (tag checkpoint-0-approved)
-- [x] CP1 BUILT, awaiting approval (branch checkpoint-1-city-landing) — City-aware landing page (/ottawa, /toronto, /hamilton; URL param capture; planned/onboarding/live/paused states; planned = noindex, no availability implied)
-- [x] CP2 BUILT, awaiting approval — Tire Match wizard steps 1–2 (continuation branch `checkpoint-2-wizard-steps-1-2-continuation`)
+- [x] CP1 APPROVED (branch checkpoint-1-city-landing, merged to main) — City-aware landing page (/ottawa, /toronto, /hamilton; URL param capture; planned/onboarding/live/paused states; planned = noindex, no availability implied)
+- [x] CP2 BUILT AND VERIFIED, awaiting Sam's approval — Tire Match wizard steps 1–2 (branch `checkpoint-2-wizard-steps-1-2-continuation`). Do NOT start CP3 until approved.
 - [ ] CP3 Wheel-Size widget + manual tire size entry
 - [ ] CP4 Preferences (priority, budget, urgency)
 - [ ] CP5 Shop & offer database + admin CRUD (admin sign-in; ABC Auto demo + 4 offers; prospects vs partners vs demo)
@@ -53,9 +53,15 @@ Rule: one checkpoint at a time; STOP for approval after each; nothing outside th
 - Six-step progress indicator, back navigation, and browser-only progress restoration.
 - The selected city stays separate from the original attribution record and its 30-day lock.
 - No contact fields, lead creation, or server writes. No migration was needed.
-- 18 frontend tests pass; the production build compiles.
+- City precedence: valid listed URL city > saved progress > city last chosen on the site > none.
+- Driver wording is neutral ("Next: vehicle and tire size (coming soon).").
+- 26 frontend unit tests, 7 backend CP2 tests, 46 real-browser checks (mobile + desktop) pass; build compiles.
+- Canonical plan is ROADMAP.md; progress and test log are in AGENT_PROGRESS.md.
 
 ## Open decisions for Sam
+- Approve Checkpoint 2.
+- Analytics snippet (PostHog) and platform script in frontend/public/index.html: remove before launch?
+- 13 CP0/CP1 backend tests need the full 28-city directory; adapt them or seed the full directory later?
 - Which checkpoint builds the real interest-registration form (CP1 collects no customer data)
 - Do NOT deploy to Railway/Vercel until told. Separate production DB before CP13. Tax verification admin task before CP13.
 - Expansion gate text when built: "Below expansion threshold — prospect research required." (Gatineau, Kingston)

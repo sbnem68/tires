@@ -17,7 +17,7 @@ The system is built in approval-gated checkpoints. See [CHECKPOINTS.md](./CHECKP
 |---|---|---|
 | 0 | Project setup and architecture | Approved (with conditions) |
 | 1 | City-aware landing page | Approved |
-| 2 | Tire Match wizard: city and need steps | Built — awaiting approval |
+| 2 | Tire Match wizard: city and need steps | Built and verified — awaiting approval |
 | 3–14 | Tire-size entry, offers, leads, routing, quotes, installs, admin, multi-city, deployment | Not started |
 
 ## Stack
@@ -62,6 +62,14 @@ design_guidelines.md     Visual design system
 ## Local setup
 
 Requirements: Python 3.11+, Node 18+, Yarn, a PostgreSQL database.
+
+### Emergent workspace preview
+
+The Emergent workspace cannot reach the Replit database. It uses a local PostgreSQL (loopback only)
+for the preview, with `DATABASE_URL`, `APP_ENV=staging` and `SITE_INDEXING_ENABLED=false` set in the
+git-ignored `backend/.env`. The same two commands apply: `python -m alembic upgrade head`, then
+`python seed.py --review-cities-only`. Install only the pinned API/database packages if the full
+`requirements.txt` fails to resolve.
 
 ### Replit preview
 
@@ -153,12 +161,24 @@ python -m pytest tests/test_checkpoint1.py
 ```
 
 Tests run against `DATABASE_URL`. Tests that write do so inside a transaction that is rolled back.
-Checkpoint 2 frontend tests:
+Run serially with `-n 0`. `test_checkpoint0.py` and `test_checkpoint1.py` assert the full 28-city
+directory, so 13 of them fail against the three-city preview seed; the Checkpoint 2 files pass on either.
+
+Checkpoint 2 frontend unit tests:
 
 ```bash
 cd frontend
 CI=true yarn test --watchAll=false --runInBand
 ```
+
+Checkpoint 2 real-browser suite (mobile and desktop, read-only, needs Python `playwright` and Chromium):
+
+```bash
+T4T_BASE_URL=https://<preview-host> python3 tests/e2e/checkpoint2_browser.py --screenshots screenshots
+```
+
+It runs the 18 acceptance tests plus precedence and attribution tests, records every network request,
+and writes `test_reports/checkpoint2_browser.json`.
 
 ## Data model
 
@@ -217,6 +237,11 @@ The `/tire-match` page contains the first two steps only: city/location, followe
 choices come from the public, database-backed locations API. Postal code and travel radius are optional.
 Need selection supports two tires, four tires, winter changeover, repair/inspection, and guidance. The
 winter and repair follow-up questions appear only when relevant.
+
+City precedence: a valid listed city in the URL (`?city=ottawa`) wins and becomes the selected city;
+otherwise saved progress is used; otherwise the city the driver last chose on the site; otherwise
+nothing is selected and the driver must choose. A URL city is applied once per browser session, so a
+manual change afterwards survives a refresh.
 
 The wizard shows progress as steps 1 and 2 of 6 and saves partial answers in the browser. This checkpoint
 does not collect contact information, create a lead, submit a request, or write to the server. Original

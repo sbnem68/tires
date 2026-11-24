@@ -18,8 +18,12 @@ React + Tailwind / FastAPI / PostgreSQL (SQLAlchemy 2, Alembic, psycopg 3). See 
   staging-only architecture review page, tests, README, env templates, deploy configs.
 
 - Checkpoint 1 (city-aware landing): pages /, /ottawa, /toronto, /hamilton; city states; attribution capture;
-  per-page SEO; migration 0002; public read-only API. Awaiting approval.
+  per-page SEO; migration 0002; public read-only API. Approved 2026-11-24.
+
+- Checkpoint 2 (Tire Match wizard, steps 1-2): city/location and need selection, progress indicator,
+  back navigation, browser-saved progress, URL city precedence, attribution lock preserved. No contact
+  fields, no lead, no server write. Built and verified 2026-11-24; awaiting Sam's approval.
 
 ## Backlog (P0 next)
-- Checkpoint 2: wizard steps 1-2 (after approval of Checkpoint 1).
-- Then Checkpoints 3–14 in order, each gated by approval.
+- Checkpoint 3 (Wheel-Size widget and manual tire-size entry) only after Sam approves Checkpoint 2.
+- Then Checkpoints 4–14 in order, each gated by approval. Canonical plan: /app/ROADMAP.md.

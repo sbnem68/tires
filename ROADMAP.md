@@ -40,7 +40,7 @@ Before coding, every agent must:
 |---|---|---|
 | 0 | Project setup and architecture | Approved with conditions; deployment remains on hold |
 | 1 | City-aware landing pages | Approved |
-| 2 | Tire Match Wizard — Steps 1 and 2 | In progress; awaiting completion and approval |
+| 2 | Tire Match Wizard — Steps 1 and 2 | Built and verified; awaiting Sam's approval |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started |
 | 4 | Preferences and lead intent | Not started |
 | 5 | Shop and offer database | Not started |
@@ -54,7 +54,7 @@ Before coding, every agent must:
 | 13 | WordPress embed and deployment | Not started |
 | 14 | Final end-to-end test | Not started |
 
-**Current checkpoint:** Checkpoint 2. Checkpoint 3 must not start until Checkpoint 2 is completed, verified, and explicitly approved by Sam.
+**Current checkpoint:** Checkpoint 2 — built and verified, awaiting Sam's approval. Checkpoint 3 must not start until Sam explicitly approves Checkpoint 2.
 
 ## 5. Global Build Rules
 
@@ -178,7 +178,11 @@ Ottawa live-state copy:
 
 **Approval gate:** Sam approves Steps 1 and 2.
 
-**Current status:** In progress; awaiting completion and approval. Existing branch documentation reports 18 frontend tests passing and a successful production build; end-to-end preview verification remains incomplete. These prior reports are not proof of checkpoint approval.
+**Current status:** Built and verified on 2026-11-24; awaiting Sam's approval. Evidence: 26 frontend unit tests, 7 backend Checkpoint 2 tests, and a real-browser suite of 46 checks (the 18 required tests plus precedence and attribution tests, at mobile 390x844 and desktop 1440x900) all pass; an independent testing run found no application bugs; the production build compiles. See `AGENT_PROGRESS.md` (test log), `test_reports/checkpoint2_browser.json` and `screenshots/`. Passing tests are not approval.
+
+**City precedence (approved change, see Change Log):** valid listed URL city, then saved wizard progress, then the city the driver last chose on the site, then nothing selected.
+
+**Open decision before any public launch:** the analytics snippet in `frontend/public/index.html` (see `AGENT_PROGRESS.md`, Known issues).
 
 ### Checkpoint 3 — Wheel-Size Widget and Manual Tire-Size Entry
 
@@ -788,6 +792,39 @@ Use this template for future entries:
 - Reason: Prepare for the full expansion footprint without making every location publicly active, and prevent prospect counts from becoming public partner counts.
 - Impact: Adds market groups, cities, subareas, launch statuses, expansion gates, Quebec configuration, and related tests.
 - Status: Approved; implementation follows checkpoint integration rules.
+
+### 2026-11-24 — Wizard city precedence: URL city wins over saved progress
+
+- Checkpoint: 2 — Tire Match Wizard, Steps 1 and 2
+- Type: Correction
+- Proposed by: Agent (audit finding: saved progress overrode the URL city)
+- Approved by: Sam
+- Approved at: 2026-11-24
+- Reason: The brief requires the city to be preselected from the URL. Precedence is now: a valid listed URL city; otherwise saved progress; otherwise no city selected. Original attribution and the original landing city are never overwritten; the selected city is stored separately.
+- Impact: `frontend/src/lib/tireMatchWizard.js`, `TireMatchPage.jsx`, `CitySelector.jsx`, tests 3b-3e. Two implementation details to confirm: (1) a URL city is applied once per browser session so a later manual change survives refresh; (2) when there is no URL city and no saved progress, the city the driver last chose on the site (for example by visiting `/toronto`) is used before falling back to "nothing selected".
+- Status: Implemented
+
+### 2026-11-24 — Driver-facing wording contains no development language
+
+- Checkpoint: 2 — Tire Match Wizard, Steps 1 and 2
+- Type: Correction
+- Proposed by: Agent (audit finding)
+- Approved by: Sam
+- Approved at: 2026-11-24
+- Reason: Drivers saw text such as "outside Checkpoint 2". The approved wording is "Next: vehicle and tire size (coming soon)."
+- Impact: `outcomeCopy` in `frontend/src/lib/tireMatchWizard.js`, the privacy note in `TireMatchPage.jsx`, one wording test.
+- Status: Implemented
+
+### 2026-11-24 — Local preview database in the Emergent workspace
+
+- Checkpoint: 2 — Tire Match Wizard, Steps 1 and 2
+- Type: Essential upgrade (preview environment only)
+- Proposed by: Agent
+- Approved by: Sam
+- Approved at: 2026-11-24
+- Reason: The Replit development database cannot be reached from the Emergent workspace. A local PostgreSQL holds the preview data. The Replit database is untouched and unverified.
+- Impact: No repository schema or seed change. Existing migrations `0001` and `0002` and `python seed.py --review-cities-only` were run against the local database only. Thirteen Checkpoint 0/1 backend tests that assert the full 28-city directory fail against this three-city seed and were left unchanged.
+- Status: Implemented
 
 ## 9. Agent Session Protocol
 
