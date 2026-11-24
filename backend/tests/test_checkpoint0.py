@@ -36,6 +36,21 @@ def session():
         connection.close()
 
 
+def _head_revision() -> str:
+    from alembic.config import Config
+    from alembic.script import ScriptDirectory
+
+    backend = Path(__file__).resolve().parents[1]
+    cfg = Config(str(backend / "alembic.ini"))
+    cfg.set_main_option("script_location", str(backend / "alembic"))
+    return ScriptDirectory.from_config(cfg).get_current_head()
+
+
+HEAD_REVISION = _head_revision()
+# Cities given a public review page at Checkpoint 1 (migration 0002).
+LISTED_CITIES = {"ottawa", "toronto", "hamilton"}
+
+
 def count(session, model):
     return session.scalar(select(func.count()).select_from(model))
 
@@ -48,7 +63,7 @@ def city(session, slug):
 
 def test_database_connects_and_migration_is_applied(session):
     assert session.execute(text("SELECT 1")).scalar() == 1
-    assert session.execute(text("SELECT version_num FROM alembic_version")).scalar() == "0001"
+    assert session.execute(text("SELECT version_num FROM alembic_version")).scalar() == HEAD_REVISION
 
 
 def test_all_model_tables_exist():
@@ -112,12 +127,14 @@ def test_04_rerunning_seed_creates_no_duplicates(session):
 
 
 def test_04b_rerunning_seed_preserves_launch_state(session):
-    ottawa = city(session, "ottawa")
-    ottawa.launch_status = "onboarding"
+    hamilton = city(session, "hamilton")
+    hamilton.launch_status = "paused"
     session.flush()
     seed_locations(session)
-    session.refresh(ottawa)
-    assert ottawa.launch_status == "onboarding"
+    session.refresh(hamilton)
+    assert hamilton.launch_status == "paused"
+    assert city(session, "ottawa").launch_status == "onboarding"
+    assert city(session, "toronto").public_listing_enabled is True
 
 
 def test_05_seed_creates_no_prospects_partners_offers_or_business_records(session):
@@ -127,11 +144,12 @@ def test_05_seed_creates_no_prospects_partners_offers_or_business_records(sessio
     assert [count(session, m) for m in models] == before
 
 
-def test_06_every_seeded_city_is_planned_and_not_publicly_listed(session):
+def test_06_no_city_is_live_and_only_review_cities_are_listed(session):
     for c in session.scalars(select(City)).all():
-        assert c.launch_status == "planned", c.slug
-        assert c.public_listing_enabled is False
-        assert c.launched_at is None
+        # Ottawa is the onboarding pilot (approved at Checkpoint 0 review); nothing is live.
+        assert c.launch_status == ("onboarding" if c.slug == "ottawa" else "planned"), c.slug
+        assert c.public_listing_enabled is (c.slug in LISTED_CITIES), c.slug
+        assert c.launched_at is None and c.seo_indexable is False
 
 
 def test_08_subareas_belong_to_toronto_and_are_not_cities(session):
@@ -175,7 +193,8 @@ def test_14_new_city_is_configured_with_data_only(session):
     session.add(City(market_group_id=group.id, name="Testville", slug="testville", province_code="ON",
                      timezone="America/Toronto", default_locale="en-CA", supported_locales=["en-CA"]))
     session.flush()
-    assert city(session, "testville").launch_status == "planned"
+    new_city = city(session, "testville")
+    assert new_city.launch_status == "planned" and new_city.public_listing_enabled is False
     assert count(session, City) == 29
 
 
@@ -225,7 +244,7 @@ def test_health_endpoint():
     import server
 
     body = TestClient(server.app).get("/api/health").json()
-    assert body["status"] == "ok" and body["database"] == "connected" and body["migration_revision"] == "0001"
+    assert body["status"] == "ok" and body["database"] == "connected" and body["migration_revision"] == HEAD_REVISION
 
 
 def test_architecture_endpoint_is_hidden_in_production(monkeypatch):
@@ -233,9 +252,11 @@ def test_architecture_endpoint_is_hidden_in_production(monkeypatch):
     import server
 
     client = TestClient(server.app)
-    monkeypatch.setattr(server, "APP_ENV", "staging")
+    import settings
+
+    monkeypatch.setattr(settings, "APP_ENV", "staging")
     body = client.get("/api/system/architecture").json()
     assert body["totals"] == {"market_groups": 14, "cities": 28, "subareas": 3, "planning_prospects": 348}
     assert "DATABASE_URL" not in str(body) and "postgresql://" not in str(body)
-    monkeypatch.setattr(server, "APP_ENV", "production")
+    monkeypatch.setattr(settings, "APP_ENV", "production")
     assert client.get("/api/system/architecture").status_code == 404

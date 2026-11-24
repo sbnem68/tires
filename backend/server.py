@@ -1,18 +1,21 @@
-"""Tires4Today API - Checkpoint 0: foundation only (health + staging architecture review)."""
+"""Tires4Today API.
+
+Checkpoint 0: health + staging-only architecture review.
+Checkpoint 1: public read-only location API (see public_api.py).
+"""
 import logging
 import os
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
-from sqlalchemy import inspect, select, text
+from sqlalchemy import func, inspect, select, text
 from sqlalchemy.orm import Session, selectinload
 from starlette.middleware.cors import CORSMiddleware
 
+import settings
 from db import engine, get_session
 from models import Base, City, Install, Lead, MarketGroup, Prospect, ProvinceConfig, Quote, Shop, ShopOffer
+from public_api import router as public_router
 from seed import location_totals
-
-# Fail closed: anything not explicitly marked staging/development behaves as production.
-APP_ENV = os.environ.get("APP_ENV", "production").lower()
 
 app = FastAPI(title="Tires4Today Tire Match API")
 api = APIRouter(prefix="/api")
@@ -29,13 +32,14 @@ def health(session: Session = Depends(get_session)):
     except Exception as exc:  # report, never leak connection details
         logger.error("health check failed: %s", type(exc).__name__)
         raise HTTPException(status_code=503, detail="Database unavailable or not migrated")
-    return {"status": "ok", "database": "connected", "migration_revision": revision, "environment": APP_ENV}
+    return {"status": "ok", "database": "connected", "migration_revision": revision,
+            "environment": settings.APP_ENV}
 
 
 @api.get("/system/architecture")
 def architecture(session: Session = Depends(get_session)):
-    """Checkpoint 0 review data: live schema + location seed. Not available in production."""
-    if APP_ENV == "production":
+    """Internal review data: live schema + location directory. Not available in production."""
+    if settings.is_production():
         raise HTTPException(status_code=404, detail="Not found")
 
     insp = inspect(engine)
@@ -61,10 +65,10 @@ def architecture(session: Session = Depends(get_session)):
     provinces = session.scalars(select(ProvinceConfig).order_by(ProvinceConfig.code)).all()
 
     def count(model):
-        return session.scalar(select(text("count(*)")).select_from(model))
+        return session.scalar(select(func.count()).select_from(model))
 
     return {
-        "environment": APP_ENV,
+        "environment": settings.APP_ENV,
         "totals": location_totals(session),
         "record_counts": {
             "prospects": count(Prospect), "shops": count(Shop), "shop_offers": count(ShopOffer),
@@ -73,7 +77,7 @@ def architecture(session: Session = Depends(get_session)):
         "provinces": [{
             "code": p.code, "name": p.name, "default_locale": p.default_locale,
             "supported_locales": p.supported_locales, "tax_components": p.tax_components,
-            "tax_config_verified": p.tax_config_verified_at is not None,
+            "tax_components_verified": p.tax_components_verified,
             "consent_wording_approved": p.consent_wording_approved_at is not None,
             "privacy_wording_approved": p.privacy_wording_approved_at is not None,
         } for p in provinces],
@@ -85,6 +89,7 @@ def architecture(session: Session = Depends(get_session)):
                 "name": c.name, "slug": c.slug, "province_code": c.province_code, "timezone": c.timezone,
                 "default_locale": c.default_locale, "supported_locales": c.supported_locales,
                 "launch_status": c.launch_status, "public_listing_enabled": c.public_listing_enabled,
+                "seo_indexable": c.seo_indexable,
                 "subareas": [s.name for s in c.subareas],
             } for c in g.cities],
         } for g in groups],
@@ -93,6 +98,7 @@ def architecture(session: Session = Depends(get_session)):
 
 
 app.include_router(api)
+app.include_router(public_router)
 
 app.add_middleware(
     CORSMiddleware,
