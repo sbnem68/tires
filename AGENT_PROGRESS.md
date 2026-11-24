@@ -5,7 +5,7 @@ Do not start Checkpoint 3 until Sam explicitly approves Checkpoint 2.
 
 ## Current checkpoint
 
-Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: finishing (see "Incomplete items").
+Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: built and verified; awaiting Sam's approval.
 
 ## Roadmap
 
@@ -62,10 +62,13 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
   SiteProvider and real axios client with only the transport replaced by a recorder; fetch,
   XMLHttpRequest and sendBeacon are also watched).
 
+- Independent testing-agent verification completed with no application bugs.
+- Documentation updated: `ROADMAP.md` (status and three change-log entries), `CHECKPOINTS.md`,
+  `README.md`, `plan.md`, `memory/PRD.md`.
+
 ## Incomplete items
 
-- Independent verification by the testing agent.
-- Documentation refresh and completion report.
+- None inside Checkpoint 2. Waiting for Sam's approval.
 
 ## Known issues
 
@@ -100,8 +103,9 @@ Sam's roadmap commit changed documentation only and is also saved on `backup/roa
 
 ## Next immediate task
 
-Independent verification by the testing agent, then documentation (ROADMAP change log,
-CHECKPOINTS, README, plan), backup branch and the completion report.
+None until Sam responds. Do not start Checkpoint 3. If Sam approves the analytics removal, delete the
+PostHog snippet (and, if agreed, `emergent-main.js`) from `frontend/public/index.html` and re-run
+`tests/e2e/checkpoint2_browser.py`.
 
 ## Files changed (this session)
 
@@ -109,6 +113,8 @@ CHECKPOINTS, README, plan), backup branch and the completion report.
 - `frontend/src/lib/tireMatchWizard.js` — URL city precedence, session marker, neutral wording.
 - `frontend/src/pages/TireMatchPage.jsx` — uses the new precedence; neutral privacy note; `data-outcome`.
 - `frontend/src/components/site/CitySelector.jsx` — an explicit city choice outranks a carried `city` parameter.
+- `ROADMAP.md`, `CHECKPOINTS.md`, `README.md`, `plan.md`, `memory/PRD.md` — status and documentation.
+- `test_reports/iteration_3.json` — independent testing-agent report.
 - `tests/e2e/checkpoint2_browser.py` — new: real-browser suite (mobile and desktop) with network recording.
 - `test_reports/checkpoint2_browser.json` — results of the latest browser run.
 - `screenshots/checkpoint-2-step-{1,2,2-next}-{mobile,desktop}.jpg` — six screenshots.
@@ -134,6 +140,7 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
+| 2026-11-24 16:39 | Independent verification by the testing agent: backend API, wizard at 390x844 and 1920x800, URL precedence, attribution, network recording, regression of `/`, city pages and city selector | testing agent, report `test_reports/iteration_3.json` | PASS — 49 checks passed, no application bugs. One of the agent's own mobile assertions was wrong (its logic, not the app). No source files changed; database unchanged |
 | 2026-11-24 16:26 | Full backend suite, three-city seed | `cd backend && python -m pytest tests -n 0` | 30 passed, 13 failed — the same 13 full-directory tests (see Known issues); all Checkpoint 2 tests pass |
 | 2026-11-24 16:26 | Production frontend build | `cd frontend && yarn build` | PASS — compiled successfully |
 | 2026-11-24 16:26 | Real-browser acceptance (headless Chromium) at mobile 390x844 and desktop 1440x900: the 18 required tests, 3a/3b precedence, attribution A1-A3 | `T4T_BASE_URL=<preview> python3 tests/e2e/checkpoint2_browser.py --screenshots screenshots` | PASS — 46 of 46 (23 per viewport). Report: `test_reports/checkpoint2_browser.json` |
@@ -145,6 +152,10 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 | 2026-11-24 ~15:50 | Frontend unit suite and build at `d8daf86` (audit) | `yarn test`, `yarn build` | PASS — 21 of 21; build compiled |
 
 ## Decisions pending user approval
+
+- Analytics snippet in `frontend/public/index.html` (see Known issues): remove, keep, or defer.
+- Confirm two details of the city precedence: the URL city is applied once per browser session, and
+  the city last chosen on the site is used when there is no URL city and no saved progress.
 
 - Whether the 13 full-directory backend tests should be adapted or the full directory seeded in a
   later, separately approved step.
