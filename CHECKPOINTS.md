@@ -2,6 +2,8 @@
 
 One checkpoint is built at a time. Work on the next checkpoint starts only after Sam approves the current one.
 
+> For the canonical build plan, checkpoint order, approval gates, and approved scope changes, read [ROADMAP.md](./ROADMAP.md) before starting any work.
+
 | # | Scope | Status | Approved |
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |

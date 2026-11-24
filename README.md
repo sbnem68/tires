@@ -1,5 +1,7 @@
 # Tires4Today — Tire Match Intake System
 
+> For the canonical build plan, checkpoint order, approval gates, and approved scope changes, read [ROADMAP.md](./ROADMAP.md) before starting any work.
+
 ## Project purpose
 
 Tires4Today matches drivers who need tires with local partner shops and sends them one clear
