@@ -5,7 +5,7 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 | # | Scope | Status | Approved |
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |
-| 1 | City-aware landing page | Built — awaiting approval | — |
+| 1 | City-aware landing page | Approved | 2026-11-24 |
 | 2 | Tire Match wizard: city and need steps | Not started | — |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started | — |
 | 4 | Preferences and lead intent | Not started | — |
@@ -56,9 +56,10 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 
 ## Checkpoint 1 — City-aware landing page
 
-- **Status:** Built — awaiting approval
-- **Approved date:** —
-- **Branch:** `checkpoint-1-city-landing`
+- **Status:** Approved
+- **Approved date:** 2026-11-24
+- **Branch:** `checkpoint-1-city-landing` (merged to `main`)
+- **Git tag:** `checkpoint-1-approved`
 
 **Scope.** Homepage, `/ottawa`, `/toronto`, `/hamilton`, city selector, hero, How It Works, FAQ, footer,
 URL parameter capture and preservation, mobile-first layout, per-page SEO controls. No wizard, widget,
@@ -85,6 +86,15 @@ offers, lead capture, admin, notifications, quotes, bookings or reconciliation.
 - Attribution is stored in the browser only; it is submitted with the lead at Checkpoint 7.
 - Robots tags are set in the browser. Server-rendered tags or prerendering should be decided before launch.
 - No privacy or terms pages yet (no reviewed wording exists).
+
+**Decisions recorded at approval**
+- The 30-day lock on original attribution is approved. Later touches never overwrite the original.
+- "Same-Week Booking" stays visible only in the live state.
+- The real Register Interest form is built in Checkpoint 7 (minimum data, explicit consent, never a lead,
+  never notifies a shop, never counts toward bookings, installs or expansion thresholds).
+- Draft copy (homepage hero, coming-soon heading, paused message, How It Works, FAQ, "What we'll ask you",
+  `/tire-match` notice) approved as drafted.
+- No Privacy or Terms links until Sam supplies or approves reviewed wording.
 
 **Next checkpoint.** Checkpoint 2 — Tire Match wizard, steps 1 and 2 (city/location and need selection),
 only after Checkpoint 1 is approved.

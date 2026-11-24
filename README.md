@@ -14,7 +14,7 @@ The system is built in approval-gated checkpoints. See [CHECKPOINTS.md](./CHECKP
 | # | Scope | Status |
 |---|---|---|
 | 0 | Project setup and architecture | Approved (with conditions) |
-| 1 | City-aware landing page | Built — awaiting approval |
+| 1 | City-aware landing page | Approved |
 | 2–14 | Wizard, offers, leads, routing, quotes, installs, admin, multi-city, deployment | Not started |
 
 ## Stack
