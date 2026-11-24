@@ -4,7 +4,18 @@ import { ArrowLeft, ArrowRight, Check, Info } from "lucide-react";
 import { PageShell, useCarry } from "@/components/site/PageShell";
 import { Seo } from "@/components/site/Seo";
 import { useSite } from "@/context/SiteContext";
-import { createInitialWizardState, NEED_OPTIONS, RADIUS_OPTIONS, resolveInitialCity, saveWizardProgress, wizardReducer, canContinueLocation, canContinueNeed, outcomeCopy } from "@/lib/tireMatchWizard";
+import {
+  canContinueLocation,
+  canContinueNeed,
+  createInitialWizardState,
+  markUrlCityApplied,
+  NEED_OPTIONS,
+  outcomeCopy,
+  RADIUS_OPTIONS,
+  resolveInitialCity,
+  saveWizardProgress,
+  wizardReducer,
+} from "@/lib/tireMatchWizard";
 
 const FieldLabel = ({ htmlFor, children, optional = false }) => (
   <label htmlFor={htmlFor} className="mb-2 block text-sm font-semibold">
@@ -69,8 +80,11 @@ export default function TireMatchPage() {
 
   useEffect(() => {
     if (loading || error || initializedRef.current) return;
-    const initialCity = resolveInitialCity({ state, cities, search, selectedCitySlug });
-    dispatch({ type: "hydrate-city", value: initialCity });
+    const resolved = resolveInitialCity({ state, cities, search, selectedCitySlug });
+    const initialCity = resolved.citySlug;
+    dispatch({ type: "hydrate-city", value: initialCity, returnToLocation: resolved.returnToLocation });
+    // Selected city only. The original attribution record (landing city included) is not touched.
+    if (resolved.source === "url") markUrlCityApplied(initialCity);
     synchronizedCityRef.current = initialCity;
     if (initialCity && initialCity !== selectedCitySlug) selectCity(initialCity);
     initializedRef.current = true;
@@ -323,7 +337,7 @@ export default function TireMatchPage() {
                 )}
 
                 {state.outcome && (
-                  <div className="mt-6 rounded-xl border border-[hsl(var(--t4t-cta))]/30 bg-[hsl(var(--t4t-wash-1))] p-4" role="status" data-testid="next-step-notice">
+                  <div className="mt-6 rounded-xl border border-[hsl(var(--t4t-cta))]/30 bg-[hsl(var(--t4t-wash-1))] p-4" role="status" data-testid="next-step-notice" data-outcome={state.outcome}>
                     <p className="flex items-start gap-2 font-semibold">
                       <Check className="mt-0.5 h-5 w-5 shrink-0 text-[hsl(var(--t4t-cta))]" aria-hidden="true" />
                       <span>{outcomeCopy[state.outcome]}</span>
@@ -362,7 +376,7 @@ export default function TireMatchPage() {
             )}
 
             <div className="mt-6 border-t pt-4 text-xs leading-relaxed text-muted-foreground" data-testid="privacy-note">
-              This intake does not collect contact information or create a tire request. Your selections remain in this browser until later steps are built.
+              We don’t ask for contact information here, and no tire request is created. Your selections are saved in this browser only.
             </div>
           </div>
         </div>

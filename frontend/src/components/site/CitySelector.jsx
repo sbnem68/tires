@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { useSite } from "@/context/SiteContext";
+import { markUrlCityApplied, requestedCityFrom } from "@/lib/tireMatchWizard";
 
 const BADGES = {
   live: { label: "Available", className: "border-sky-300 bg-[hsl(var(--t4t-wash-1))] text-foreground" },
@@ -52,6 +53,8 @@ export const CitySelector = () => {
   cities.forEach((city) => groups[stateOf(city)].push(city));
 
   const choose = (city) => {
+    // An explicit choice here outranks a city parameter still carried in the query string.
+    markUrlCityApplied(requestedCityFrom(search));
     selectCity(city.slug);
     setSelectorOpen(false);
     navigate({ pathname: `/${city.slug}`, search });

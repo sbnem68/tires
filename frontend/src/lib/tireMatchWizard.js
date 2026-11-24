@@ -1,4 +1,6 @@
 export const WIZARD_STORAGE_KEY = "t4t.tire_match_wizard.v1";
+/** Session marker: the URL city that has already been applied in this browser session. */
+export const URL_CITY_SESSION_KEY = "t4t.tire_match_wizard.url_city.v1";
 
 export const NEED_OPTIONS = [
   { value: "buy_2", label: "Buy 2 tires" },
@@ -88,28 +90,95 @@ export const saveWizardProgress = (state, providedStorage) => {
   }
 };
 
+const sessionStore = () => {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.sessionStorage;
+  } catch (error) {
+    return null;
+  }
+};
+
+/** The `city` URL parameter, lower-cased. Empty when absent. Validity is checked against the API list. */
+export const requestedCityFrom = (search = "") =>
+  new URLSearchParams(search).get("city")?.trim().toLowerCase() || "";
+
+export const readAppliedUrlCity = () => {
+  try {
+    return sessionStore()?.getItem(URL_CITY_SESSION_KEY) || "";
+  } catch (error) {
+    return "";
+  }
+};
+
+/**
+ * Records that the URL city has been applied (or deliberately replaced by the driver) in this
+ * session, so a refresh or in-app navigation does not undo a later manual city change.
+ * This never touches the attribution record.
+ */
+export const markUrlCityApplied = (slug) => {
+  if (!slug) return;
+  try {
+    sessionStore()?.setItem(URL_CITY_SESSION_KEY, slug);
+  } catch (error) {
+    /* storage unavailable: the URL city is simply applied again on the next load */
+  }
+};
+
 export const createInitialWizardState = ({
   search = "",
   selectedCitySlug = "",
   savedProgress = readWizardProgress(),
 } = {}) => {
-  const requestedCity = new URLSearchParams(search).get("city")?.trim().toLowerCase() || "";
+  const requestedCity = requestedCityFrom(search);
   const base = savedProgress || INITIAL_WIZARD_STATE;
   return {
     ...INITIAL_WIZARD_STATE,
     ...base,
-    citySlug: savedProgress?.citySlug || requestedCity || selectedCitySlug || "",
+    // Provisional until the city list has loaded; resolveInitialCity() makes the final decision.
+    citySlug: requestedCity || savedProgress?.citySlug || selectedCitySlug || "",
+    savedCitySlug: savedProgress?.citySlug || "",
     hasSavedProgress: Boolean(savedProgress),
   };
 };
 
-export const resolveInitialCity = ({ state, cities, search = "", selectedCitySlug = "" }) => {
+/**
+ * Decides the selected city once the listed cities are known.
+ *
+ * Precedence (approved by Sam, 2026-11-24):
+ *   1. A valid listed city in the URL wins and becomes the selected city.
+ *   2. Otherwise saved wizard progress.
+ *   3. Otherwise the city the driver last chose on the site (stored apart from attribution).
+ *   4. Otherwise nothing is selected and the driver must choose.
+ *
+ * A URL city is applied once per browser session. After that, a refresh or in-app navigation
+ * keeps whatever the driver has since chosen, so no selection is lost on refresh.
+ * The original attribution record is never read or written here.
+ */
+export const resolveInitialCity = ({
+  state,
+  cities,
+  search = "",
+  selectedCitySlug = "",
+  appliedUrlCity = readAppliedUrlCity(),
+}) => {
   const available = new Set(cities.map((city) => city.slug));
-  const requestedCity = new URLSearchParams(search).get("city")?.trim().toLowerCase() || "";
-  const candidates = state.hasSavedProgress
-    ? [state.citySlug, requestedCity, selectedCitySlug]
-    : [requestedCity, selectedCitySlug, state.citySlug];
-  return candidates.find((slug) => slug && available.has(slug)) || "";
+  const valid = (slug) => Boolean(slug) && available.has(slug);
+  const requestedCity = requestedCityFrom(search);
+  const savedCity = state.hasSavedProgress ? state.savedCitySlug : "";
+
+  if (valid(requestedCity) && requestedCity !== appliedUrlCity) {
+    return {
+      citySlug: requestedCity,
+      source: "url",
+      // The driver should see the changed city, so return to the location step.
+      returnToLocation: valid(savedCity) && savedCity !== requestedCity,
+    };
+  }
+  if (valid(savedCity)) return { citySlug: savedCity, source: "saved", returnToLocation: false };
+  if (valid(requestedCity)) return { citySlug: requestedCity, source: "url", returnToLocation: false };
+  if (valid(selectedCitySlug)) return { citySlug: selectedCitySlug, source: "selected", returnToLocation: false };
+  return { citySlug: "", source: "none", returnToLocation: false };
 };
 
 export const canContinueLocation = (state) => Boolean(state.citySlug);
@@ -159,15 +228,18 @@ export const wizardReducer = (state, action) => {
     case "edit-need":
       return { ...state, step: 2, outcome: null };
     case "hydrate-city":
-      return { ...state, citySlug: action.value };
+      return action.returnToLocation
+        ? { ...state, citySlug: action.value, step: 1, outcome: null }
+        : { ...state, citySlug: action.value };
     default:
       return state;
   }
 };
 
+/** Driver-facing wording only. Internal checkpoint or development language never appears here. */
 export const outcomeCopy = {
-  vehicle_tire_size: "Next: vehicle and tire-size selection. That step is outside Checkpoint 2.",
-  guidance_needed: "Next: the full intake, marked as guidance needed. The remaining steps are outside Checkpoint 2.",
-  changeover_request: "This is routed as a winter tire changeover. The remaining request steps are outside Checkpoint 2.",
-  repair_inspection: "This is routed as tire repair or inspection. The remaining request steps are outside Checkpoint 2.",
+  vehicle_tire_size: "Next: vehicle and tire size (coming soon).",
+  guidance_needed: "Next: vehicle and tire size (coming soon). We’ll help you choose along the way.",
+  changeover_request: "Winter tire changeover noted. The next steps are coming soon.",
+  repair_inspection: "Tire repair or inspection noted. The next steps are coming soon.",
 };
