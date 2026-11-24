@@ -6,7 +6,7 @@ One checkpoint is built at a time. Work on the next checkpoint starts only after
 |---|---|---|---|
 | 0 | Project setup and architecture | Approved with conditions | 2026-11-24 |
 | 1 | City-aware landing page | Approved | 2026-11-24 |
-| 2 | Tire Match wizard: city and need steps | Not started | — |
+| 2 | Tire Match wizard: city and need steps | Built — awaiting approval | — |
 | 3 | Wheel-Size widget and manual tire-size entry | Not started | — |
 | 4 | Preferences and lead intent | Not started | — |
 | 5 | Shop and offer database, admin | Not started | — |
@@ -98,3 +98,33 @@ offers, lead capture, admin, notifications, quotes, bookings or reconciliation.
 
 **Next checkpoint.** Checkpoint 2 — Tire Match wizard, steps 1 and 2 (city/location and need selection),
 only after Checkpoint 1 is approved.
+
+---
+
+## Checkpoint 2 — Tire Match wizard: city and need steps
+
+- **Status:** Built — awaiting approval
+- **Approved date:** —
+- **Branch:** `checkpoint-2-tire-match-wizard-steps-1-2`
+- **Scope.** Wizard steps 1 and 2 only: city/location and need selection. The progress indicator shows
+  steps 1 and 2 of 6. Answers are stored in the browser; the wizard makes no server writes.
+
+**Deliverables**
+- Step 1 uses the public locations API for city choices, with optional postal code and travel radius.
+- Step 2 offers two tires, four tires, winter changeover, repair/inspection, and guidance-needed options.
+- Winter changeover asks whether new tires are also needed. Repair/inspection asks for a short issue
+  description. Each selection resolves to the appropriate next-step intent without building later screens.
+- Back navigation, responsive layout, and saved progress across refreshes.
+- The original 30-day attribution record stays separate from the driver's selected city and wizard state.
+- 18 frontend acceptance tests pass. The production frontend build compiles.
+
+**Known limitations**
+- Vehicle/tire-size entry, preferences, offers, lead capture, and every later checkpoint remain unbuilt.
+  The page explains the next-step intent but does not collect downstream details.
+- No contact information is collected; no lead or request is created; no form data is sent to the server.
+- Previewing database-backed city choices requires the existing PostgreSQL-backed public API to be
+  configured and running.
+- Not deployed to Railway or Vercel.
+
+**Next checkpoint.** Checkpoint 3 — Wheel-Size widget and manual tire-size entry, only after Checkpoint 2
+is approved.

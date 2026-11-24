@@ -15,7 +15,8 @@ The system is built in approval-gated checkpoints. See [CHECKPOINTS.md](./CHECKP
 |---|---|---|
 | 0 | Project setup and architecture | Approved (with conditions) |
 | 1 | City-aware landing page | Approved |
-| 2–14 | Wizard, offers, leads, routing, quotes, installs, admin, multi-city, deployment | Not started |
+| 2 | Tire Match wizard: city and need steps | Built — awaiting approval |
+| 3–14 | Tire-size entry, offers, leads, routing, quotes, installs, admin, multi-city, deployment | Not started |
 
 ## Stack
 
@@ -130,6 +131,12 @@ python -m pytest tests/test_checkpoint1.py
 ```
 
 Tests run against `DATABASE_URL`. Tests that write do so inside a transaction that is rolled back.
+Checkpoint 2 frontend tests:
+
+```bash
+cd frontend
+CI=true yarn test --watchAll=false --runInBand
+```
 
 ## Data model
 
@@ -166,7 +173,7 @@ Rules enforced by the schema:
 |---|---|
 | `/` | Homepage with city selector |
 | `/ottawa`, `/toronto`, `/hamilton` | City pages. One domain, one path per city |
-| `/tire-match` | Destination of the CTA. The form is Checkpoint 2; this page collects nothing |
+| `/tire-match` | Checkpoint 2 wizard: city/location and need selection only |
 | `/internal/architecture` | Staging-only schema and seed review |
 
 **City states.** `live` shows the approved hero and CTA. `planned` and `onboarding` show
@@ -181,6 +188,18 @@ and inspect captured attribution. The API disables these tools in production.
 referrer_url, landing_url` are captured on first landing into local storage and never overwritten by
 navigation or by changing city. The selected city is stored separately. Internal links also keep the
 query string.
+
+## Tire Match wizard (Checkpoint 2)
+
+The `/tire-match` page contains the first two steps only: city/location, followed by tire need. The city
+choices come from the public, database-backed locations API. Postal code and travel radius are optional.
+Need selection supports two tires, four tires, winter changeover, repair/inspection, and guidance. The
+winter and repair follow-up questions appear only when relevant.
+
+The wizard shows progress as steps 1 and 2 of 6 and saves partial answers in the browser. This checkpoint
+does not collect contact information, create a lead, submit a request, or write to the server. Original
+attribution stays in the existing 30-day store; the driver's selected city and wizard progress are stored
+separately. Later wizard steps are not included.
 
 **SEO.** Every page is `noindex` today. A city page becomes indexable only when
 `SITE_INDEXING_ENABLED=true` **and** `cities.seo_indexable` **and** the city is `live`.

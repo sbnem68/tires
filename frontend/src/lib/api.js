@@ -1,8 +1,28 @@
 import axios from "axios";
 
-const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL?.replace(/\/+$/, "");
+const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
 
-export const fetchPublicConfig = () => axios.get(`${API}/public/config`).then((r) => r.data);
-export const fetchLocations = () => axios.get(`${API}/public/locations`).then((r) => r.data.cities);
-export const fetchHealth = () => axios.get(`${API}/health`).then((r) => r.data);
-export const fetchArchitecture = () => axios.get(`${API}/system/architecture`).then((r) => r.data);
+const missingBackendUrl = () => Promise.reject(new Error("REACT_APP_BACKEND_URL is not configured."));
+const get = (endpoint) => (API ? axios.get(`${API}/${endpoint}`) : missingBackendUrl());
+
+export const fetchPublicConfig = () => {
+  return get("public/config").then((response) => {
+    if (!response.data || typeof response.data !== "object" || Array.isArray(response.data)) {
+      throw new Error("The public config API returned an invalid response.");
+    }
+    return response.data;
+  });
+};
+
+export const fetchLocations = () => {
+  return get("public/locations").then((response) => {
+    if (!Array.isArray(response.data?.cities)) {
+      throw new Error("The public locations API returned an invalid response.");
+    }
+    return response.data.cities;
+  });
+};
+
+export const fetchHealth = () => get("health").then((response) => response.data);
+export const fetchArchitecture = () => get("system/architecture").then((response) => response.data);
