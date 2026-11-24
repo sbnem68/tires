@@ -17,6 +17,9 @@ React + Tailwind / FastAPI / PostgreSQL (SQLAlchemy 2, Alembic, psycopg 3). See 
 - Checkpoint 0 (foundation): schema + migration 0001, idempotent location seed, health endpoint,
   staging-only architecture review page, tests, README, env templates, deploy configs.
 
+- Checkpoint 1 (city-aware landing): pages /, /ottawa, /toronto, /hamilton; city states; attribution capture;
+  per-page SEO; migration 0002; public read-only API. Awaiting approval.
+
 ## Backlog (P0 next)
-- Checkpoint 1: city-aware landing page (after approval of Checkpoint 0).
-- Then Checkpoints 2–14 in order, each gated by approval.
+- Checkpoint 2: wizard steps 1-2 (after approval of Checkpoint 1).
+- Then Checkpoints 3–14 in order, each gated by approval.
