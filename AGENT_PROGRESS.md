@@ -97,6 +97,7 @@ Real-browser suite (mobile and desktop) for all 18 tests plus attribution, then 
 - `frontend/src/lib/tireMatchWizard.js` — URL city precedence, session marker, neutral wording.
 - `frontend/src/pages/TireMatchPage.jsx` — uses the new precedence; neutral privacy note; `data-outcome`.
 - `frontend/src/components/site/CitySelector.jsx` — an explicit city choice outranks a carried `city` parameter.
+- `backend/tests/test_checkpoint2_no_writes.py` — new: every API route is read-only; no lead or wizard endpoint; write attempts return 404/405 and create no records.
 - `frontend/src/pages/TireMatchPage.test.jsx` — tests 3b, 3c, 3d added; 12, 15, 16 strengthened; wording test.
 
 ## Commands run
@@ -115,6 +116,7 @@ Real-browser suite (mobile and desktop) for all 18 tests plus attribution, then 
 
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
+| 2026-11-24 16:50 | Backend Checkpoint 2 suites: no write/lead endpoint, write attempts rejected, three listed cities, restricted seed | `cd backend && python -m pytest tests/test_checkpoint2_no_writes.py tests/test_checkpoint2_seed.py -n 0` | PASS — 7 of 7 |
 | 2026-11-24 16:40 | Frontend unit suite after decisions A and B and stronger tests 12, 15, 16 | `cd frontend && CI=true yarn test --watchAll=false --runInBand` | PASS — 25 of 25 (18 numbered, 3b/3c/3d precedence, wording, 3 attribution) |
 | 2026-11-24 15:55 | Backend Checkpoint 0/1/2 suites against the three-city seed | `cd backend && python -m pytest tests -n 0` | 25 passed, 13 failed — all 13 assert the full 28-city directory (see Known issues); not changed |
 | 2026-11-24 15:50 | Local API after migration and seed | `GET /api/health`, `GET /api/public/locations` | PASS — 200, revision `0002`, three cities |
