@@ -176,8 +176,9 @@ export const resolveInitialCity = ({
     };
   }
   if (valid(savedCity)) return { citySlug: savedCity, source: "saved", returnToLocation: false };
-  if (valid(requestedCity)) return { citySlug: requestedCity, source: "url", returnToLocation: false };
   if (valid(selectedCitySlug)) return { citySlug: selectedCitySlug, source: "selected", returnToLocation: false };
+  // A URL city already applied this session only matters when the driver has chosen nothing since.
+  if (valid(requestedCity)) return { citySlug: requestedCity, source: "url", returnToLocation: false };
   return { citySlug: "", source: "none", returnToLocation: false };
 };
 

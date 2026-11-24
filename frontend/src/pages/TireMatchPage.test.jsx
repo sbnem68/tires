@@ -259,6 +259,17 @@ test("3d. A manual city change after a URL preselect survives a refresh", async 
   expect(container.querySelector('[data-testid="city-select"]').value).toBe("hamilton");
 });
 
+test("3e. An explicit city choice on the site outranks a city parameter already applied this session", async () => {
+  // The driver landed with ?city=ottawa, then chose Toronto in the city selector. The query
+  // string is still carried on internal links, but it must not put Ottawa back.
+  const { markUrlCityApplied } = require("@/lib/tireMatchWizard");
+  markUrlCityApplied("ottawa");
+  setSelectedCity("toronto");
+  mockSite("toronto");
+  await renderPage("/tire-match?city=ottawa");
+  expect(container.querySelector('[data-testid="city-select"]').value).toBe("toronto");
+});
+
 test("4. Postal code is optional", async () => {
   await renderPage();
   await setValue('[data-testid="city-select"]', "ottawa");
