@@ -1,116 +1,103 @@
-import asyncio
-from contextlib import suppress
-from fastapi import FastAPI, APIRouter, Query
-from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-from pymongo import ASCENDING, DESCENDING, IndexModel
-import os
+"""Tires4Today API - Checkpoint 0: foundation only (health + staging architecture review)."""
 import logging
-from pathlib import Path
-from pydantic import BaseModel, Field, ConfigDict
-from typing import List
-import uuid
-from datetime import datetime, timezone
+import os
+
+from fastapi import APIRouter, Depends, FastAPI, HTTPException
+from sqlalchemy import inspect, select, text
+from sqlalchemy.orm import Session, selectinload
+from starlette.middleware.cors import CORSMiddleware
+
+from db import engine, get_session
+from models import Base, City, Install, Lead, MarketGroup, Prospect, ProvinceConfig, Quote, Shop, ShopOffer
+from seed import location_totals
+
+# Fail closed: anything not explicitly marked staging/development behaves as production.
+APP_ENV = os.environ.get("APP_ENV", "production").lower()
+
+app = FastAPI(title="Tires4Today Tire Match API")
+api = APIRouter(prefix="/api")
+logger = logging.getLogger("tires4today")
+logging.basicConfig(level=logging.INFO)
 
 
-ROOT_DIR = Path(__file__).parent
-load_dotenv(ROOT_DIR / '.env')
-
-# MongoDB connection
-mongo_url = os.environ['MONGO_URL']
-client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
-
-# One entry per collection: every field a route filters, sorts or dedupes on. Add the index in the same edit as the query.
-INDEXES: dict[str, list[IndexModel]] = {
-    "status_checks": [
-        IndexModel([("id", ASCENDING)], name="id", unique=True),
-        IndexModel([("timestamp", DESCENDING)], name="timestamp_desc"),
-    ],
-}
+@api.get("/health")
+def health(session: Session = Depends(get_session)):
+    """Liveness + database + migration check. Used by the host's health probe."""
+    try:
+        session.execute(text("SELECT 1"))
+        revision = session.execute(text("SELECT version_num FROM alembic_version")).scalar_one_or_none()
+    except Exception as exc:  # report, never leak connection details
+        logger.error("health check failed: %s", type(exc).__name__)
+        raise HTTPException(status_code=503, detail="Database unavailable or not migrated")
+    return {"status": "ok", "database": "connected", "migration_revision": revision, "environment": APP_ENV}
 
 
-async def ensure_indexes() -> None:
-    for collection, models in INDEXES.items():
-        for model in models:  # one at a time so a bad spec skips only itself
-            try:
-                await db[collection].create_indexes([model])
-            except Exception as exc:  # never block boot on an index; the log line names what to fix
-                logging.getLogger(__name__).error("ensure_indexes(%s.%s): %s", collection, model.document["name"], exc)
+@api.get("/system/architecture")
+def architecture(session: Session = Depends(get_session)):
+    """Checkpoint 0 review data: live schema + location seed. Not available in production."""
+    if APP_ENV == "production":
+        raise HTTPException(status_code=404, detail="Not found")
 
-# Create the main app without a prefix
-app = FastAPI()
+    insp = inspect(engine)
+    tables = []
+    for name in sorted(Base.metadata.tables):
+        if not insp.has_table(name):
+            continue
+        fks = {fk["constrained_columns"][0]: f'{fk["referred_table"]}.{fk["referred_columns"][0]}'
+               for fk in insp.get_foreign_keys(name)}
+        pks = set(insp.get_pk_constraint(name)["constrained_columns"])
+        tables.append({
+            "name": name,
+            "columns": [{
+                "name": c["name"], "type": str(c["type"]), "nullable": c["nullable"],
+                "primary_key": c["name"] in pks, "references": fks.get(c["name"]),
+            } for c in insp.get_columns(name)],
+        })
 
-# Create a router with the /api prefix
-api_router = APIRouter(prefix="/api")
+    groups = session.scalars(
+        select(MarketGroup).options(selectinload(MarketGroup.cities).selectinload(City.subareas))
+        .order_by(MarketGroup.priority_order)
+    ).all()
+    provinces = session.scalars(select(ProvinceConfig).order_by(ProvinceConfig.code)).all()
+
+    def count(model):
+        return session.scalar(select(text("count(*)")).select_from(model))
+
+    return {
+        "environment": APP_ENV,
+        "totals": location_totals(session),
+        "record_counts": {
+            "prospects": count(Prospect), "shops": count(Shop), "shop_offers": count(ShopOffer),
+            "leads": count(Lead), "quotes": count(Quote), "installs": count(Install),
+        },
+        "provinces": [{
+            "code": p.code, "name": p.name, "default_locale": p.default_locale,
+            "supported_locales": p.supported_locales, "tax_components": p.tax_components,
+            "tax_config_verified": p.tax_config_verified_at is not None,
+            "consent_wording_approved": p.consent_wording_approved_at is not None,
+            "privacy_wording_approved": p.privacy_wording_approved_at is not None,
+        } for p in provinces],
+        "market_groups": [{
+            "priority_order": g.priority_order, "tier": g.tier, "name": g.name, "slug": g.slug,
+            "planning_prospect_count": g.planning_prospect_count,
+            "count_verified": g.count_verified_at is not None, "notes": g.notes,
+            "cities": [{
+                "name": c.name, "slug": c.slug, "province_code": c.province_code, "timezone": c.timezone,
+                "default_locale": c.default_locale, "supported_locales": c.supported_locales,
+                "launch_status": c.launch_status, "public_listing_enabled": c.public_listing_enabled,
+                "subareas": [s.name for s in c.subareas],
+            } for c in g.cities],
+        } for g in groups],
+        "tables": tables,
+    }
 
 
-# Define Models
-class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
-    
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
-    client_name: str
-    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-
-class StatusCheckCreate(BaseModel):
-    client_name: str
-
-# Add your routes to the router instead of directly to app
-@api_router.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@api_router.post("/status", response_model=StatusCheck)
-async def create_status_check(input: StatusCheckCreate):
-    status_dict = input.model_dump()
-    status_obj = StatusCheck(**status_dict)
-    
-    # Convert to dict and serialize datetime to ISO string for MongoDB
-    doc = status_obj.model_dump()
-    doc['timestamp'] = doc['timestamp'].isoformat()
-    
-    _ = await db.status_checks.insert_one(doc)
-    return status_obj
-
-@api_router.get("/status", response_model=List[StatusCheck])
-async def get_status_checks(limit: int = Query(20, ge=1, le=100)):
-    # Exclude MongoDB's _id field from the query results
-    status_checks = await db.status_checks.find({}, {"_id": 0}).sort("timestamp", -1).limit(limit).to_list(limit)
-    
-    # Convert ISO string timestamps back to datetime objects
-    for check in status_checks:
-        if isinstance(check['timestamp'], str):
-            check['timestamp'] = datetime.fromisoformat(check['timestamp'])
-    
-    return status_checks
-
-# Include the router in the main app
-app.include_router(api_router)
+app.include_router(api)
 
 app.add_middleware(
     CORSMiddleware,
     allow_credentials=True,
-    allow_origins=os.environ.get('CORS_ORIGINS', '*').split(','),
+    allow_origins=os.environ.get("CORS_ORIGINS", "*").split(","),
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-)
-logger = logging.getLogger(__name__)
-
-@app.on_event("startup")
-async def start_index_build():
-    app.state.index_task = asyncio.create_task(ensure_indexes())  # background: a big index build must not block boot
-
-@app.on_event("shutdown")
-async def shutdown_db_client():
-    app.state.index_task.cancel()  # stop a build still running before its client closes
-    with suppress(asyncio.CancelledError):
-        await app.state.index_task
-    client.close()
