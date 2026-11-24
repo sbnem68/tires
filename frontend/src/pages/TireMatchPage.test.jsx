@@ -8,10 +8,13 @@ import {
   canContinueNeed,
   createInitialWizardState,
   getNeedOutcome,
+  INITIAL_WIZARD_STATE,
+  normalizeTireSize,
   outcomeCopy,
   readWizardProgress,
   saveWizardProgress,
   WIZARD_STORAGE_KEY,
+  wizardReducer,
 } from "@/lib/tireMatchWizard";
 import { captureAttribution, clearAttribution, getAttribution, getAttributionRecord, getSelectedCity, setSelectedCity } from "@/lib/attribution";
 
@@ -347,6 +350,34 @@ test("8. Each need type resolves to its correct next route", () => {
     expect(getNeedOutcome(state)).toBe(outcome);
   });
   expect(canContinueNeed({ need: "repair", issueDescription: "   " })).toBe(false);
+});
+
+test("Step 2 sends purchases, new-tire changeovers, and guidance to manual entry only", () => {
+  const cases = [
+    [{ need: "buy_2" }, 3, "vehicle_tire_size"],
+    [{ need: "buy_4" }, 3, "vehicle_tire_size"],
+    [{ need: "changeover", winterNeedsNewTires: true }, 3, "vehicle_tire_size"],
+    [{ need: "unsure" }, 3, "guidance_needed"],
+    [{ need: "changeover", winterNeedsNewTires: false }, 2, "changeover_request"],
+    [{ need: "repair", issueDescription: "Slow leak" }, 2, "repair_inspection"],
+  ];
+
+  for (const [selection, step, outcome] of cases) {
+    const result = wizardReducer(
+      { ...INITIAL_WIZARD_STATE, step: 2, citySlug: "ottawa", ...selection },
+      { type: "continue-need" },
+    );
+    expect(result).toMatchObject({ step, outcome });
+  }
+});
+
+test("tire-size normalization accepts common sidewall formats and rejects malformed values", () => {
+  expect(normalizeTireSize(" 205 / 55 r16 ")).toBe("205/55R16");
+  expect(normalizeTireSize("LT 245/75 ZR 16 120/116Q")).toBe("LT245/75ZR16120/116Q");
+  expect(normalizeTireSize("LT 31 x 10.50 R 15")).toBe("LT31X10.50R15");
+  expect(normalizeTireSize("7.50-16")).toBe("7.50-16");
+  expect(normalizeTireSize("205/55R")).toBe("");
+  expect(normalizeTireSize(null)).toBe("");
 });
 
 test("9. Back navigation keeps the user's selections", async () => {

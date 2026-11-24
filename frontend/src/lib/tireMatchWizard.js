@@ -33,9 +33,14 @@ export const TIRE_TYPES = ["Winter", "All-season", "Summer", "Performance", "Unk
 export const TIRE_CONDITIONS = ["New", "Good", "Worn", "Damaged", "Unknown"];
 
 export const normalizeTireSize = (value = "") => {
-  const compact = value.toUpperCase().replace(/\s+/g, "");
-  // Check the shape, not whether the size is suitable for a particular vehicle.
-  return /^(?:P|LT|ST|T)?[1-9]\d{2}\/[1-9]\d(?:R|D|B)[1-9]\d(?:\.\d)?$/.test(compact) ? compact : "";
+  if (typeof value !== "string") return "";
+  const compact = value.trim().toUpperCase().replace(/\s+/g, "");
+  // Accept metric, flotation, and older inch-based sidewall formats without
+  // trying to infer whether a size is appropriate for a particular vehicle.
+  const metric = /^(?:P|LT|ST|T)?[1-9]\d{2}\/[1-9]\d(?:ZR|R|D|B)[1-9]\d(?:\.\d)?C?(?:\d{2,3}(?:\/\d{2,3})?[A-Z])?(?:XL)?$/;
+  const flotation = /^(?:LT)?\d{2,3}(?:\.\d{1,2})?X\d{1,2}(?:\.\d{1,2})?(?:ZR|R|D|B)[1-9]\d(?:LT)?(?:\d{2,3}(?:\/\d{2,3})?[A-Z])?(?:XL|C)?$/;
+  const inchBased = /^(?:LT)?[1-9]\d?\.\d{1,2}(?:-|ZR|R|D|B)[1-9]\d(?:LT)?(?:\d{2,3}(?:\/\d{2,3})?[A-Z])?(?:XL|C)?$/;
+  return metric.test(compact) || flotation.test(compact) || inchBased.test(compact) ? compact : "";
 };
 
 const readVehicle = (value) => {
