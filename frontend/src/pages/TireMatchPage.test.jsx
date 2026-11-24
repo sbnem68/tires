@@ -191,7 +191,7 @@ test("2. City can be selected manually", async () => {
 
 test("3. City is preselected from the URL", async () => {
   expect(
-    createInitialWizardState({ search: "?city=toronto", selectedCitySlug: "ottawa", savedProgress: null }).citySlug,
+    createInitialWizardState({ search: "?city=toronto", savedProgress: null }).citySlug,
   ).toBe("toronto");
   await renderPage("/tire-match?city=toronto");
   expect(container.querySelector('[data-testid="city-select"]').value).toBe("toronto");
@@ -225,27 +225,42 @@ test("3b. A valid URL city wins over saved progress, and original attribution is
   expect(getAttribution().landing_url).toContain("/toronto");
 });
 
-test("3c. Without a valid URL city, saved progress is used; with neither, no city is selected", async () => {
+test("3c. No URL city: saved wizard progress restores the saved city", async () => {
   saveWizardProgress({ step: 1, citySlug: "toronto" });
-  await renderPage("/tire-match?city=gatineau");
+  await renderPage("/tire-match");
   expect(container.querySelector('[data-testid="city-select"]').value).toBe("toronto");
   await act(async () => root.unmount());
   root = null;
   container.remove();
 
-  // A new browser with nothing stored at all.
-  window.localStorage.clear();
+  // An unlisted URL city is not a valid URL city, so saved progress still applies.
+  saveWizardProgress({ step: 1, citySlug: "hamilton" });
   window.sessionStorage.clear();
   mockSite();
-  await renderPage("/tire-match");
-  expect(container.querySelector('[data-testid="city-select"]').value).toBe("");
-  expect(container.querySelector('[data-testid="continue-location"]').disabled).toBe(true);
+  await renderPage("/tire-match?city=gatineau");
+  expect(container.querySelector('[data-testid="city-select"]').value).toBe("hamilton");
 });
 
-test("3d. A manual city change after a URL preselect survives a refresh", async () => {
+test("3c-strict. No URL city and no saved progress leaves the city unselected, whatever was chosen elsewhere", async () => {
+  // The driver visited /toronto earlier, so the site-wide selected city is Toronto.
+  setSelectedCity("toronto");
+  mockSite("toronto");
+  await renderPage("/tire-match");
+
+  const select = container.querySelector('[data-testid="city-select"]');
+  expect(select.value).toBe("");
+  expect(select.options[select.selectedIndex].textContent).toBe("Choose a city");
+  expect(container.querySelector('[data-testid="continue-location"]').disabled).toBe(true);
+  expect(mockSelectCity).not.toHaveBeenCalled();
+  expect(readWizardProgress().citySlug).toBe("");
+});
+
+test("3d. Manual city change after a URL preselect is kept, and survives a refresh", async () => {
   await renderPage("/tire-match?city=ottawa");
   expect(container.querySelector('[data-testid="city-select"]').value).toBe("ottawa");
   await setValue('[data-testid="city-select"]', "hamilton");
+  expect(container.querySelector('[data-testid="city-select"]').value).toBe("hamilton");
+  expect(readWizardProgress().citySlug).toBe("hamilton");
   await act(async () => root.unmount());
 
   root = createRoot(container);
@@ -259,15 +274,21 @@ test("3d. A manual city change after a URL preselect survives a refresh", async 
   expect(container.querySelector('[data-testid="city-select"]').value).toBe("hamilton");
 });
 
-test("3e. An explicit city choice on the site outranks a city parameter already applied this session", async () => {
-  // The driver landed with ?city=ottawa, then chose Toronto in the city selector. The query
-  // string is still carried on internal links, but it must not put Ottawa back.
-  const { markUrlCityApplied } = require("@/lib/tireMatchWizard");
-  markUrlCityApplied("ottawa");
+test("3e. The city chosen elsewhere on the site never overrides the URL city or saved progress", async () => {
   setSelectedCity("toronto");
   mockSite("toronto");
   await renderPage("/tire-match?city=ottawa");
-  expect(container.querySelector('[data-testid="city-select"]').value).toBe("toronto");
+  expect(container.querySelector('[data-testid="city-select"]').value).toBe("ottawa");
+  await act(async () => root.unmount());
+  root = null;
+  container.remove();
+
+  window.sessionStorage.clear();
+  saveWizardProgress({ step: 1, citySlug: "hamilton" });
+  setSelectedCity("toronto");
+  mockSite("toronto");
+  await renderPage("/tire-match");
+  expect(container.querySelector('[data-testid="city-select"]').value).toBe("hamilton");
 });
 
 test("4. Postal code is optional", async () => {

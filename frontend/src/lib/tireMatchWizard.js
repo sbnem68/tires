@@ -127,7 +127,6 @@ export const markUrlCityApplied = (slug) => {
 
 export const createInitialWizardState = ({
   search = "",
-  selectedCitySlug = "",
   savedProgress = readWizardProgress(),
 } = {}) => {
   const requestedCity = requestedCityFrom(search);
@@ -136,7 +135,7 @@ export const createInitialWizardState = ({
     ...INITIAL_WIZARD_STATE,
     ...base,
     // Provisional until the city list has loaded; resolveInitialCity() makes the final decision.
-    citySlug: requestedCity || savedProgress?.citySlug || selectedCitySlug || "",
+    citySlug: requestedCity || savedProgress?.citySlug || "",
     savedCitySlug: savedProgress?.citySlug || "",
     hasSavedProgress: Boolean(savedProgress),
   };
@@ -145,23 +144,19 @@ export const createInitialWizardState = ({
 /**
  * Decides the selected city once the listed cities are known.
  *
- * Precedence (approved by Sam, 2026-11-24):
- *   1. A valid listed city in the URL wins and becomes the selected city.
- *   2. Otherwise saved wizard progress.
- *   3. Otherwise the city the driver last chose on the site (stored apart from attribution).
- *   4. Otherwise nothing is selected and the driver must choose.
+ * Strict precedence (approved by Sam, 2026-11-24):
+ *   1. A valid listed city in the URL.
+ *   2. Saved wizard progress.
+ *   3. Nothing selected: the driver must choose.
  *
- * A URL city is applied once per browser session. After that, a refresh or in-app navigation
- * keeps whatever the driver has since chosen, so no selection is lost on refresh.
+ * The city the driver chose elsewhere on the site, or on a previous visit, is never used.
+ *
+ * A URL city is applied once per browser session, so a refresh does not undo a manual city
+ * change made afterwards. When a URL city replaces a different saved city the wizard returns
+ * to the location step and keeps every other answer.
  * The original attribution record is never read or written here.
  */
-export const resolveInitialCity = ({
-  state,
-  cities,
-  search = "",
-  selectedCitySlug = "",
-  appliedUrlCity = readAppliedUrlCity(),
-}) => {
+export const resolveInitialCity = ({ state, cities, search = "", appliedUrlCity = readAppliedUrlCity() }) => {
   const available = new Set(cities.map((city) => city.slug));
   const valid = (slug) => Boolean(slug) && available.has(slug);
   const requestedCity = requestedCityFrom(search);
@@ -171,13 +166,11 @@ export const resolveInitialCity = ({
     return {
       citySlug: requestedCity,
       source: "url",
-      // The driver should see the changed city, so return to the location step.
       returnToLocation: valid(savedCity) && savedCity !== requestedCity,
     };
   }
   if (valid(savedCity)) return { citySlug: savedCity, source: "saved", returnToLocation: false };
-  if (valid(selectedCitySlug)) return { citySlug: selectedCitySlug, source: "selected", returnToLocation: false };
-  // A URL city already applied this session only matters when the driver has chosen nothing since.
+  // The URL city was already applied this session and nothing has been saved since.
   if (valid(requestedCity)) return { citySlug: requestedCity, source: "url", returnToLocation: false };
   return { citySlug: "", source: "none", returnToLocation: false };
 };

@@ -69,35 +69,23 @@ export default function TireMatchPage() {
   const { search } = useLocation();
   const carry = useCarry();
   const initializedRef = useRef(false);
-  const synchronizedCityRef = useRef(selectedCitySlug);
   const [initialized, setInitialized] = useState(false);
-  const [state, dispatch] = useReducer(
-    wizardReducer,
-    null,
-    () => createInitialWizardState({ search, selectedCitySlug }),
-  );
+  const [state, dispatch] = useReducer(wizardReducer, null, () => createInitialWizardState({ search }));
   const city = findCity(state.citySlug);
 
+  // Strict precedence: URL city, then saved wizard progress, then nothing selected.
+  // The city chosen elsewhere on the site is deliberately not consulted.
   useEffect(() => {
     if (loading || error || initializedRef.current) return;
-    const resolved = resolveInitialCity({ state, cities, search, selectedCitySlug });
+    const resolved = resolveInitialCity({ state, cities, search });
     const initialCity = resolved.citySlug;
     dispatch({ type: "hydrate-city", value: initialCity, returnToLocation: resolved.returnToLocation });
     // Selected city only. The original attribution record (landing city included) is not touched.
     if (resolved.source === "url") markUrlCityApplied(initialCity);
-    synchronizedCityRef.current = initialCity;
     if (initialCity && initialCity !== selectedCitySlug) selectCity(initialCity);
     initializedRef.current = true;
     setInitialized(true);
   }, [cities, error, loading, search, selectCity, selectedCitySlug, state]);
-
-  useEffect(() => {
-    if (!initialized || !selectedCitySlug || selectedCitySlug === synchronizedCityRef.current) return;
-    if (cities.some((availableCity) => availableCity.slug === selectedCitySlug)) {
-      synchronizedCityRef.current = selectedCitySlug;
-      dispatch({ type: "set-city", value: selectedCitySlug });
-    }
-  }, [cities, initialized, selectedCitySlug]);
 
   useEffect(() => {
     if (initialized) saveWizardProgress(state);
@@ -105,7 +93,6 @@ export default function TireMatchPage() {
 
   const chooseCity = (slug) => {
     dispatch({ type: "set-city", value: slug });
-    synchronizedCityRef.current = slug;
     if (slug) selectCity(slug);
   };
 
