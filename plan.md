@@ -14,7 +14,7 @@ Rule: one checkpoint at a time; STOP for approval after each; nothing outside th
 ## Status
 - [x] CP0 Project setup & architecture — APPROVED with conditions (tag checkpoint-0-approved)
 - [x] CP1 BUILT, awaiting approval (branch checkpoint-1-city-landing) — City-aware landing page (/ottawa, /toronto, /hamilton; URL param capture; planned/onboarding/live/paused states; planned = noindex, no availability implied)
-- [ ] CP2 Wizard steps 1–2 (city/postal/radius; need selection; progress, back, local storage)
+- [x] CP2 BUILT, awaiting approval — Tire Match wizard steps 1–2 (continuation branch `checkpoint-2-wizard-steps-1-2-continuation`)
 - [ ] CP3 Wheel-Size widget + manual tire size entry
 - [ ] CP4 Preferences (priority, budget, urgency)
 - [ ] CP5 Shop & offer database + admin CRUD (admin sign-in; ABC Auto demo + 4 offers; prospects vs partners vs demo)
@@ -46,6 +46,14 @@ Rule: one checkpoint at a time; STOP for approval after each; nothing outside th
 - Staging review bar (state preview + attribution inspector), attribution lib, per-page SEO
 - 36 pytest tests; testing agent iteration_2 all passed
 - GitHub: sbnem68/tires — main = approved work only; checkpoint branches for review. Push with GITHUB_TOKEN env (never store in remote URL).
+
+## CP2 delivered — awaiting approval
+- Step 1: public-API city selection, optional postal code and travel radius.
+- Step 2: five need choices, with conditional winter-tire and repair follow-ups.
+- Six-step progress indicator, back navigation, and browser-only progress restoration.
+- The selected city stays separate from the original attribution record and its 30-day lock.
+- No contact fields, lead creation, or server writes. No migration was needed.
+- 18 frontend tests pass; the production build compiles.
 
 ## Open decisions for Sam
 - Which checkpoint builds the real interest-registration form (CP1 collects no customer data)

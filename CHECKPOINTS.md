@@ -105,7 +105,7 @@ only after Checkpoint 1 is approved.
 
 - **Status:** Built — awaiting approval
 - **Approved date:** —
-- **Branch:** `checkpoint-2-tire-match-wizard-steps-1-2`
+- **Branch:** `checkpoint-2-wizard-steps-1-2-continuation` (from the saved backup commit)
 - **Scope.** Wizard steps 1 and 2 only: city/location and need selection. The progress indicator shows
   steps 1 and 2 of 6. Answers are stored in the browser; the wizard makes no server writes.
 
