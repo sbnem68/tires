@@ -105,8 +105,12 @@ only after Checkpoint 1 is approved.
 
 ## Checkpoint 2 — Tire Match wizard: city and need steps
 
-- **Status:** Conditionally approved 2026-11-24. Both required fixes (analytics removal, strict city precedence) are completed and retested. Awaiting Sam's approval of the updated report. Not tagged, not merged.
-- **Approved date:** —
+- **Status:** Approved by Sam on 2026-11-24 for the work completed, subject to follow-up requirements
+  (Sam's decision: "Checkpoint 2 is APPROVED, subject to the follow-up requirements below… Do not tag it as
+  production-ready. Do not deploy it. Do not launch it publicly."). Closeout report at `ce3bfb0` is awaiting
+  Sam's review. Not tagged, not merged to `main`, not deployed, not production-ready.
+- **Approved date:** 2026-11-24 (no approval tag; a tag needs Sam's instruction)
+- **Tested revision:** `ce3bfb0e3e6bc2bdbb9b6bfe5b2339466f1d1b88`
 - **Branch:** `checkpoint-2-wizard-steps-1-2-continuation`
 - **Scope.** Wizard steps 1 and 2 only: city/location and need selection. The progress indicator shows
   steps 1 and 2 of 6. Answers are stored in the browser; the wizard makes no server writes.
@@ -138,11 +142,29 @@ only after Checkpoint 1 is approved.
 - Screenshots: `screenshots/checkpoint-2-step-*.jpg`.
 - No migration added or changed. Local preview database only: `0001`, `0002`, three-city seed.
 
+**Closeout verification at `ce3bfb0` (2026-11-24)**
+- Frontend unit tests: 30 of 30. Backend: 30 passed, 13 failed (the same 13 full-directory tests);
+  Checkpoint 2 backend tests 7 of 7.
+- Real-browser suite, 390x844 and 1440x900: 54 of 54 on the preview and 54 of 54 on the production build.
+- Follow-up 1 done: the development-preview session recorder is switched off in `frontend/craco.config.js`
+  (`ce3bfb0`). On the preview: no `recorder.js`, no `window.rrweb`.
+- Network check with attribution parameters and typed input: no wizard input and no secret in any request.
+- Report: `test_reports/cp2_review_evidence/closeout_ce3bfb0/CHECKPOINT2_CLOSEOUT_REPORT.md`. Earlier report:
+  `test_reports/cp2_review_evidence/CHECKPOINT2_VERIFICATION_REPORT.md`.
+- Preview: https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match (workspace preview; not
+  permanent).
+
 **Known limitations**
 - Vehicle/tire-size entry, preferences, offers, lead capture, and every later checkpoint remain unbuilt.
 - No contact information is collected; no lead or request is created; no wizard data is sent to the server.
-- In a development preview only, the preview host adds its own CDN beacon and the development server
-  injects its error overlay with a same-origin recorder. Neither is in the production bundle.
+- In a development preview only: the development server's error overlay (kept on at Sam's instruction,
+  recorder off) posts a same-origin status message containing the page path, and the preview host adds a
+  Cloudflare beacon and `cf_clearance` cookie. Neither message contains wizard input, attribution parameters
+  or secrets, but the browser's Referer header on both carries the full page address, including any
+  attribution parameters in it. Neither is in the production bundle.
+- Browser "network" evidence is a rendering of the headless test browser's request log, not a DevTools panel.
+- `.emergent/` holds Emergent workspace settings committed automatically by the workspace (for example
+  `ca726a1`); they are not application files.
 - Fonts are loaded from Google Fonts (font files only).
 - Thirteen Checkpoint 0/1 backend tests assert the full 28-city directory and fail against the approved
   three-city preview seed. This is expected; they were not changed and the full seed was not run. The
@@ -152,5 +174,5 @@ only after Checkpoint 1 is approved.
 - The Replit development database is untouched and unverified.
 - Not deployed to Railway or Vercel.
 
-**Next checkpoint.** Checkpoint 3 — Wheel-Size widget and manual tire-size entry, only after Sam explicitly
-approves Checkpoint 2.
+**Next checkpoint.** Checkpoint 3 — Wheel-Size widget and manual tire-size entry, only after Sam reviews the
+Checkpoint 2 closeout report and explicitly authorizes Checkpoint 3.

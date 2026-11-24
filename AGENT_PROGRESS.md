@@ -1,13 +1,17 @@
 # Agent Progress
 
 Working branch: `checkpoint-2-wizard-steps-1-2-continuation`. Never merge to `main` without Sam's approval.
-Do not start Checkpoint 3 until Sam explicitly approves Checkpoint 2.
+Do not start Checkpoint 3 until Sam explicitly authorizes it.
 
 ## Current checkpoint
 
-Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: CONDITIONALLY APPROVED by Sam (2026-11-24).
-Both required fixes are complete, retested and pushed. Awaiting Sam's approval of the updated report.
-Not tagged. Not merged to `main`. Checkpoint 3 must NOT start until Sam explicitly approves.
+Checkpoint 2 — Tire Match wizard, Steps 1 and 2 only. Status: APPROVED by Sam on 2026-11-24 for the work
+completed, subject to follow-up requirements; not production-ready. Follow-up 1 (development-preview recorder
+off) is done in `ce3bfb0`. Closeout report at `ce3bfb0` is awaiting Sam's review:
+`test_reports/cp2_review_evidence/closeout_ce3bfb0/CHECKPOINT2_CLOSEOUT_REPORT.md`.
+Not tagged (needs Sam's instruction). Not merged to `main`. Not deployed. Checkpoint 3 must NOT start until
+Sam authorizes it. The Foot memo and self-hosted fonts are not prerequisites (Sam, 2026-11-24).
+The error overlay stays on in the development preview and the session recorder stays off (Sam, 2026-11-24).
 
 Standing instruction from Sam: push to GitHub the instant each approved change is complete and tested;
 never hold finished work locally.
@@ -160,6 +164,7 @@ Times marked ~ are approximate (taken before the first commit of this session); 
 
 | When (UTC) | What was tested | Command | Result |
 |---|---|---|---|
+| 2026-11-24 19:40 | Checkpoint 2 closeout at `ce3bfb0`: full frontend unit, backend, and browser acceptance suites (preview and production build, 390x844 and 1440x900); network check with attribution parameters, typed input and secret comparison; review of workspace commit `ca726a1` | `CI=true yarn test --watchAll=false --runInBand --verbose`; `python -m pytest tests -n 0 -v`; `python3 tests/e2e/checkpoint2_browser.py` on both targets; `closeout_network_check.py` | Frontend 30 of 30; backend 30 passed, 13 failed (same 13); browser 54 of 54 on both targets. Recorder off. No wizard input and no secret in any request. Overlay and Cloudflare messages contain no attribution parameters, but the browser's Referer header on them carries the full page address. Limitation recorded in `CHECKPOINTS.md`. No application code, test or seed changed |
 | 2026-11-24 19:05 | Checkpoint 2 approved by Sam (not production-ready, not deployed). Required follow-up 1: development-preview session recorder switched off in `frontend/craco.config.js`. Verified on the preview at 390x844 and 1440x900 | `CI=true yarn test --watchAll=false --runInBand`; `python3 tests/e2e/checkpoint2_browser.py --only 19`; `yarn build` | Frontend 30 of 30 (new guard test); browser test 19 passes 2 of 2 with the stricter no-recorder assertions; no `recorder.js` request and no `window.rrweb`; production bundle unchanged (`main.6ba5c62b.js`). Still present on the preview and documented in README: the overlay's same-origin status message and the preview host's Cloudflare beacon. Evidence: `test_reports/cp2_review_evidence/followup_recorder_off/`. Full suites not rerun (already accepted) |
 | 2026-11-24 18:33 | Independent re-verification of `2c3eeb8` in a new workspace for Sam's Checkpoint 2 review: frontend unit, backend, production build, browser suite on the preview and on the production build, network recording at 390x844 and 1440x900 | see `test_reports/cp2_review_evidence/CHECKPOINT2_VERIFICATION_REPORT.md` | Frontend 29 of 29; backend 30 passed, 13 failed (same 13 full-directory tests); build compiles; browser 54 of 54 on both targets. No PostHog or emergent.sh request; no wizard input in any request. Development preview still carries a platform-injected recorder (`/__emergent_overlay__/recorder.js`) and Cloudflare beacon, absent from the production build. No application file changed. Foot memo not started |
 | 2026-11-24 17:06 | Full backend suite, three-city seed, after both fixes | `cd backend && python -m pytest tests -n 0` | 30 passed, 13 failed — the same 13 full-directory tests, expected on the preview seed; Checkpoint 2 files 7 of 7 |
