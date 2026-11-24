@@ -270,6 +270,10 @@ does not contain and that `yarn build` never includes:
 | Error overlay and preview health probe (`/__emergent_overlay__/report`, `/health`) | Same package | Still on. It posts a small same-origin status message (page path and any runtime errors) to the workspace's own dev server; the workspace uses it to know the preview is healthy. It can be removed completely by starting the dev server with `DISABLE_EMERGENT_OVERLAY=true` |
 | Cloudflare beacon (`static.cloudflareinsights.com`, `/cdn-cgi/rum`) and `cf_clearance` cookie | The preview host's network edge | Cannot be controlled from this repository. It is not present when the build is served anywhere else |
 
+The dev server also sends `Referrer-Policy: no-referrer` (set in `craco.config.js`, review previews only), so
+campaign and attribution values in the page address are not attached as a Referer header to requests made by
+the page, the overlay or the preview host's scripts. No production hosting setting is changed by this.
+
 These are platform development tools, not application dependencies. The only third-party requests
 the production bundle makes are font files from Google Fonts (a known third-party asset request: GET
 only, no cookie, no script, no wizard input).

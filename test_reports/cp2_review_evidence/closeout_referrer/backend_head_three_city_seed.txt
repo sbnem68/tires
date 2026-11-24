@@ -1,0 +1,314 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.18, pytest-9.2.0, pluggy-1.7.0 -- /root/.venv/bin/python
+rootdir: /app/backend
+configfile: pytest.ini
+plugins: anyio-4.16.0, platformdirs-4.14.7, xdist-3.8.0
+collecting ... collected 43 items
+
+tests/test_checkpoint0.py::test_database_connects_and_migration_is_applied PASSED [  2%]
+tests/test_checkpoint0.py::test_all_model_tables_exist PASSED            [  4%]
+tests/test_checkpoint0.py::test_required_foreign_keys_exist PASSED       [  6%]
+tests/test_checkpoint0.py::test_offers_and_shops_have_no_free_text_city PASSED [  9%]
+tests/test_checkpoint0.py::test_01_seed_has_exactly_14_groups_and_28_cities FAILED [ 11%]
+tests/test_checkpoint0.py::test_02_toronto_has_exactly_the_three_supplied_subareas FAILED [ 13%]
+tests/test_checkpoint0.py::test_03_planning_counts_total_348_without_duplication FAILED [ 16%]
+tests/test_checkpoint0.py::test_04_rerunning_seed_creates_no_duplicates FAILED [ 18%]
+tests/test_checkpoint0.py::test_04b_rerunning_seed_preserves_launch_state PASSED [ 20%]
+tests/test_checkpoint0.py::test_05_seed_creates_no_prospects_partners_offers_or_business_records PASSED [ 23%]
+tests/test_checkpoint0.py::test_06_no_city_is_live_and_only_review_cities_are_listed PASSED [ 25%]
+tests/test_checkpoint0.py::test_08_subareas_belong_to_toronto_and_are_not_cities PASSED [ 27%]
+tests/test_checkpoint0.py::test_09_market_group_grants_no_service_relationship FAILED [ 30%]
+tests/test_checkpoint0.py::test_10_gatineau_uses_quebec_configuration FAILED [ 32%]
+tests/test_checkpoint0.py::test_11_gatineau_and_kingston_pools_are_below_the_five_shop_gate FAILED [ 34%]
+tests/test_checkpoint0.py::test_14_new_city_is_configured_with_data_only FAILED [ 37%]
+tests/test_checkpoint0.py::test_city_cannot_go_live_without_recorded_approval PASSED [ 39%]
+tests/test_checkpoint0.py::test_invalid_launch_status_is_rejected PASSED [ 41%]
+tests/test_checkpoint0.py::test_active_offer_must_be_all_in_and_city_comes_from_shop PASSED [ 44%]
+tests/test_checkpoint0.py::test_health_endpoint PASSED                   [ 46%]
+tests/test_checkpoint0.py::test_architecture_endpoint_is_hidden_in_production FAILED [ 48%]
+tests/test_checkpoint1.py::test_only_the_three_review_cities_are_publicly_listed PASSED [ 51%]
+tests/test_checkpoint1.py::test_review_city_pages_resolve PASSED         [ 53%]
+tests/test_checkpoint1.py::test_unlisted_and_unknown_cities_are_not_found PASSED [ 55%]
+tests/test_checkpoint1.py::test_toronto_subareas_are_not_cities FAILED   [ 58%]
+tests/test_checkpoint1.py::test_no_city_is_live_and_ottawa_is_onboarding FAILED [ 60%]
+tests/test_checkpoint1.py::test_public_api_exposes_no_planning_counts_prices_or_shops PASSED [ 62%]
+tests/test_checkpoint1.py::test_every_page_is_noindex_for_now PASSED     [ 65%]
+tests/test_checkpoint1.py::test_indexing_requires_site_switch_and_city_flag_and_live_status PASSED [ 67%]
+tests/test_checkpoint1.py::test_preview_tools_are_disabled_in_production PASSED [ 69%]
+tests/test_checkpoint1.py::test_no_public_write_endpoints_exist PASSED   [ 72%]
+tests/test_checkpoint1.py::test_no_customer_or_inventory_records_exist PASSED [ 74%]
+tests/test_checkpoint1.py::test_tax_components_are_unverified_placeholders FAILED [ 76%]
+tests/test_checkpoint1.py::test_lead_events_records_timestamp_actor_type_and_notes PASSED [ 79%]
+tests/test_checkpoint1.py::test_gatineau_is_french_first_and_unpublished FAILED [ 81%]
+tests/test_checkpoint1.py::test_no_expansion_overrides_created PASSED    [ 83%]
+tests/test_checkpoint2_no_writes.py::test_every_api_route_is_read_only PASSED [ 86%]
+tests/test_checkpoint2_no_writes.py::test_no_lead_or_wizard_endpoint_exists PASSED [ 88%]
+tests/test_checkpoint2_no_writes.py::test_write_attempts_are_rejected_and_create_no_records PASSED [ 90%]
+tests/test_checkpoint2_no_writes.py::test_no_lead_records_exist_in_the_preview_database PASSED [ 93%]
+tests/test_checkpoint2_no_writes.py::test_public_locations_lists_only_the_three_review_cities PASSED [ 95%]
+tests/test_checkpoint2_seed.py::test_restricted_seed_adds_only_the_three_review_cities PASSED [ 97%]
+tests/test_checkpoint2_seed.py::test_restricted_seed_is_idempotent PASSED [100%]
+
+=================================== FAILURES ===================================
+_______________ test_01_seed_has_exactly_14_groups_and_28_cities _______________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca0364810>
+
+    def test_01_seed_has_exactly_14_groups_and_28_cities(session):
+>       assert count(session, MarketGroup) == 14
+E       assert 3 == 14
+E        +  where 3 = count(<sqlalchemy.orm.session.Session object at 0xffaca0364810>, MarketGroup)
+
+tests/test_checkpoint0.py:104: AssertionError
+___________ test_02_toronto_has_exactly_the_three_supplied_subareas ____________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca020f610>
+
+    def test_02_toronto_has_exactly_the_three_supplied_subareas(session):
+        toronto = city(session, "toronto")
+>       assert sorted(s.name for s in toronto.subareas) == ["Etobicoke", "North York", "Scarborough"]
+E       AssertionError: assert [] == ['Etobicoke',...'Scarborough']
+E         
+E         Right contains 3 more items, first extra item: 'Etobicoke'
+E         
+E         Full diff: (-: missing in left side, +: extra in left side)
+E         + []
+E         - [
+E         -     'Etobicoke',...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests/test_checkpoint0.py:110: AssertionError
+____________ test_03_planning_counts_total_348_without_duplication _____________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca020d3d0>
+
+    def test_03_planning_counts_total_348_without_duplication(session):
+>       assert session.scalar(select(func.sum(MarketGroup.planning_prospect_count))) == 348
+E       assert 0 == 348
+E        +  where 0 = scalar(<sqlalchemy.sql.selectable.Select object at 0xffaca020f750>)
+E        +    where scalar = <sqlalchemy.orm.session.Session object at 0xffaca020d3d0>.scalar
+E        +    and   <sqlalchemy.sql.selectable.Select object at 0xffaca020f750> = select(<sqlalchemy.sql.functions.sum at 0xffaca020fb50; sum>)
+E        +      where <sqlalchemy.sql.functions.sum at 0xffaca020fb50; sum> = <sqlalchemy.sql.functions._FunctionGenerator object at 0xffaca020fad0>(<sqlalchemy.orm.attributes.InstrumentedAttribute object at 0xffaca1955ee0>)
+E        +        where <sqlalchemy.sql.functions._FunctionGenerator object at 0xffaca020fad0> = func.sum
+E        +        and   <sqlalchemy.orm.attributes.InstrumentedAttribute object at 0xffaca1955ee0> = MarketGroup.planning_prospect_count
+
+tests/test_checkpoint0.py:115: AssertionError
+_________________ test_04_rerunning_seed_creates_no_duplicates _________________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca0137690>
+
+    def test_04_rerunning_seed_creates_no_duplicates(session):
+        before = location_totals(session)
+>       assert seed_locations(session) == before
+E       AssertionError: assert {'market_grou...ospects': 348} == {'market_grou...prospects': 0}
+E         
+E         Differing items:
+E         {'cities': 28} != {'cities': 3}
+E         {'market_groups': 14} != {'market_groups': 3}
+E         {'planning_prospects': 348} != {'planning_prospects': 0}
+E         {'subareas': 3} != {'subareas': 0}
+E         ...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests/test_checkpoint0.py:124: AssertionError
+_____________ test_09_market_group_grants_no_service_relationship ______________
+
+session = <sqlalchemy.orm.session.Session object at 0xffac9ffc2350>
+
+    def test_09_market_group_grants_no_service_relationship(session):
+>       barrie, peterborough = city(session, "barrie"), city(session, "peterborough")
+                               ^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_checkpoint0.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_checkpoint0.py:59: in city
+    return session.scalars(select(City).where(City.slug == slug)).one()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py:1421: in one
+    return self._only_one_row(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   sqlalchemy.exc.NoResultFound: No row was found when one was required
+
+lib/sqlalchemy/engine/_result_cy.py:539: NoResultFound
+__________________ test_10_gatineau_uses_quebec_configuration __________________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca01a1890>
+
+    def test_10_gatineau_uses_quebec_configuration(session):
+>       gatineau = city(session, "gatineau")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_checkpoint0.py:171: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_checkpoint0.py:59: in city
+    return session.scalars(select(City).where(City.slug == slug)).one()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py:1421: in one
+    return self._only_one_row(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   sqlalchemy.exc.NoResultFound: No row was found when one was required
+
+lib/sqlalchemy/engine/_result_cy.py:539: NoResultFound
+_______ test_11_gatineau_and_kingston_pools_are_below_the_five_shop_gate _______
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca0206f10>
+
+    def test_11_gatineau_and_kingston_pools_are_below_the_five_shop_gate(session):
+        small = session.scalars(select(MarketGroup).where(MarketGroup.planning_prospect_count < 5)).all()
+>       assert sorted(g.slug for g in small) == ["gatineau", "kingston"]
+E       AssertionError: assert ['burlington-...a', 'toronto'] == ['gatineau', 'kingston']
+E         
+E         At index 0 diff: 'burlington-corridor' != 'gatineau'
+E         Left contains one more item: 'toronto'
+E         
+E         Full diff: (-: missing in left side, +: extra in left side)
+E           [
+E         -     'gatineau',...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests/test_checkpoint0.py:185: AssertionError
+________________ test_14_new_city_is_configured_with_data_only _________________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca0016ad0>
+
+    def test_14_new_city_is_configured_with_data_only(session):
+        group = MarketGroup(name="Test Group", slug="test-group", tier=4, priority_order=99, planning_prospect_count=0)
+        session.add(group)
+        session.flush()
+        session.add(City(market_group_id=group.id, name="Testville", slug="testville", province_code="ON",
+                         timezone="America/Toronto", default_locale="en-CA", supported_locales=["en-CA"]))
+        session.flush()
+        new_city = city(session, "testville")
+        assert new_city.launch_status == "planned" and new_city.public_listing_enabled is False
+>       assert count(session, City) == 29
+E       assert 4 == 29
+E        +  where 4 = count(<sqlalchemy.orm.session.Session object at 0xffaca0016ad0>, City)
+
+tests/test_checkpoint0.py:198: AssertionError
+______________ test_architecture_endpoint_is_hidden_in_production ______________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0xffaca000b610>
+
+    def test_architecture_endpoint_is_hidden_in_production(monkeypatch):
+        from fastapi.testclient import TestClient
+        import server
+    
+        client = TestClient(server.app)
+        import settings
+    
+        monkeypatch.setattr(settings, "APP_ENV", "staging")
+        body = client.get("/api/system/architecture").json()
+>       assert body["totals"] == {"market_groups": 14, "cities": 28, "subareas": 3, "planning_prospects": 348}
+E       AssertionError: assert {'market_grou...prospects': 0} == {'market_grou...ospects': 348}
+E         
+E         Differing items:
+E         {'cities': 3} != {'cities': 28}
+E         {'market_groups': 3} != {'market_groups': 14}
+E         {'planning_prospects': 0} != {'planning_prospects': 348}
+E         {'subareas': 0} != {'subareas': 3}
+E         ...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests/test_checkpoint0.py:259: AssertionError
+_____________________ test_toronto_subareas_are_not_cities _____________________
+
+client = <starlette.testclient.TestClient object at 0xffaca0040ad0>
+session = <sqlalchemy.orm.session.Session object at 0xffaca003fc50>
+
+    def test_toronto_subareas_are_not_cities(client, session):
+        toronto = client.get("/api/public/locations/toronto").json()
+>       assert sorted(s["name"] for s in toronto["subareas"]) == ["Etobicoke", "North York", "Scarborough"]
+E       AssertionError: assert [] == ['Etobicoke',...'Scarborough']
+E         
+E         Right contains 3 more items, first extra item: 'Etobicoke'
+E         
+E         Full diff: (-: missing in left side, +: extra in left side)
+E         + []
+E         - [
+E         -     'Etobicoke',...
+E         
+E         ...Full output truncated, use '-vv' to show
+
+tests/test_checkpoint1.py:61: AssertionError
+________________ test_no_city_is_live_and_ottawa_is_onboarding _________________
+
+session = <sqlalchemy.orm.session.Session object at 0xffaca000e550>
+
+    def test_no_city_is_live_and_ottawa_is_onboarding(session):
+        statuses = dict(session.execute(select(City.slug, City.launch_status)).all())
+        assert statuses.pop("ottawa") == "onboarding"
+        assert set(statuses.values()) == {"planned"}
+>       assert len(statuses) == 27
+E       AssertionError: assert 2 == 27
+E        +  where 2 = len({'hamilton': 'planned', 'toronto': 'planned'})
+
+tests/test_checkpoint1.py:71: AssertionError
+_______________ test_tax_components_are_unverified_placeholders ________________
+
+session = <sqlalchemy.orm.session.Session object at 0xffac9fedabd0>
+
+    def test_tax_components_are_unverified_placeholders(session):
+        for province in session.scalars(select(ProvinceConfig)).all():
+            assert province.tax_components_verified is False
+>           assert province.tax_components  # placeholders kept
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           assert []
+E            +  where [] = <models.ProvinceConfig object at 0xffaca00ac5d0>.tax_components
+
+tests/test_checkpoint1.py:120: AssertionError
+________________ test_gatineau_is_french_first_and_unpublished _________________
+
+session = <sqlalchemy.orm.session.Session object at 0xffac9fedb950>
+
+    def test_gatineau_is_french_first_and_unpublished(session):
+>       gatineau = session.scalars(select(City).where(City.slug == "gatineau")).one()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_checkpoint1.py:129: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/result.py:1421: in one
+    return self._only_one_row(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+>   ???
+E   sqlalchemy.exc.NoResultFound: No row was found when one was required
+
+lib/sqlalchemy/engine/_result_cy.py:539: NoResultFound
+=============================== warnings summary ===============================
+../../root/.venv/lib/python3.11/site-packages/alembic/config.py:604
+  /root/.venv/lib/python3.11/site-packages/alembic/config.py:604: DeprecationWarning: No path_separator found in configuration; falling back to legacy splitting on spaces, commas, and colons for prepend_sys_path.  Consider adding path_separator=os to Alembic config.
+    util.warn_deprecated(
+
+../../root/.venv/lib/python3.11/site-packages/starlette/formparsers.py:12
+  /root/.venv/lib/python3.11/site-packages/starlette/formparsers.py:12: PendingDeprecationWarning: Please use `import python_multipart` instead.
+    import multipart
+
+../../root/.venv/lib/python3.11/site-packages/starlette/testclient.py:41
+  /root/.venv/lib/python3.11/site-packages/starlette/testclient.py:41: DeprecationWarning: The anyio.abc.BlockingPortal alias is deprecated, use anyio.from_thread.BlockingPortal instead.
+    [], typing.ContextManager[anyio.abc.BlockingPortal]
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+FAILED tests/test_checkpoint0.py::test_01_seed_has_exactly_14_groups_and_28_cities
+FAILED tests/test_checkpoint0.py::test_02_toronto_has_exactly_the_three_supplied_subareas
+FAILED tests/test_checkpoint0.py::test_03_planning_counts_total_348_without_duplication
+FAILED tests/test_checkpoint0.py::test_04_rerunning_seed_creates_no_duplicates
+FAILED tests/test_checkpoint0.py::test_09_market_group_grants_no_service_relationship
+FAILED tests/test_checkpoint0.py::test_10_gatineau_uses_quebec_configuration
+FAILED tests/test_checkpoint0.py::test_11_gatineau_and_kingston_pools_are_below_the_five_shop_gate
+FAILED tests/test_checkpoint0.py::test_14_new_city_is_configured_with_data_only
+FAILED tests/test_checkpoint0.py::test_architecture_endpoint_is_hidden_in_production
+FAILED tests/test_checkpoint1.py::test_toronto_subareas_are_not_cities - Asse...
+FAILED tests/test_checkpoint1.py::test_no_city_is_live_and_ottawa_is_onboarding
+FAILED tests/test_checkpoint1.py::test_tax_components_are_unverified_placeholders
+FAILED tests/test_checkpoint1.py::test_gatineau_is_french_first_and_unpublished
+================== 13 failed, 30 passed, 3 warnings in 1.13s ===================
+exit=1

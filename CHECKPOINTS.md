@@ -110,7 +110,7 @@ only after Checkpoint 1 is approved.
   production-ready. Do not deploy it. Do not launch it publicly."). Closeout report at `ce3bfb0` is awaiting
   Sam's review. Not tagged, not merged to `main`, not deployed, not production-ready.
 - **Approved date:** 2026-11-24 (no approval tag; a tag needs Sam's instruction)
-- **Tested revision:** `ce3bfb0e3e6bc2bdbb9b6bfe5b2339466f1d1b88`
+- **Tested revision:** `b721fe4` (closeout follow-up); earlier closeout at `ce3bfb0e3e6bc2bdbb9b6bfe5b2339466f1d1b88`
 - **Branch:** `checkpoint-2-wizard-steps-1-2-continuation`
 - **Scope.** Wizard steps 1 and 2 only: city/location and need selection. The progress indicator shows
   steps 1 and 2 of 6. Answers are stored in the browser; the wizard makes no server writes.
@@ -154,14 +154,34 @@ only after Checkpoint 1 is approved.
 - Preview: https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com/tire-match (workspace preview; not
   permanent).
 
+**Closeout follow-up at `b721fe4` (2026-11-24)**
+- Tested revision: `b721fe4`. Change: dev-server `Referrer-Policy: no-referrer` and one guard test. No
+  application code, seed or production setting changed; the production build file is identical.
+- Frontend unit tests: 31 of 31. Browser suite on the preview, both viewports: 54 of 54.
+- Referer check with synthetic values, before and after: requests carrying attribution in Referer went from
+  17–18 to 0 across application, overlay and preview-host traffic; attribution still saves and survives
+  navigation; recorder off; no wizard input sent; preview and overlay health checks return 200.
+  Independent confirmation by the testing agent: `test_reports/iteration_4.json`.
+- Backend baseline: the same 13 tests fail with identical errors at `checkpoint-1-approved` on the same
+  three-city database, and passed on the full seed at the Checkpoint 0 and 1 reviews
+  (`test_reports/iteration_1.json`, `iteration_2.json`). Backend at `b721fe4`: 30 passed, 13 failed.
+- Evidence: `test_reports/cp2_review_evidence/closeout_referrer/`; report sections 6–8 of
+  `test_reports/cp2_review_evidence/closeout_ce3bfb0/CHECKPOINT2_CLOSEOUT_REPORT.md`.
+- Status unchanged: approved by Sam on 2026-11-24 subject to follow-up requirements; this follow-up evidence
+  is awaiting Sam's review.
+
 **Known limitations**
 - Vehicle/tire-size entry, preferences, offers, lead capture, and every later checkpoint remain unbuilt.
 - No contact information is collected; no lead or request is created; no wizard data is sent to the server.
 - In a development preview only: the development server's error overlay (kept on at Sam's instruction,
   recorder off) posts a same-origin status message containing the page path, and the preview host adds a
-  Cloudflare beacon and `cf_clearance` cookie. Neither message contains wizard input, attribution parameters
-  or secrets, but the browser's Referer header on both carries the full page address, including any
-  attribution parameters in it. Neither is in the production bundle.
+  Cloudflare beacon, a challenge exchange with an encoded body, and `cf_clearance` / `__cf_bm` cookies. Since
+  `b721fe4` the dev server sends `Referrer-Policy: no-referrer`, and no request from the page, the overlay or
+  the preview host carries attribution values in a Referer header. The Cloudflare items themselves are
+  outside repository control. None of this is in the production bundle.
+- On the three-city seed, `test_architecture_endpoint_is_hidden_in_production` stops at its directory-count
+  line, so its hidden-in-production assertions are not exercised automatically. They were checked directly
+  once at `b721fe4` (staging 200 with no database address; production 404).
 - Browser "network" evidence is a rendering of the headless test browser's request log, not a DevTools panel.
 - `.emergent/` holds Emergent workspace settings committed automatically by the workspace (for example
   `ca726a1`); they are not application files.

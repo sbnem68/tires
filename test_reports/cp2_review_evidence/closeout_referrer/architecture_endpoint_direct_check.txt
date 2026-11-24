@@ -1,0 +1,7 @@
+INFO:httpx:HTTP Request: GET http://testserver/api/system/architecture "HTTP/1.1 200 OK"
+staging status: 200
+staging totals: {'market_groups': 3, 'cities': 3, 'subareas': 0, 'planning_prospects': 0}
+'DATABASE_URL' in body: False
+'postgresql://' in body: False | 'postgresql+psycopg://' in body: False
+INFO:httpx:HTTP Request: GET http://testserver/api/system/architecture "HTTP/1.1 404 Not Found"
+production status: 404

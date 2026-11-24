@@ -148,7 +148,7 @@ tests that assert the full 28-city directory, read from the failure messages of 
 | `test_checkpoint0::test_10_gatineau_uses_quebec_configuration` | `NoResultFound` | Gatineau not seeded |
 | `test_checkpoint0::test_11_gatineau_and_kingston_pools_are_below_the_five_shop_gate` | wrong group list | Gatineau and Kingston groups not seeded |
 | `test_checkpoint0::test_14_new_city_is_configured_with_data_only` | `4 == 29` | counts 28 cities plus one |
-| `test_checkpoint0::test_architecture_endpoint_is_hidden_in_production` | counts 3/3/0/0 vs 14/28/3/348 | the endpoint is hidden correctly; the test also compares directory counts |
+| `test_checkpoint0::test_architecture_endpoint_is_hidden_in_production` | counts 3/3/0/0 vs 14/28/3/348 | the test stops at its directory-count comparison, so its hidden-in-production assertions do not run on this seed (corrected 2026-11-24; see closeout report section 7) |
 | `test_checkpoint1::test_toronto_subareas_are_not_cities` | `[] == ['Etobicoke', …]` | subareas not seeded |
 | `test_checkpoint1::test_no_city_is_live_and_ottawa_is_onboarding` | `2 == 27` | expects 27 planned cities |
 | `test_checkpoint1::test_tax_components_are_unverified_placeholders` | empty `tax_components` | restricted seed creates the Ontario parent row with no tax placeholders |

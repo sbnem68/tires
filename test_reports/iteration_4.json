@@ -1,0 +1,274 @@
+{
+  "summary": "Completed independent READ-ONLY verification of Checkpoint 2 closeout - Referrer-Policy fix (commit b721fe4). Tested at mobile (390x844) and desktop (1440x900) viewports against preview URL. Verified that `Referrer-Policy: no-referrer` response header successfully prevents attribution query parameters from leaking in browser Referer headers. All 10 test requirements passed with ZERO violations detected.",
+  "test_type": "referrer_policy_verification_closeout",
+  "preview_url": "https://wizard-cp2-review--8ktg0g80.preview.emergentagent.com",
+  "viewports_tested": ["mobile (390x844)", "desktop (1440x900)"],
+  "synthetic_test_values": {
+    "attribution_params": ["tsrc-x9", "tcamp-x9", "tshop-x9", "tpkg-x9", "tprice-x9", "tutm-src-x9", "tutm-med-x9", "tutm-cmp-x9"],
+    "wizard_input": ["K8Y 8Y8", "Synthetic note teal-otter-77"]
+  },
+  "backend_issues": {
+    "critical_bugs": [],
+    "flaky_endpoints": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "passed_tests": [
+    "Requirement 1: HTML page responses for /, /ottawa, /toronto, /hamilton, /tire-match all carry response header `Referrer-Policy: no-referrer`",
+    "Requirement 2: Attribution captured correctly in localStorage key `t4t.attribution.v1` with all 9 synthetic parameters (source=tsrc-x9, campaign=tcamp-x9, shop=tshop-x9, package=tpkg-x9, price=tprice-x9, utm_source=tutm-src-x9, utm_medium=tutm-med-x9, utm_campaign=tutm-cmp-x9, city=ottawa) and landing_url containing /ottawa",
+    "Requirement 3: Original attribution record unchanged after city selector navigation (Ottawa -> Toronto), /tire-match load without parameters, and page reload",
+    "Requirement 4: Wizard flow completed successfully - city preselected from URL (?city=ottawa), postal code K8Y 8Y8 entered, travel radius 25km selected, repair option chosen, issue description 'Synthetic note teal-otter-77' entered, next-step-notice displayed",
+    "Requirement 5a: Network inspection - 117 requests captured per viewport with wire-level headers via CDP Network.requestWillBeSentExtraInfo (72 wire-level headers captured)",
+    "Requirement 5b: Application requests (36 per viewport) - ZERO Referer headers sent to page loads (/ottawa, /toronto, /tire-match, /), static assets (/static/js/*), or API endpoints (/api/public/config, /api/public/locations)",
+    "Requirement 5c: Development overlay requests (19 per viewport) - ZERO Referer headers sent to /__emergent_overlay__/report or /__emergent_overlay__/health",
+    "Requirement 5d: Preview host requests (14 per viewport) - ZERO Referer headers sent to /cdn-cgi/* or static.cloudflareinsights.com",
+    "Requirement 5e: Google Fonts requests (48 per viewport) - 36 requests sent Referer header, but ONLY 'https://fonts.googleapis.com/' (fonts.googleapis.com -> fonts.gstatic.com), containing ZERO attribution values",
+    "Requirement 5f: ZERO requests across all categories (application, overlay, preview host, fonts) contained ANY synthetic attribution values (tsrc-x9, tcamp-x9, tshop-x9, tpkg-x9, tprice-x9, tutm-src-x9, tutm-med-x9, tutm-cmp-x9, utm_source, utm_medium, utm_campaign) in Referer headers",
+    "Requirement 6: Typed wizard values ('K8Y 8Y8', 'K8Y%208Y8', 'K8Y+8Y8', 'teal-otter-77') appeared in ZERO request URLs, bodies, or headers to any host",
+    "Requirement 7a: Session recorder OFF - 'rrweb' in window is false",
+    "Requirement 7b: Session recorder OFF - ZERO <script> tags with src containing 'recorder' or 'rrweb'",
+    "Requirement 7c: Session recorder OFF - ZERO network requests to paths containing 'recorder' or 'rrweb'",
+    "Requirement 7d: Overlay ON - '__EMERGENT_OVERLAY__' in window is true",
+    "Requirement 8a: GET /api/health returns 200 with status ok, database connected, migration_revision 0002, environment staging",
+    "Requirement 8b: GET /__emergent_overlay__/health returns 200 with healthy true",
+    "Requirement 8c: Pages /, /ottawa, /toronto, /hamilton, /tire-match all render without console errors or red error screen",
+    "Requirement 9a: Application API traffic is GET only - 24 GET requests to /api/public/config and /api/public/locations",
+    "Requirement 9b: Application API traffic has ZERO POST/PUT/PATCH/DELETE requests",
+    "Requirement 9c: Application API requests carry ZERO request bodies",
+    "Requirement 10a: Outside repository control - Cloudflare cookies (cf_clearance, __cf_bm) present (set by preview host edge)",
+    "Requirement 10b: Outside repository control - Cloudflare beacon script (static.cloudflareinsights.com/beacon.min.js) loaded (injected by preview host edge)",
+    "Requirement 10c: Outside repository control - Cloudflare challenge scripts (/cdn-cgi/challenge-platform/*) loaded (injected by preview host edge)",
+    "Requirement 10d: Outside repository control - Cloudflare RUM beacons (POST /cdn-cgi/rum) sent with ZERO Referer headers (protected by Referrer-Policy)",
+    "Mobile viewport (390x844): All tests passed",
+    "Desktop viewport (1440x900): All tests passed"
+  ],
+  "test_report_links": [
+    "/tmp/referrer_verification.py",
+    "/tmp/referrer_verification_results.json"
+  ],
+  "action_item_for_main_agent": "",
+  "updated_files": [],
+  "success_percentage": {
+    "referrer_policy_headers": "100% (5/5 pages return 'Referrer-Policy: no-referrer')",
+    "attribution_tracking": "100% (captured, preserved across navigation and reload)",
+    "network_security": "100% (0 attribution values in Referer headers, 0 wizard input leaked)",
+    "session_recorder": "100% (OFF as required)",
+    "overlay": "100% (ON as required)",
+    "health_checks": "100% (API and overlay both 200 OK)",
+    "api_traffic": "100% (GET only, no writes, no bodies)",
+    "overall": "100% (ZERO violations detected)"
+  },
+  "should_call_test_agent_after_fix": false,
+  "should_main_agent_test_itself": false,
+  "detailed_findings": {
+    "referrer_policy_response_headers": {
+      "status": "PASS",
+      "pages_tested": ["/", "/ottawa", "/toronto", "/hamilton", "/tire-match"],
+      "header_value": "no-referrer",
+      "note": "All HTML document responses carry the Referrer-Policy: no-referrer header as configured in frontend/craco.config.js line 38"
+    },
+    "attribution_tracking": {
+      "status": "PASS",
+      "localStorage_key": "t4t.attribution.v1",
+      "captured_values": {
+        "source": "tsrc-x9",
+        "campaign": "tcamp-x9",
+        "shop": "tshop-x9",
+        "package": "tpkg-x9",
+        "price": "tprice-x9",
+        "utm_source": "tutm-src-x9",
+        "utm_medium": "tutm-med-x9",
+        "utm_campaign": "tutm-cmp-x9",
+        "city": "ottawa",
+        "landing_url": "contains /ottawa"
+      },
+      "preservation": "Original attribution unchanged after city selector navigation (Ottawa->Toronto), /tire-match load without parameters, and page reload"
+    },
+    "wizard_flow": {
+      "status": "PASS",
+      "steps_completed": [
+        "Loaded /tire-match?city=ottawa&source=tsrc-x9&... (city preselected to ottawa)",
+        "Filled postal code: K8Y 8Y8",
+        "Selected travel radius: 25 km",
+        "Clicked Continue to Step 2",
+        "Selected need: Tire repair or inspection",
+        "Filled issue description: Synthetic note teal-otter-77",
+        "Clicked Continue (next-step-notice displayed)",
+        "Waited 35 seconds for overlay messages and beacons"
+      ]
+    },
+    "network_inspection": {
+      "status": "PASS - ZERO VIOLATIONS",
+      "mobile_viewport": {
+        "total_requests": 117,
+        "wire_headers_captured": 72,
+        "requests_by_category": {
+          "a_application": 36,
+          "b_development_overlay": 19,
+          "c_preview_host_cloudflare": 14,
+          "d_google_fonts": 48
+        },
+        "referer_analysis": {
+          "application_requests_with_referer": 0,
+          "overlay_requests_with_referer": 0,
+          "cloudflare_requests_with_referer": 0,
+          "google_fonts_requests_with_referer": 36,
+          "google_fonts_referer_value": "https://fonts.googleapis.com/ (no attribution data)"
+        },
+        "violations": {
+          "attribution_in_referer": 0,
+          "wizard_input_leaked": 0,
+          "recorder_detected": 0
+        }
+      },
+      "desktop_viewport": {
+        "total_requests": 117,
+        "wire_headers_captured": 72,
+        "requests_by_category": {
+          "a_application": 36,
+          "b_development_overlay": 19,
+          "c_preview_host_cloudflare": 14,
+          "d_google_fonts": 48
+        },
+        "referer_analysis": {
+          "application_requests_with_referer": 0,
+          "overlay_requests_with_referer": 0,
+          "cloudflare_requests_with_referer": 0,
+          "google_fonts_requests_with_referer": 36,
+          "google_fonts_referer_value": "https://fonts.googleapis.com/ (no attribution data)"
+        },
+        "violations": {
+          "attribution_in_referer": 0,
+          "wizard_input_leaked": 0,
+          "recorder_detected": 0
+        }
+      },
+      "critical_finding": "The Referrer-Policy: no-referrer header successfully prevents ALL attribution query parameters from appearing in Referer headers on application requests, development overlay requests, and preview host requests. The only Referer headers sent are from Google Fonts to Google Fonts (fonts.googleapis.com -> fonts.gstatic.com), which contain no attribution data."
+    },
+    "wizard_input_security": {
+      "status": "PASS",
+      "typed_values_tested": ["K8Y 8Y8", "K8Y%208Y8", "K8Y+8Y8", "teal-otter-77"],
+      "requests_scanned": 234,
+      "leaks_found": 0,
+      "note": "No typed wizard values appeared in any request URL, body, or header to any host"
+    },
+    "session_recorder": {
+      "status": "PASS - OFF",
+      "rrweb_in_window": false,
+      "recorder_scripts": [],
+      "recorder_requests": [],
+      "note": "Session recorder successfully disabled via craco.config.js lines 85-87 (EMERGENT_OVERLAY_RRWEB='', EMERGENT_OVERLAY_NETWORK='off', EMERGENT_OVERLAY_FAB='off')"
+    },
+    "overlay": {
+      "status": "PASS - ON",
+      "overlay_in_window": true,
+      "overlay_health": "200 OK",
+      "note": "Development error overlay present and functional as required"
+    },
+    "health_checks": {
+      "status": "PASS",
+      "api_health": {
+        "status": 200,
+        "response": {
+          "status": "ok",
+          "database": "connected",
+          "migration_revision": "0002",
+          "environment": "staging"
+        }
+      },
+      "overlay_health": {
+        "status": 200,
+        "response": {
+          "healthy": true,
+          "build_error": null
+        }
+      },
+      "pages_rendered": ["/", "/ottawa", "/toronto", "/hamilton", "/tire-match"],
+      "console_errors": 0,
+      "red_error_screens": 0
+    },
+    "api_traffic": {
+      "status": "PASS - GET ONLY",
+      "total_api_requests": 24,
+      "methods": {
+        "GET": 24,
+        "POST": 0,
+        "PUT": 0,
+        "PATCH": 0,
+        "DELETE": 0
+      },
+      "endpoints": ["/api/public/config", "/api/public/locations"],
+      "requests_with_body": 0,
+      "note": "Application API traffic is read-only as required for Checkpoint 2"
+    },
+    "outside_repository_control": {
+      "status": "DOCUMENTED",
+      "cloudflare_cookies": ["cf_clearance", "__cf_bm"],
+      "cloudflare_scripts": [
+        "static.cloudflareinsights.com/beacon.min.js",
+        "/cdn-cgi/challenge-platform/h/b/scripts/jsd/*/main.js"
+      ],
+      "cloudflare_beacons": ["POST /cdn-cgi/rum"],
+      "google_fonts": [
+        "fonts.googleapis.com/css2",
+        "fonts.gstatic.com/s/inter/*",
+        "fonts.gstatic.com/s/spacegrotesk/*",
+        "fonts.gstatic.com/s/ibmplexmono/*"
+      ],
+      "note": "Cloudflare infrastructure is injected by the preview host's edge and cannot be controlled from this repository. Cloudflare beacons send ZERO Referer headers due to the Referrer-Policy fix. Google Fonts requests send only 'https://fonts.googleapis.com/' as Referer (no attribution data). None of these are present in production builds served elsewhere."
+    }
+  },
+  "verification_methodology": {
+    "approach": "Independent READ-ONLY verification using throwaway test script (/tmp/referrer_verification.py)",
+    "network_capture": "Chrome DevTools Protocol (CDP) Network.requestWillBeSentExtraInfo to capture wire-level request headers including actual Referer values sent by browser",
+    "synthetic_values": "Distinctive test values (tsrc-x9, tcamp-x9, etc.) that exist nowhere else in the application",
+    "test_flow": [
+      "1. Load /ottawa with synthetic attribution parameters",
+      "2. Navigate to Toronto via city selector",
+      "3. Load /tire-match without parameters",
+      "4. Reload page",
+      "5. Load /tire-match with attribution parameters",
+      "6. Complete wizard Steps 1 and 2 with synthetic input",
+      "7. Wait 35 seconds for overlay messages and beacons",
+      "8. Check session recorder and overlay status",
+      "9. Run health checks",
+      "10. Load additional pages (/, /hamilton) to verify Referrer-Policy headers",
+      "11. Analyze all captured network requests for violations"
+    ],
+    "reference_files_reviewed": [
+      "/app/frontend/craco.config.js (lines 30-38: Referrer-Policy header configuration)",
+      "/app/test_reports/cp2_review_evidence/closeout_referrer/referrer_check.py (main agent's verification script)",
+      "/app/tests/e2e/checkpoint2_browser.py (existing test suite)",
+      "/app/README.md (project documentation)"
+    ],
+    "files_modified": "NONE (read-only verification as required)",
+    "test_script_location": "/tmp/referrer_verification.py (throwaway script, not committed)",
+    "results_location": "/tmp/referrer_verification_results.json"
+  },
+  "comparison_with_main_agent_results": {
+    "main_agent_script": "/app/test_reports/cp2_review_evidence/closeout_referrer/referrer_check.py",
+    "main_agent_finding": "Zero Referer headers with attribution after the fix",
+    "independent_verification_finding": "Zero Referer headers with attribution after the fix",
+    "agreement": "100% - Independent verification confirms main agent's findings",
+    "additional_coverage": [
+      "Tested at both 390x844 (mobile) and 1440x900 (desktop) viewports",
+      "Captured 72 wire-level headers per viewport via CDP Network.requestWillBeSentExtraInfo",
+      "Verified Referrer-Policy header on 5 different page paths",
+      "Confirmed session recorder OFF and overlay ON",
+      "Verified health endpoints for both API and overlay",
+      "Documented all outside-repository-control elements (Cloudflare, Google Fonts)"
+    ]
+  },
+  "conclusion": {
+    "fix_status": "VERIFIED - WORKING AS INTENDED",
+    "commit": "b721fe4",
+    "fix_description": "Added 'Referrer-Policy: no-referrer' response header in frontend/craco.config.js (line 38) to prevent attribution query parameters from leaking in browser Referer headers",
+    "effectiveness": "100% - Zero attribution values found in Referer headers across 234 total requests (117 mobile + 117 desktop)",
+    "scope": "Development preview only (craco.config.js devServer configuration, not part of production build)",
+    "side_effects": "None - Session recorder remains OFF, overlay remains ON, all functionality working correctly",
+    "recommendation": "Fix is complete and effective. No further action required for this closeout item."
+  }
+}
