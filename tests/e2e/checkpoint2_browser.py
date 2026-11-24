@@ -216,6 +216,55 @@ def t03_url_beats_saved(s, vp):
     return "saved Toronto + ?city=ottawa -> Ottawa; original attribution unchanged"
 
 
+def t03_strict_unselected(s, vp):
+    # The driver browses city pages first, so the site-wide selected city is Toronto.
+    s.goto("/toronto")
+    assert s.store(CITY_KEY)["slug"] == "toronto"
+    s.wizard()
+    assert s.page.input_value(tid("city-select")) == "", "a city was inferred from an earlier visit"
+    shown = s.page.eval_on_selector(tid("city-select"), "e => e.options[e.selectedIndex].textContent.trim()")
+    assert shown == "Choose a city", shown
+    assert s.page.is_disabled(tid("continue-location"))
+    assert s.store(WIZ_KEY)["state"]["citySlug"] == ""
+    # A reload, and a later visit in a new tab, still infer nothing.
+    s.page.reload(wait_until="domcontentloaded")
+    s.page.wait_for_selector(tid("location-step"))
+    assert s.page.input_value(tid("city-select")) == ""
+    s.new_tab()
+    s.wizard()
+    assert s.page.input_value(tid("city-select")) == ""
+    return "no URL city + no saved progress -> 'Choose a city', Continue disabled, even after visiting /toronto"
+
+
+def t03_saved_restores(s, vp):
+    s.wizard()
+    s.page.select_option(tid("city-select"), "hamilton")
+    s.page.fill(tid("postal-code-input"), "L8P 1A1")
+    s.goto("/toronto")  # browsing another city page must not change the wizard's saved city
+    s.new_tab()
+    s.wizard()
+    assert s.page.input_value(tid("city-select")) == "hamilton"
+    assert s.page.input_value(tid("postal-code-input")) == "L8P 1A1"
+    return "no URL city + saved progress -> saved city (Hamilton) restored, not the last city page visited"
+
+
+def t03_manual_after_url(s, vp):
+    s.wizard("city=ottawa")
+    assert s.page.input_value(tid("city-select")) == "ottawa"
+    s.page.select_option(tid("city-select"), "hamilton")
+    assert s.page.input_value(tid("city-select")) == "hamilton"
+    assert s.store(WIZ_KEY)["state"]["citySlug"] == "hamilton"
+    s.page.reload(wait_until="domcontentloaded")
+    s.page.wait_for_selector(tid("location-step"))
+    assert s.page.input_value(tid("city-select")) == "hamilton", "refresh undid the manual city change"
+    s.page.click(tid("continue-location"))
+    s.page.reload(wait_until="domcontentloaded")
+    s.page.wait_for_selector(tid("need-step"))
+    s.page.click(tid("wizard-back"))
+    assert s.page.input_value(tid("city-select")) == "hamilton"
+    return "URL preselect Ottawa -> manual Hamilton -> kept across two refreshes"
+
+
 def t04(s, vp):
     s.wizard()
     s.page.select_option(tid("city-select"), "ottawa")
@@ -499,6 +548,60 @@ def t16(s, vp):
             f"non-API writes (preview tooling/analytics): {s.findings['non_api_writes_by_destination']}")
 
 
+# Hosts whose scripts are injected by the preview host's CDN, not by this repository.
+EDGE_INJECTED_HOSTS = {"static.cloudflareinsights.com"}
+# Same-origin paths served only by the development server's tooling.
+DEV_TOOLING_PREFIXES = ("/__emergent_overlay__", "/visual-edit-overlay")
+# Where the API lives when the frontend is served separately from it (production-bundle check).
+API_HOST = urlparse(os.environ.get("T4T_API_URL", BASE)).netloc
+
+ANALYTICS_MARKERS = ("posthog", "ap.emergent.sh", "assets.emergent.sh", "emergent-main", "/flags", "/decide",
+                     "/e/", "/s/", "/batch", "google-analytics", "googletagmanager", "hotjar", "clarity.ms",
+                     "segment", "mixpanel", "fullstory")
+
+
+def t19_no_analytics(s, vp):
+    """Required fix (2026-11-24): the application sends no analytics or session recording."""
+    host = urlparse(BASE).netloc
+    s.goto("/")
+    s.goto("/ottawa?city=ottawa&utm_source=first")
+    s.wizard("city=ottawa&utm_source=first")
+    run_full_wizard(s)
+    s.page.wait_for_timeout(6000)
+    globals_found = s.page.evaluate(
+        "['posthog','gtag','ga','dataLayer','mixpanel','analytics','hj','clarity','FS'].filter(k => k in window)")
+    assert not globals_found, f"analytics globals present: {globals_found}"
+    script_sources = s.page.eval_on_selector_all("script[src]", "els => els.map(e => e.src)")
+    # Not part of the application: the preview host's CDN injects its own beacon at the edge, and
+    # the development server injects its error overlay. Both are reported, and both are absent
+    # from the production bundle (run this test with T4T_BASE_URL pointing at a served build).
+    edge_injected = [src for src in script_sources if urlparse(src).netloc in EDGE_INJECTED_HOSTS]
+    dev_tooling = [urlparse(src).path for src in script_sources
+                   if urlparse(src).netloc == host and urlparse(src).path.startswith(DEV_TOOLING_PREFIXES)]
+    external_scripts = [src for src in script_sources
+                        if urlparse(src).netloc not in ("", host) and src not in edge_injected]
+    assert not external_scripts, f"third-party scripts loaded: {external_scripts}"
+    third_party = [r for r in s.requests
+                   if urlparse(r["url"]).netloc not in {host, API_HOST} | EDGE_INJECTED_HOSTS]
+    flagged = sorted({urlparse(r["url"]).netloc + urlparse(r["url"]).path[:40] for r in third_party
+                      if any(m in r["url"].lower() for m in ANALYTICS_MARKERS)})
+    assert not flagged, f"analytics requests: {flagged}"
+    third_party_writes = [r["url"] for r in third_party if r["method"] not in ("GET", "HEAD", "OPTIONS")]
+    assert not third_party_writes, f"writes to third parties: {third_party_writes}"
+    typed = [r["url"] for r in third_party
+             if any(v in r["body"] or v in r["url"] for v in (TYPED_POSTAL, "zebra-quartz", "K1A%200B1", "K1A+0B1"))]
+    assert not typed, f"wizard input sent to a third party: {typed}"
+    cookies = [c["name"] for c in s.context.cookies() if not c["name"].startswith(("__cf", "cf_", "_cf"))]
+    assert not cookies, f"cookies set: {cookies}"
+    hosts = sorted({urlparse(r["url"]).netloc for r in third_party})
+    s.findings = {"third_party_hosts_contacted": hosts, "third_party_writes": 0, "analytics_requests": 0,
+                  "scripts_injected_by_preview_host": sorted({urlparse(src).netloc for src in edge_injected}),
+                  "scripts_injected_by_dev_server": sorted(set(dev_tooling))}
+    return (f"no analytics globals, requests, third-party writes or cookies; third-party hosts contacted (GET only): "
+            f"{hosts}; injected by preview host: {s.findings['scripts_injected_by_preview_host']}; "
+            f"injected by dev server: {s.findings['scripts_injected_by_dev_server']}")
+
+
 def t17(s, vp):
     s.goto(f"/ottawa?{FULL_QUERY}")
     original = s.original()
@@ -572,10 +675,10 @@ def a3_internal_navigation(s, vp):
     assert s.original() == original
     assert s.store(CITY_KEY)["slug"] == "toronto"
     s.wizard(FULL_QUERY)
-    # The driver explicitly chose Toronto, so the carried ?city=ottawa does not override it.
-    assert s.page.input_value(tid("city-select")) == "toronto"
+    # Strict precedence: the wizard follows the URL city, never the city chosen elsewhere on the site.
+    assert s.page.input_value(tid("city-select")) == "ottawa"
     assert s.original() == original
-    return "city selector change keeps attribution; explicit choice outranks carried parameter"
+    return "city selector change keeps attribution; wizard follows the URL city, not the site selection"
 
 
 TESTS = [
@@ -584,6 +687,9 @@ TESTS = [
     ("3", "City is preselected from URL", t03),
     ("3a", "Unlisted URL city is ignored", t03_unlisted),
     ("3b", "URL city wins over saved progress; attribution unchanged", t03_url_beats_saved),
+    ("3c", "No URL city and no saved progress leaves the city unselected (strict)", t03_strict_unselected),
+    ("3d", "No URL city but saved progress restores the saved city", t03_saved_restores),
+    ("3e", "Manual city change after URL preselect survives refresh", t03_manual_after_url),
     ("4", "Postal code is optional", t04),
     ("5", "Travel radius can be selected", t05),
     ("6", "Step 2 loads correctly", t06),
@@ -599,6 +705,7 @@ TESTS = [
     ("16", "No server write occurs", t16),
     ("17", "Attribution remains intact when city changes", t17),
     ("18", "Original attribution remains locked for 30 days", t18),
+    ("19", "No analytics or session recording (required fix)", t19_no_analytics),
     ("A1", "Attribution: organic first landing is the original", a1_organic_first),
     ("A2", "Attribution: lock ends after 30 days", a2_expiry),
     ("A3", "Attribution: city selector keeps attribution", a3_internal_navigation),
@@ -638,9 +745,14 @@ def take_screenshots(browser, directory):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--screenshots", help="directory to write Step 1 and Step 2 screenshots to")
+    parser.add_argument("--only", help="comma-separated test numbers to run, for example 19")
+    parser.add_argument("--report", default="checkpoint2_browser.json", help="report file name in test_reports/")
     parser.add_argument("--screenshots-only", action="store_true", help="skip the tests; only capture screenshots")
     args = parser.parse_args()
     tests = [] if args.screenshots_only else TESTS
+    if args.only:
+        wanted = set(args.only.split(","))
+        tests = [t for t in tests if t[0] in wanted]
 
     results, findings = [], {}
     with sync_playwright() as p:
@@ -660,7 +772,7 @@ def main():
                     if os.environ.get("T4T_E2E_DEBUG"):
                         traceback.print_exc()
                 if getattr(s, "findings", None):
-                    findings[vp] = s.findings
+                    findings.setdefault(vp, {}).update(s.findings)
                 s.close()
                 results.append({"viewport": vp, "test": number, "title": title, "status": status, "detail": detail})
                 print(f"[{vp:7}] {status}  {number:>3}. {title} — {detail}")
@@ -679,7 +791,7 @@ def main():
         "passed": passed, "failed": len(results) - passed, "total": len(results),
         "network_findings": findings, "results": results,
     }
-    report = ROOT / "test_reports" / "checkpoint2_browser.json"
+    report = ROOT / "test_reports" / args.report
     report.write_text(json.dumps(summary, indent=2, ensure_ascii=False) + "\n")
     print(f"\n{passed} of {len(results)} passed. Report: {report.relative_to(ROOT)}")
     print("Network findings:", json.dumps(findings))
