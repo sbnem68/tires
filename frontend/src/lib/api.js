@@ -1,7 +1,11 @@
 import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL?.replace(/\/+$/, "");
-const API = BACKEND_URL ? `${BACKEND_URL}/api` : null;
+const API = BACKEND_URL
+  ? `${BACKEND_URL}/api`
+  : process.env.NODE_ENV === "development"
+    ? "/api"
+    : null;
 
 const missingBackendUrl = () => Promise.reject(new Error("REACT_APP_BACKEND_URL is not configured."));
 const get = (endpoint) => (API ? axios.get(`${API}/${endpoint}`) : missingBackendUrl());
